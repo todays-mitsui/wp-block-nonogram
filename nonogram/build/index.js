@@ -2,10 +2,67 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/edit.js":
-/*!*********************!*\
-  !*** ./src/edit.js ***!
-  \*********************/
+/***/ "./src/Controls/BoardSize.jsx":
+/*!************************************!*\
+  !*** ./src/Controls/BoardSize.jsx ***!
+  \************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   BoardSize: () => (/* binding */ BoardSize)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+
+
+function BoardSize({
+  numRows,
+  numColumns,
+  setAttributes
+}) {
+  const setNumRows = numRowsStr => {
+    const numRows = parseInt(numRowsStr, 10);
+    if (numRows > 0) {
+      setAttributes({
+        numRows: parseInt(numRowsStr, 10)
+      });
+    }
+  };
+  const setNumColumns = numColumnsStr => {
+    const numColumns = parseInt(numColumnsStr, 10);
+    if (numColumns > 0) {
+      setAttributes({
+        numColumns: parseInt(numColumnsStr, 10)
+      });
+    }
+  };
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.PanelBody, {
+    title: "\u76E4\u9762\u306E\u30B5\u30A4\u30BA",
+    initialOpen: "true"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("fieldset", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("legend", null, "\u884C\u6570"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.__experimentalNumberControl, {
+    isShiftStepEnabled: true,
+    onChange: setNumRows,
+    shiftStep: 5,
+    value: numRows,
+    min: 1
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("fieldset", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("legend", null, "\u5217\u6570"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.__experimentalNumberControl, {
+    isShiftStepEnabled: true,
+    onChange: setNumColumns,
+    shiftStep: 5,
+    value: numColumns,
+    min: 1
+  })));
+}
+
+/***/ }),
+
+/***/ "./src/edit.jsx":
+/*!**********************!*\
+  !*** ./src/edit.jsx ***!
+  \**********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -18,29 +75,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./editor.scss */ "./src/editor.scss");
-
-/**
- * Retrieves the translation of text.
- *
- * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-i18n/
- */
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _Controls_BoardSize__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Controls/BoardSize */ "./src/Controls/BoardSize.jsx");
+/* harmony import */ var _src_render__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../src/render */ "../src/render.js");
+/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./editor.scss */ "./src/editor.scss");
 
 
-/**
- * React hook that is used to mark the block wrapper element.
- * It provides all the necessary props like the class name.
- *
- * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
- */
 
 
-/**
- * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
- * Those files can contain any CSS code that gets applied to the editor.
- *
- * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
- */
+
+
+
 
 
 /**
@@ -51,10 +97,62 @@ __webpack_require__.r(__webpack_exports__);
  *
  * @return {Element} Element to render.
  */
-function Edit() {
+function Edit({
+  attributes,
+  setAttributes
+}) {
+  /** @type {{ numRows: number; numColumns: number; }} */
+  const {
+    numRows,
+    numColumns
+  } = attributes;
+  const blockRootRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useRef)(null);
+  const canvasRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useRef)(null);
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useEffect)(() => {
+    const blockRoot = blockRootRef.current;
+    const canvas = canvasRef.current;
+    const render = (0,_src_render__WEBPACK_IMPORTED_MODULE_5__.createRender)(numRows, numColumns);
+    const resizerCleanup = initResizer(blockRoot, canvas, render);
+    return () => {
+      resizerCleanup();
+    };
+  }, [numRows, numColumns]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)()
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Nonogram – hello from the editor!', 'nonogram'), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("canvas", null));
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    ref: blockRootRef
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.InspectorControls, {
+    key: "settings"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Controls_BoardSize__WEBPACK_IMPORTED_MODULE_4__.BoardSize, {
+    numRows: numRows,
+    numColumns: numColumns,
+    setAttributes: setAttributes
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("canvas", {
+    width: 100,
+    height: 100,
+    ref: canvasRef
+  })));
+}
+const ASPECT_RATIO = 2 / 3;
+
+/**
+ * @param {HTMLDivElement} blockRoot
+ * @param {HTMLCanvasElement} canvas
+ * @param {(canvas: HTMLCanvasElement) => void} render
+ */
+function initResizer(blockRoot, canvas, render) {
+  const observer = new ResizeObserver(entries => {
+    const newWidth = entries[0]?.contentRect?.width;
+    if (newWidth == null) {
+      return;
+    }
+    const [width, height] = [newWidth, newWidth * ASPECT_RATIO];
+    canvas.width = width;
+    canvas.height = height;
+    render(canvas);
+  });
+  observer.observe(blockRoot);
+  return () => observer.unobserve(blockRoot);
 }
 
 /***/ }),
@@ -69,7 +167,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./style.scss */ "./src/style.scss");
-/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./edit */ "./src/edit.js");
+/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./edit */ "./src/edit.jsx");
 /* harmony import */ var _save__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./save */ "./src/save.js");
 /* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./block.json */ "./src/block.json");
 /**
@@ -207,6 +305,26 @@ module.exports = window["wp"]["blocks"];
 
 /***/ }),
 
+/***/ "@wordpress/components":
+/*!************************************!*\
+  !*** external ["wp","components"] ***!
+  \************************************/
+/***/ ((module) => {
+
+module.exports = window["wp"]["components"];
+
+/***/ }),
+
+/***/ "@wordpress/element":
+/*!*********************************!*\
+  !*** external ["wp","element"] ***!
+  \*********************************/
+/***/ ((module) => {
+
+module.exports = window["wp"]["element"];
+
+/***/ }),
+
 /***/ "@wordpress/i18n":
 /*!******************************!*\
   !*** external ["wp","i18n"] ***!
@@ -217,13 +335,105 @@ module.exports = window["wp"]["i18n"];
 
 /***/ }),
 
+/***/ "../src/render.js":
+/*!************************!*\
+  !*** ../src/render.js ***!
+  \************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   createRender: () => (/* binding */ createRender)
+/* harmony export */ });
+/**
+ * @param {number} numRows
+ * @param {number} numColumns
+ * @returns {(canvas: HTMLCanvasElement, width: number, height: number) => void}
+ */
+function createRender(numRows, numColumns) {
+  const text = `numRows: ${numRows}, numColumns: ${numColumns}`;
+
+  /**
+   * @param {HTMLCanvasElement} canvas
+   */
+  return canvas => {
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+      return;
+    }
+    const {
+      paddingLeft,
+      paddingTop,
+      gridWidth,
+      gridHeight
+    } = calcLayout(canvas.width, canvas.height, numRows, numColumns);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = '#ccc';
+    ctx.strokeRect(paddingLeft, paddingTop, CLUES_WIDTH + gridWidth, CLUES_HEIGHT + gridHeight);
+    ctx.fillStyle = '#cdc';
+    ctx.fillRect(paddingLeft + CLUES_WIDTH + 1, paddingTop + 1, gridWidth - 2, CLUES_HEIGHT);
+    ctx.fillStyle = '#bcd';
+    ctx.fillRect(paddingLeft + 1, paddingTop + CLUES_HEIGHT + 1, CLUES_WIDTH, gridHeight - 2);
+    ctx.fillStyle = '#ddd';
+    ctx.fillRect(paddingLeft + CLUES_WIDTH + 1, paddingTop + CLUES_HEIGHT + 1, gridWidth - 2, gridHeight - 2);
+    ctx.fillStyle = "red";
+    ctx.font = "20px serif";
+    ctx.fillText(text, 10, 50);
+  };
+}
+const MIN_PADDING = 20;
+const CLUES_WIDTH = 100;
+const CLUES_HEIGHT = 100;
+
+/**
+ * @param {number} canvasWidth
+ * @param {number} canvasHeight
+ * @param {number} numRows
+ * @param {number} numColumns
+ * @returns {{ paddingLeft: number; paddingTop: number; gridWidth: number; gridHeight: number; }}
+ */
+function calcLayout(canvasWidth, canvasHeight, numRows, numColumns) {
+  const {
+    gridWidth,
+    gridHeight
+  } = calcGridSize(canvasWidth, canvasHeight, numRows, numColumns);
+  const boardWidth = gridWidth + CLUES_WIDTH;
+  const paddingLeft = (canvasWidth - boardWidth) / 2;
+  const boardHeight = gridHeight + CLUES_HEIGHT;
+  const paddingTop = (canvasHeight - boardHeight) / 2;
+  return {
+    paddingLeft,
+    paddingTop,
+    gridWidth,
+    gridHeight
+  };
+}
+
+/**
+ * @param {number} canvasWidth
+ * @param {number} canvasHeight
+ * @param {number} numRows
+ * @param {number} numColumns
+ * @returns {{ cellSize: number; gridWidth: number; gridHeight: number; }}
+ */
+function calcGridSize(canvasWidth, canvasHeight, numRows, numColumns) {
+  const cellSize = Math.min((canvasWidth - CLUES_WIDTH - 2 * MIN_PADDING) / numColumns, (canvasHeight - CLUES_HEIGHT - 2 * MIN_PADDING) / numRows);
+  return {
+    cellSize,
+    gridWidth: cellSize * numColumns,
+    gridHeight: cellSize * numRows
+  };
+}
+
+/***/ }),
+
 /***/ "./src/block.json":
 /*!************************!*\
   !*** ./src/block.json ***!
   \************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"create-block/nonogram","version":"0.1.0","title":"Nonogram","category":"widgets","icon":"smiley","description":"Example block scaffolded with Create Block tool.","example":{},"supports":{"html":false},"textdomain":"nonogram","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"todays-mitsui/nonogram","version":"0.1.0","title":"Nonogram","category":"widgets","icon":"smiley","description":"Example block scaffolded with Create Block tool.","example":{},"supports":{"html":false},"attributes":{"numRows":{"type":"number","default":15},"numColumns":{"type":"number","default":15}},"textdomain":"nonogram","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js"}');
 
 /***/ })
 

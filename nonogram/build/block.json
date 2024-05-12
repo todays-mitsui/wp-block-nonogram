@@ -1,7 +1,7 @@
 {
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 3,
-  "name": "create-block/nonogram",
+  "name": "todays-mitsui/nonogram",
   "version": "0.1.0",
   "title": "Nonogram",
   "category": "widgets",
@@ -10,6 +10,16 @@
   "example": {},
   "supports": {
     "html": false
+  },
+  "attributes": {
+    "numRows": {
+      "type": "number",
+      "default": 15
+    },
+    "numColumns": {
+      "type": "number",
+      "default": 15
+    }
   },
   "textdomain": "nonogram",
   "editorScript": "file:./index.js",
