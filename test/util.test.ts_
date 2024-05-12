@@ -1,0 +1,252 @@
+import { bitsToString, chunks, stringToBits, transpose } from "../util";
+
+describe("transpose", () => {
+  test("転置行列が得られる", () => {
+    const matrix = [
+      [1, 2, 3],
+      [4, 5, 6],
+    ];
+    const actual = transpose(matrix);
+
+    const expected = [
+      [1, 4],
+      [2, 5],
+      [3, 6],
+    ];
+
+    expect(actual).toEqual(expected);
+  });
+
+  describe("行列の一部が欠損しているとき", () => {
+    test("1行目が欠損しているき", () => {
+      const matrix = [
+        [1, 2],
+        [4, 5, 6],
+      ];
+      const actual = transpose(matrix);
+
+      const expected = [
+        [1, 4],
+        [2, 5],
+        [undefined, 6],
+      ];
+
+      expect(actual).toEqual(expected);
+    });
+
+    test("2行目が欠損しているき", () => {
+      const matrix = [
+        [1, 2, 3],
+        [4, 5],
+      ];
+      const actual = transpose(matrix);
+
+      const expected = [
+        [1, 4],
+        [2, 5],
+        [3, undefined],
+      ];
+
+      expect(actual).toEqual(expected);
+    });
+  });
+
+  describe("空の行列を渡したとき", () => {
+    test("0x0行列", () => {
+      const matrix = [];
+      const actual = transpose(matrix);
+
+      const expected = [];
+
+      expect(actual).toEqual(expected);
+    });
+
+    test("1x0行列", () => {
+      const matrix = [
+        [],
+      ];
+      const actual = transpose(matrix);
+
+      const expected = [];
+
+      expect(actual).toEqual(expected);
+    });
+
+    test("2x0行列", () => {
+      const matrix = [
+        [],
+        [],
+      ];
+      const actual = transpose(matrix);
+
+      const expected = [];
+
+      expect(actual).toEqual(expected);
+    });
+  });
+});
+
+describe("chunk", () => {
+  test("配列が指定したサイズで分割される", () => {
+    const array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
+    const cases = [
+      { length: 0, expected: [] },
+      { length: 1, expected: [[1]] },
+      { length: 2, expected: [[1, 2]] },
+      { length: 3, expected: [[1, 2, 3]] },
+      { length: 9, expected: [[1, 2, 3], [4, 5, 6], [7, 8, 9]] },
+      { length: 10, expected: [[1, 2, 3], [4, 5, 6], [7, 8, 9], [10]] },
+      { length: 11, expected: [[1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11]] },
+      { length: 12, expected: [[1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12]] },
+    ];
+
+    for (const { length, expected } of cases) {
+      const base = array.slice(0, length);
+
+      const actual = [...chunks(base, 3)];
+
+      expect(actual).toEqual(expected);
+    }
+  });
+});
+
+describe("bitsToString", () => {
+  describe("ビット列が正しく変換される", () => {
+    test("1ビット", () => {
+      expect(bitsToString([false]))
+        .toBe("1:A");
+      expect(bitsToString([true]))
+        .toBe("1:g");
+    });
+
+    test("2ビット", () => {
+      expect(bitsToString([false, false]))
+        .toBe("2:A");
+      expect(bitsToString([true, false]))
+        .toBe("2:g");
+      expect(bitsToString([false, true]))
+        .toBe("2:Q");
+      expect(bitsToString([true, true]))
+        .toBe("2:w");
+    });
+
+    test("6ビット", () => {
+      expect(bitsToString([false, false, false, false, false, false]))
+        .toBe("6:A");
+      expect(bitsToString([true, false, false, true, true, false]))
+        .toBe("6:m");
+      expect(bitsToString([false, true, false, false, true, true]))
+        .toBe("6:T");
+      expect(bitsToString([true, true, true, true, true, true]))
+        .toBe("6:/");
+    });
+
+    test("6ビット以上", () => {
+      let bits: boolean[];
+
+      // deno-fmt-ignore
+      bits = [
+        false, true , false, true, true, false,
+        true , false,
+      ];
+      expect(bitsToString(bits))
+        .toBe("8:Wg");
+
+      // deno-fmt-ignore
+      bits = [
+        false, true , false, true, true, false,
+        true , false, false, true, true, false,
+        true ,
+      ];
+      expect(bitsToString(bits))
+        .toBe("13:Wmg");
+
+      // deno-fmt-ignore
+      bits = [
+        false, false, false, false, false, false,
+        true , false, false, true , true , false,
+        false, true , false, false, true , true ,
+        true , true , true , true , true , true ,
+      ];
+      expect(bitsToString(bits))
+        .toBe("24:AmT/");
+    });
+  });
+});
+
+describe("stringToBits", () => {
+  describe("文字列が正しく変換される", () => {
+    test("1ビット", () => {
+      expect(stringToBits("1:A"))
+        .toEqual([false]);
+      expect(stringToBits("1:g"))
+        .toEqual([true]);
+    });
+
+    test("2ビット", () => {
+      expect(stringToBits("2:A"))
+        .toEqual([false, false]);
+      expect(stringToBits("2:g"))
+        .toEqual([true, false]);
+      expect(stringToBits("2:Q"))
+        .toEqual([false, true]);
+      expect(stringToBits("2:w"))
+        .toEqual([true, true]);
+    });
+
+    test("6ビット", () => {
+      expect(stringToBits("6:A"))
+        .toEqual([false, false, false, false, false, false]);
+      expect(stringToBits("6:m"))
+        .toEqual([true, false, false, true, true, false]);
+      expect(stringToBits("6:T"))
+        .toEqual([false, true, false, false, true, true]);
+      expect(stringToBits("6:/"))
+        .toEqual([true, true, true, true, true, true]);
+    });
+
+    test("6ビット以上", () => {
+      let bits: boolean[];
+
+      // deno-fmt-ignore
+      bits = [
+        false, true , false, true, true, false,
+        true , false,
+      ];
+      expect(stringToBits("8:Wg"))
+        .toEqual(bits);
+
+      // deno-fmt-ignore
+      bits = [
+        false, true , false, true, true, false,
+        true , false, false, true, true, false,
+        true ,
+      ];
+      expect(stringToBits("13:Wmg"))
+        .toEqual(bits);
+
+      // deno-fmt-ignore
+      bits = [
+        false, false, false, false, false, false,
+        true , false, false, true , true , false,
+        false, true , false, false, true , true ,
+        true , true , true , true , true , true ,
+      ];
+      expect(stringToBits("24:AmT/"))
+        .toEqual(bits);
+    });
+  });
+
+  describe("不正な文字列が渡されたとき", () => {
+    test("不正な形式", () => {
+      expect(() => stringToBits("foobar"))
+        .toThrow();
+    });
+
+    test("想定しない文字が含まれる", () => {
+      expect(() => stringToBits("12:@~"))
+        .toThrow();
+    });
+  });
+});
