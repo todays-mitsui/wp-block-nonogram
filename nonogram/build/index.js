@@ -243,8 +243,8 @@ function Edit({
     setAttributes: setAttributes
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_7__.Stage, {
     width: width,
-    height: width * ASPECT_RATIO
-  }, board && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Components_Grid__WEBPACK_IMPORTED_MODULE_8__.Grid, {
+    height: height
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Components_Grid__WEBPACK_IMPORTED_MODULE_8__.Grid, {
     offsetLeft: offsetLeft,
     offsetTop: offsetTop,
     cluesWidth: cluesWidth,
@@ -255,61 +255,12 @@ function Edit({
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_7__.Layer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_7__.Text, {
     text: `numRows: ${board.height}, numColumns: ${board.width}`
   })))));
-
-  // useEffect(() => {
-  // 	const blockRoot = blockRootRef.current;
-  // 	const canvas = canvasRef.current;
-  // 	const render = createRender(board.width, board.height);
-
-  // 	const resizerCleanup = initResizer(blockRoot, canvas, render);
-
-  // 	return () => {
-  // 		resizerCleanup();
-  // 	};
-  // }, [boardData]);
-
-  // return (
-  // 	<div {...useBlockProps()}>
-  // 		<div ref={blockRootRef}>
-  // 			<InspectorControls key="settings">
-  // 				<BoardSize
-  // 					board={board}
-  // 					numRows={board.height}
-  // 					numColumns={board.width}
-  // 					setAttributes={setAttributes}
-  // 				/>
-  // 			</InspectorControls>
-
-  // 			<canvas
-  // 				width={200}
-  // 				height={200}
-  // 				ref={canvasRef}
-  // 			></canvas>
-  // 		</div>
-  // 	</div>
-  // );
 }
 const ASPECT_RATIO = 2 / 3;
 
 /**
- * @param {HTMLDivElement} blockRoot
- * @param {HTMLCanvasElement} canvas
- * @param {(canvas: HTMLCanvasElement) => void} render
+ * @returns {[React.MutableRefObject<HTMLDivElement | null>, number | null]}
  */
-function initResizer(blockRoot, canvas, render) {
-  const observer = new ResizeObserver(entries => {
-    const newWidth = entries[0]?.contentRect?.width;
-    if (newWidth == null) {
-      return;
-    }
-    const [width, height] = [newWidth, newWidth * ASPECT_RATIO];
-    canvas.width = width;
-    canvas.height = height;
-    render(canvas);
-  });
-  observer.observe(blockRoot);
-  return () => observer.unobserve(blockRoot);
-}
 function useBlockSize() {
   const wrapperRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useRef)(null);
   const [width, setWidth] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(null);

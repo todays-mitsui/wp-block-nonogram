@@ -43,18 +43,16 @@ export default function Edit({ attributes, setAttributes }) {
 					/>
 				</InspectorControls>
 
-				<Stage width={width} height={width * ASPECT_RATIO}>
-					{ board && (
-						<Grid
-							offsetLeft={offsetLeft}
-							offsetTop={offsetTop}
-							cluesWidth={cluesWidth}
-							cluesHeight={cluesHeight}
-							numRows={board.height}
-							numColumns={board.width}
-							cellSize={cellSize}
-						/>
-					) }
+				<Stage width={width} height={height}>
+					<Grid
+						offsetLeft={offsetLeft}
+						offsetTop={offsetTop}
+						cluesWidth={cluesWidth}
+						cluesHeight={cluesHeight}
+						numRows={board.height}
+						numColumns={board.width}
+						cellSize={cellSize}
+					/>
 					<Layer>
 						<Text text={`numRows: ${board.height}, numColumns: ${board.width}`} />
 					</Layer>
@@ -62,67 +60,13 @@ export default function Edit({ attributes, setAttributes }) {
 			</div>
 		</div>
 	);
-
-	// useEffect(() => {
-	// 	const blockRoot = blockRootRef.current;
-	// 	const canvas = canvasRef.current;
-	// 	const render = createRender(board.width, board.height);
-
-	// 	const resizerCleanup = initResizer(blockRoot, canvas, render);
-
-	// 	return () => {
-	// 		resizerCleanup();
-	// 	};
-	// }, [boardData]);
-
-	// return (
-	// 	<div {...useBlockProps()}>
-	// 		<div ref={blockRootRef}>
-	// 			<InspectorControls key="settings">
-	// 				<BoardSize
-	// 					board={board}
-	// 					numRows={board.height}
-	// 					numColumns={board.width}
-	// 					setAttributes={setAttributes}
-	// 				/>
-	// 			</InspectorControls>
-
-	// 			<canvas
-	// 				width={200}
-	// 				height={200}
-	// 				ref={canvasRef}
-	// 			></canvas>
-	// 		</div>
-	// 	</div>
-	// );
 }
 
 const ASPECT_RATIO = 2 / 3;
 
 /**
- * @param {HTMLDivElement} blockRoot
- * @param {HTMLCanvasElement} canvas
- * @param {(canvas: HTMLCanvasElement) => void} render
+ * @returns {[React.MutableRefObject<HTMLDivElement | null>, number | null]}
  */
-function initResizer(blockRoot, canvas, render) {
-	const observer = new ResizeObserver((entries) => {
-		const newWidth = entries[0]?.contentRect?.width;
-
-		if (newWidth == null) { return; }
-
-		const [width, height] = [newWidth, newWidth * ASPECT_RATIO];
-
-		canvas.width = width;
-		canvas.height = height;
-
-		render(canvas);
-	});
-
-	observer.observe(blockRoot);
-
-	return () => observer.unobserve(blockRoot);
-}
-
 function useBlockSize() {
 	const wrapperRef = useRef(null);
 	const [width, setWidth] = useState(null);
