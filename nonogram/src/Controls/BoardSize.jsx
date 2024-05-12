@@ -2,18 +2,30 @@ import {
 	__experimentalNumberControl as NumberControl,
 	PanelBody,
 } from '@wordpress/components';
+import { Board } from '../../../src/Board';
 
-export function BoardSize({ numRows, numColumns, setAttributes }) {
+/**
+ * @param {{
+ * 		board: Board;
+ * 		numRows: number;
+ * 		numColumns: number;
+ * 		setAttributes: (newParam: { boardData: string }) => void;
+ * }} param
+ * @returns
+ */
+export function BoardSize({ board, numRows, numColumns, setAttributes }) {
 	const setNumRows = (numRowsStr) => {
 		const numRows = parseInt(numRowsStr, 10);
 		if (numRows > 0) {
-			setAttributes({ numRows: parseInt(numRowsStr, 10) });
+			board.resize(numColumns, numRows);
+			setAttributes({ boardData: board.serialize() });
 		}
 	};
 	const setNumColumns = (numColumnsStr) => {
 		const numColumns = parseInt(numColumnsStr, 10);
 		if (numColumns > 0) {
-			setAttributes({ numColumns: parseInt(numColumnsStr, 10) });
+			board.resize(numColumns, numRows);
+			setAttributes({ boardData: board.serialize() });
 		}
 	};
 

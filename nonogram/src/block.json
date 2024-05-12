@@ -19,6 +19,10 @@
 		"numColumns": {
 			"type": "number",
 			"default": 15
+		},
+		"boardData": {
+			"type": "string",
+			"default": null
 		}
 	},
 	"textdomain": "nonogram",

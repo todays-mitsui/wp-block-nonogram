@@ -1,4 +1,4 @@
-import { bitsToString, stringToBits } from './util';
+const { bitsToString, stringToBits } = require('./util.js');
 
 export class Grid {
   /**

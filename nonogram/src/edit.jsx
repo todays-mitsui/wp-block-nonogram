@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from '@wordpress/element';
 import React from 'react';
 import { BoardSize } from './Controls/BoardSize';
 import { createRender } from '../../src/render';
+import { Board } from '../../src/Board';
 import './editor.scss';
 
 /**
@@ -15,8 +16,14 @@ import './editor.scss';
  * @return {Element} Element to render.
  */
 export default function Edit({ attributes, setAttributes }) {
-	/** @type {{ numRows: number; numColumns: number; }} */
-	const { numRows, numColumns } = attributes;
+	/** @type {{ boardData: string }} */
+	const { boardData } = attributes;
+
+	console.info({ boardData });
+
+	const board = boardData == null
+		? new Board(15, 15)
+		: Board.deserialize(boardData);
 
 	const blockRootRef = useRef(null);
 	const canvasRef = useRef(null);
@@ -24,22 +31,23 @@ export default function Edit({ attributes, setAttributes }) {
 	useEffect(() => {
 		const blockRoot = blockRootRef.current;
 		const canvas = canvasRef.current;
-		const render = createRender(numRows, numColumns);
+		const render = createRender(board.width, board.height);
 
 		const resizerCleanup = initResizer(blockRoot, canvas, render);
 
 		return () => {
 			resizerCleanup();
 		};
-	}, [numRows, numColumns]);
+	}, [boardData]);
 
 	return (
 		<div {...useBlockProps()}>
 			<div ref={blockRootRef}>
 				<InspectorControls key="settings">
 					<BoardSize
-						numRows={numRows}
-						numColumns={numColumns}
+						board={board}
+						numRows={board.height}
+						numColumns={board.width}
 						setAttributes={setAttributes}
 					/>
 				</InspectorControls>

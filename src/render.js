@@ -3,7 +3,7 @@
  * @param {number} numColumns
  * @returns {(canvas: HTMLCanvasElement, width: number, height: number) => void}
  */
-export function createRender(numRows, numColumns) {
+function createRender(numRows, numColumns) {
   const text = `numRows: ${numRows}, numColumns: ${numColumns}`;
 
   /**
@@ -52,6 +52,7 @@ export function createRender(numRows, numColumns) {
     ctx.fillText(text, 10, 50);
   }
 }
+exports.createRender = createRender;
 
 const MIN_PADDING = 8;
 const CLUES_WIDTH = 100;

@@ -5,7 +5,7 @@ const BASE64_CHARACTERS =
  * @param {boolean[]} bits
  * @returns {string}
  */
-export function bitsToString(bits) {
+function bitsToString(bits) {
   let str = '';
   for (const b6 of chunks(bits, 6)) {
     const index = (b6[0] ? 0b100000 : 0b000000) +
@@ -19,12 +19,13 @@ export function bitsToString(bits) {
 
   return str;
 }
+exports.bitsToString = bitsToString;
 
 /**
  * @param {string} str
  * @returns {boolean[]}
  */
-export function stringToBits(str) {
+function stringToBits(str) {
   const charToIndex = new Map();
   BASE64_CHARACTERS.split("").forEach((c, i) => charToIndex.set(c, i));
 
@@ -47,6 +48,7 @@ export function stringToBits(str) {
 
   return bits;
 }
+exports.stringToBits = stringToBits;
 
 /**
  * @template T
@@ -54,7 +56,7 @@ export function stringToBits(str) {
  * @param {number} size
  * @returns {Generator<T[]>}
  */
-export function* chunks(array, size) {
+function* chunks(array, size) {
   for (let i = 0; i < array.length; i += size) {
     yield array.slice(i, i + size);
   }

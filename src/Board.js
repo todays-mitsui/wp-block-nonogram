@@ -1,6 +1,6 @@
-import { Grid } from './Grid';
+const { Grid } = require('./Grid.js');
 
-export class Board {
+class Board {
   constructor(width, height) {
     if (!Number.isInteger(width) || !Number.isInteger(height)) {
       throw new Error('width and height must be integers');
@@ -73,6 +73,18 @@ export class Board {
     this._grid.set(x, y, false);
 
     return this;
+  }
+
+  /**
+   * @returns {Generator<{ x: number; y: number; filled: boolean; }>}
+   */
+  * cells() {
+    for (let y = 0; y < this._height; y++) {
+      for (let x = 0; x < this._width; x++) {
+        const filled = this._grid.get(x, y);
+        yield { x, y, filled };
+      }
+    }
   }
 
   /**
@@ -168,7 +180,14 @@ export class Board {
    * @returns {Board}
    */
   static deserialize(str) {
-    const [size, data] = str.split(';');
+    const matches = str.match(/^(\d+x\d+);(.+)$/);
+
+    if (matches == null) {
+      throw new Error('Invalid format');
+    }
+
+    const size = matches[1];
+    const data = matches[2];
     const [width, height] = size.split('x').map(Number);
 
     if (width < 0 || height < 0) {
@@ -183,3 +202,4 @@ export class Board {
     return board;
   }
 }
+exports.Board = Board;
