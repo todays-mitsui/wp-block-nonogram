@@ -45,8 +45,8 @@ export default function Edit({ attributes, setAttributes }) {
 				</InspectorControls>
 
 				<canvas
-					width={100}
-					height={100}
+					width={10}
+					height={10}
 					ref={canvasRef}
 				></canvas>
 			</div>
