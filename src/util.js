@@ -47,3 +47,15 @@ export function stringToBits(str) {
 
   return bits;
 }
+
+/**
+ * @template T
+ * @param {T[]} array
+ * @param {number} size
+ * @returns {Generator<T[]>}
+ */
+export function* chunks(array, size) {
+  for (let i = 0; i < array.length; i += size) {
+    yield array.slice(i, i + size);
+  }
+}
