@@ -39,8 +39,6 @@ export function Grid({
 		y: offsetTop + cluesHeight + i * cellSize,
 	}));
 
-	console.info({ verticalLines, horizontalLines });
-
 	return (
 		<Layer>
 			<Rect
@@ -49,6 +47,7 @@ export function Grid({
 				width={gridWidth}
 				height={cluesHeight}
 				fill="#eee"
+				strokeEnabled={false}
 			/>
 			<Rect
 				x={offsetLeft}
@@ -56,6 +55,7 @@ export function Grid({
 				width={cluesWidth}
 				height={gridHeight}
 				fill="#eee"
+				strokeEnabled={false}
 			/>
 			{ verticalLines.map(({ x, yStart, yEnd }, i) => (
 				<Line

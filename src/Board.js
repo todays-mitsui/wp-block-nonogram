@@ -76,13 +76,14 @@ class Board {
   }
 
   /**
-   * @returns {Generator<{ x: number; y: number; filled: boolean; }>}
+   * @returns {Generator<{ id: string; x: number; y: number; filled: boolean; }>}
    */
   * cells() {
     for (let y = 0; y < this._height; y++) {
       for (let x = 0; x < this._width; x++) {
+        const id = `(${x},${y})`;
         const filled = this._grid.get(x, y);
-        yield { x, y, filled };
+        yield { id, x, y, filled };
       }
     }
   }

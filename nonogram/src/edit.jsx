@@ -6,6 +6,7 @@ import { BoardSize } from './Controls/BoardSize';
 import { createRender } from '../../src/render';
 import { Board } from '../../src/Board';
 import { Stage, Layer, Star, Text } from 'react-konva';
+import { Cells } from './Components/Cells';
 import { Grid } from './Components/Grid';
 import './editor.scss';
 
@@ -24,6 +25,16 @@ export default function Edit({ attributes, setAttributes }) {
 	const board = boardData == null
 		? new Board(15, 15)
 		: Board.deserialize(boardData);
+	const cells = [...board.cells()];
+
+	useEffect(() => {
+		console.info({
+			data: boardData,
+			numRows: board.height,
+			numColumns: board.width,
+			cells: cells,
+		});
+	}, [boardData]);
 
 	const [wrapperRef, width] = useBlockSize();
 	const height = width && width * ASPECT_RATIO;
@@ -52,6 +63,14 @@ export default function Edit({ attributes, setAttributes }) {
 						numRows={board.height}
 						numColumns={board.width}
 						cellSize={cellSize}
+					/>
+					<Cells
+						board={board}
+						cells={cells}
+						gridOffsetLeft={offsetLeft + cluesWidth}
+						gridOffsetTop={offsetTop + cluesHeight}
+						cellSize={cellSize}
+						setAttributes={setAttributes}
 					/>
 					<Layer>
 						<Text text={`numRows: ${board.height}, numColumns: ${board.width}`} />
