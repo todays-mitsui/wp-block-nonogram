@@ -101,8 +101,8 @@ class Board {
    * @returns {Generator<boolean[]>}
    */
   * columns() {
-    for (const column of this._grid.columns()) {
-      yield column.slice(0, this._height);
+    for (let x = 0; x < this._width; x++) {
+      yield this._grid.getColumn(x).slice(0, this._height);
     }
   }
 
@@ -145,7 +145,7 @@ class Board {
       clue.push(count);
     }
 
-    return clue;
+    return clue.length === 0 ? [0] : clue;
   }
 
   /**

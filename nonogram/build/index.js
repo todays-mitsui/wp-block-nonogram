@@ -20,6 +20,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _src_Board__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../src/Board */ "../src/Board.js");
 /* harmony import */ var _CellsView__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./CellsView */ "./src/Components/CellsView.jsx");
 /* harmony import */ var _GridView__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./GridView */ "./src/Components/GridView.jsx");
+/* harmony import */ var _ColumnCluesView__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./ColumnCluesView */ "./src/Components/ColumnCluesView.jsx");
+
 
 
 
@@ -65,6 +67,9 @@ function BoardView({
     setCurrentState(null);
   };
   const cells = [...board.cells()];
+  const rowClues = [...board.rowClues()];
+  const columnClues = [...board.columnClues()];
+  const fontSize = Math.min(cellSize / 2, 20);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Stage, {
     width: width,
     height: height,
@@ -77,7 +82,14 @@ function BoardView({
     numRows: board.height,
     numColumns: board.width,
     cellSize: cellSize
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_CellsView__WEBPACK_IMPORTED_MODULE_4__.CellsView, {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Layer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ColumnCluesView__WEBPACK_IMPORTED_MODULE_6__.ColumnCluesView, {
+    clues: columnClues,
+    fontSize: fontSize,
+    fill: "black",
+    left: offsetLeft + cluesWidth,
+    bottom: offsetTop + cluesHeight,
+    cellSize: cellSize
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_CellsView__WEBPACK_IMPORTED_MODULE_4__.CellsView, {
     board: board,
     cells: cells,
     gridOffsetLeft: offsetLeft + cluesWidth,
@@ -180,6 +192,108 @@ function CellsView({
     strokeEnabled: false,
     onMouseDown: onMouseDown,
     onMouseOver: onMouseOver
+  })));
+}
+
+/***/ }),
+
+/***/ "./src/Components/ColumnClueView.jsx":
+/*!*******************************************!*\
+  !*** ./src/Components/ColumnClueView.jsx ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ColumnClueView: () => (/* binding */ ColumnClueView)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_konva__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-konva */ "./node_modules/react-konva/es/ReactKonva.js");
+
+
+
+/**
+ * @param {{
+ * 		clue: number[];
+ * 		fontSize: number;
+ * 		fill: string;
+ * 		left: number;
+ * 		bottom: number;
+ * 		width: number;
+ * }} props
+ * @returns {JSX.Element}
+ */
+function ColumnClueView({
+  clue,
+  fontSize,
+  fill,
+  left,
+  bottom,
+  width
+}) {
+  const texts = clue.map(num => num.toString()).reverse();
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Group, null, texts.map((text, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Text, {
+    key: index,
+    text: text,
+    fontSize: fontSize,
+    fill: fill,
+    x: left,
+    y: bottom - (index * 1.5 + 1.5) * fontSize,
+    width: width,
+    align: "center"
+  })));
+}
+
+/***/ }),
+
+/***/ "./src/Components/ColumnCluesView.jsx":
+/*!********************************************!*\
+  !*** ./src/Components/ColumnCluesView.jsx ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ColumnCluesView: () => (/* binding */ ColumnCluesView)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_konva__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-konva */ "./node_modules/react-konva/es/ReactKonva.js");
+/* harmony import */ var _ColumnClueView__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ColumnClueView */ "./src/Components/ColumnClueView.jsx");
+
+
+
+
+/**
+ * @param {{
+ * 		clues: number[][];
+ * 		fontSize: number;
+ * 		fill: string;
+ * 		left: number;
+ * 		bottom: number;
+ * 		cellSize: number;
+ * }} props
+ * @returns {JSX.Element}
+ */
+function ColumnCluesView({
+  clues,
+  fontSize,
+  fill,
+  left,
+  bottom,
+  cellSize
+}) {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Group, null, clues.map((clue, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ColumnClueView__WEBPACK_IMPORTED_MODULE_2__.ColumnClueView, {
+    key: index,
+    clue: clue,
+    fontSize: fontSize,
+    fill: fill,
+    left: left + cellSize * index,
+    bottom: bottom,
+    width: cellSize
   })));
 }
 
@@ -695,8 +809,8 @@ class Board {
    * @returns {Generator<boolean[]>}
    */
   *columns() {
-    for (const column of this._grid.columns()) {
-      yield column.slice(0, this._height);
+    for (let x = 0; x < this._width; x++) {
+      yield this._grid.getColumn(x).slice(0, this._height);
     }
   }
 
@@ -736,7 +850,7 @@ class Board {
     if (count > 0) {
       clue.push(count);
     }
-    return clue;
+    return clue.length === 0 ? [0] : clue;
   }
 
   /**

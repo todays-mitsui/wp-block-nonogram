@@ -3,6 +3,7 @@ import { Stage, Layer, Text } from 'react-konva';
 import { Board } from '../../../src/Board';
 import { CellsView } from './CellsView';
 import { GridView } from './GridView';
+import { ColumnCluesView } from './ColumnCluesView';
 
 /**
  * @param {{
@@ -44,6 +45,10 @@ export function BoardView({
 	};
 
 	const cells = [...board.cells()];
+	const rowClues = [...board.rowClues()];
+	const columnClues = [...board.columnClues()];
+
+	const fontSize = Math.min(cellSize / 2, 20);
 
 	return (
 		<Stage
@@ -60,6 +65,16 @@ export function BoardView({
 				numColumns={board.width}
 				cellSize={cellSize}
 			/>
+			<Layer>
+				<ColumnCluesView
+					clues={columnClues}
+					fontSize={fontSize}
+					fill="black"
+					left={offsetLeft + cluesWidth}
+					bottom={offsetTop + cluesHeight}
+					cellSize={cellSize}
+				/>
+			</Layer>
 			<CellsView
 				board={board}
 				cells={cells}
