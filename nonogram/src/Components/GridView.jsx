@@ -14,9 +14,9 @@ const STROKE_COLOR_LIGHT = '#aaa';
  * 		numColumns: number;
  * 		cellSize: number;
  * }} param
- * @returns
+ * @returns {JSX.Element}
  */
-export function Grid({
+export function GridView({
 	offsetLeft,
 	offsetTop,
 	cluesWidth,

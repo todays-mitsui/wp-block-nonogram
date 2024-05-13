@@ -6,8 +6,7 @@ import { BoardSize } from './Controls/BoardSize';
 import { createRender } from '../../src/render';
 import { Board } from '../../src/Board';
 import { Stage, Layer, Star, Text } from 'react-konva';
-import { Cells } from './Components/Cells';
-import { Grid } from './Components/Grid';
+import { BoardView } from './Components/BoardView';
 import './editor.scss';
 
 /**
@@ -54,28 +53,17 @@ export default function Edit({ attributes, setAttributes }) {
 					/>
 				</InspectorControls>
 
-				<Stage width={width} height={height}>
-					<Grid
-						offsetLeft={offsetLeft}
-						offsetTop={offsetTop}
-						cluesWidth={cluesWidth}
-						cluesHeight={cluesHeight}
-						numRows={board.height}
-						numColumns={board.width}
-						cellSize={cellSize}
-					/>
-					<Cells
-						board={board}
-						cells={cells}
-						gridOffsetLeft={offsetLeft + cluesWidth}
-						gridOffsetTop={offsetTop + cluesHeight}
-						cellSize={cellSize}
-						setAttributes={setAttributes}
-					/>
-					<Layer>
-						<Text text={`numRows: ${board.height}, numColumns: ${board.width}`} />
-					</Layer>
-				</Stage>
+				<BoardView
+					width={width}
+					height={height}
+					board={board}
+					offsetLeft={offsetLeft}
+					offsetTop={offsetTop}
+					cluesWidth={cluesWidth}
+					cluesHeight={cluesHeight}
+					cellSize={cellSize}
+					setAttributes={setAttributes}
+				/>
 			</div>
 		</div>
 	);
@@ -103,7 +91,9 @@ function useBlockSize() {
 
 		observer.observe(wrapperRef.current);
 
-		return () => observer.unobserve(wrapperRef.current);
+		return () => {
+			wrapperRef.current && observer.unobserve(wrapperRef.current);
+		};
 	}, [wrapperRef.current]);
 
 	return [wrapperRef, width];

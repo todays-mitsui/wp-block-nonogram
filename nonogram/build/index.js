@@ -1,16 +1,109 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/Components/Cells.jsx":
-/*!**********************************!*\
-  !*** ./src/Components/Cells.jsx ***!
-  \**********************************/
+/***/ "./src/Components/BoardView.jsx":
+/*!**************************************!*\
+  !*** ./src/Components/BoardView.jsx ***!
+  \**************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   Cells: () => (/* binding */ Cells)
+/* harmony export */   BoardView: () => (/* binding */ BoardView)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_konva__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-konva */ "./node_modules/react-konva/es/ReactKonva.js");
+/* harmony import */ var _src_Board__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../src/Board */ "../src/Board.js");
+/* harmony import */ var _CellsView__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./CellsView */ "./src/Components/CellsView.jsx");
+/* harmony import */ var _GridView__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./GridView */ "./src/Components/GridView.jsx");
+
+
+
+
+
+
+
+/**
+ * @param {{
+ * 		width: number;
+ * 		height: number;
+ * 		board: Board;
+ * 		offsetLeft: number;
+ * 		offsetTop: number;
+ * 		cluesWidth: number;
+ * 		cluesHeight: number;
+ * 		cellSize: number;
+ * 		setAttributes: (newParam: { boardData: string }) => void;
+ * }} param
+ * @returns {JSX.Element}
+ */
+function BoardView({
+  width,
+  height,
+  board,
+  offsetLeft,
+  offsetTop,
+  cluesWidth,
+  cluesHeight,
+  cellSize,
+  setAttributes
+}) {
+  const [isDragging, setIsDragging] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
+  const [currentState, setCurrentState] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
+
+  // 各セルでマウスが押されたときに呼ばれる想定のハンドラ
+  const onMouseDown = currentState => {
+    setIsDragging(true);
+    setCurrentState(currentState);
+  };
+  const onMouseUp = () => {
+    setIsDragging(false);
+    setCurrentState(null);
+  };
+  const cells = [...board.cells()];
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Stage, {
+    width: width,
+    height: height,
+    onMouseUp: onMouseUp
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_GridView__WEBPACK_IMPORTED_MODULE_5__.GridView, {
+    offsetLeft: offsetLeft,
+    offsetTop: offsetTop,
+    cluesWidth: cluesWidth,
+    cluesHeight: cluesHeight,
+    numRows: board.height,
+    numColumns: board.width,
+    cellSize: cellSize
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_CellsView__WEBPACK_IMPORTED_MODULE_4__.CellsView, {
+    board: board,
+    cells: cells,
+    gridOffsetLeft: offsetLeft + cluesWidth,
+    gridOffsetTop: offsetTop + cluesHeight,
+    cellSize: cellSize,
+    isDragging: isDragging,
+    currentState: currentState,
+    onMouseDown: onMouseDown,
+    setAttributes: setAttributes
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Layer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Text, {
+    text: `numRows: ${board.height}, numColumns: ${board.width}`
+  })));
+}
+
+/***/ }),
+
+/***/ "./src/Components/CellsView.jsx":
+/*!**************************************!*\
+  !*** ./src/Components/CellsView.jsx ***!
+  \**************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   CellsView: () => (/* binding */ CellsView)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
@@ -19,6 +112,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+const COLOR_FILLED = '#333';
+const COLOR_EMPTY = 'transparent';
 
 /**
  *
@@ -28,22 +123,40 @@ __webpack_require__.r(__webpack_exports__);
  * 		gridOffsetLeft: number;
  * 		gridOffsetTop: number;
  * 		cellSize: number;
+ * 		isDragging: boolean;
+ * 		currentState: 'fill' | 'clear' | null;
+ * 		onMouseDown: (event: KonvaEventObject<MouseEvent>) => void;
  * 		setAttributes: (newParam: { boardData: string }) => void;
  * }} param
  */
-function Cells({
+function CellsView({
   board,
   cells,
   gridOffsetLeft,
   gridOffsetTop,
   cellSize,
+  isDragging,
+  currentState,
+  onMouseDown: onParentMouseDown,
   setAttributes
 }) {
-  const onClick = event => {
-    console.log(event.target.attrs.id);
+  const onMouseDown = event => {
     const cell = cells.find(cell => cell.id === event.target.attrs.id);
     if (cell) {
       cell.filled ? board.clear(cell.x, cell.y) : board.fill(cell.x, cell.y);
+      onParentMouseDown(cell.filled ? 'clear' : 'fill');
+      setAttributes({
+        boardData: board.serialize()
+      });
+    }
+  };
+  const onMouseOver = event => {
+    if (!isDragging || currentState == null) {
+      return;
+    }
+    const cell = cells.find(cell => cell.id === event.target.attrs.id);
+    if (cell) {
+      currentState === 'fill' ? board.fill(cell.x, cell.y) : board.clear(cell.x, cell.y);
       setAttributes({
         boardData: board.serialize()
       });
@@ -57,28 +170,29 @@ function Cells({
   }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Rect, {
     key: id,
     id: id,
-    x: gridOffsetLeft + x * cellSize + 1,
-    y: gridOffsetTop + y * cellSize + 1,
-    width: cellSize - 2,
-    height: cellSize - 2,
-    fill: filled ? 'black' : 'yellow',
+    x: gridOffsetLeft + x * cellSize + 0.5,
+    y: gridOffsetTop + y * cellSize + 0.5,
+    width: cellSize - 1.5,
+    height: cellSize - 1.5,
+    fill: filled ? COLOR_FILLED : COLOR_EMPTY,
     strokeEnabled: false,
-    onClick: onClick
+    onMouseDown: onMouseDown,
+    onMouseOver: onMouseOver
   })));
 }
 
 /***/ }),
 
-/***/ "./src/Components/Grid.jsx":
-/*!*********************************!*\
-  !*** ./src/Components/Grid.jsx ***!
-  \*********************************/
+/***/ "./src/Components/GridView.jsx":
+/*!*************************************!*\
+  !*** ./src/Components/GridView.jsx ***!
+  \*************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   Grid: () => (/* binding */ Grid)
+/* harmony export */   GridView: () => (/* binding */ GridView)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
@@ -99,9 +213,9 @@ const STROKE_COLOR_LIGHT = '#aaa';
  * 		numColumns: number;
  * 		cellSize: number;
  * }} param
- * @returns
+ * @returns {JSX.Element}
  */
-function Grid({
+function GridView({
   offsetLeft,
   offsetTop,
   cluesWidth,
@@ -257,10 +371,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _src_render__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../src/render */ "../src/render.js");
 /* harmony import */ var _src_Board__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../src/Board */ "../src/Board.js");
 /* harmony import */ var react_konva__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-konva */ "./node_modules/react-konva/es/ReactKonva.js");
-/* harmony import */ var _Components_Cells__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Components/Cells */ "./src/Components/Cells.jsx");
-/* harmony import */ var _Components_Grid__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Components/Grid */ "./src/Components/Grid.jsx");
-/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./editor.scss */ "./src/editor.scss");
-
+/* harmony import */ var _Components_BoardView__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Components/BoardView */ "./src/Components/BoardView.jsx");
+/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./editor.scss */ "./src/editor.scss");
 
 
 
@@ -318,27 +430,17 @@ function Edit({
     numRows: board.height,
     numColumns: board.width,
     setAttributes: setAttributes
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_7__.Stage, {
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Components_BoardView__WEBPACK_IMPORTED_MODULE_8__.BoardView, {
     width: width,
-    height: height
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Components_Grid__WEBPACK_IMPORTED_MODULE_9__.Grid, {
+    height: height,
+    board: board,
     offsetLeft: offsetLeft,
     offsetTop: offsetTop,
     cluesWidth: cluesWidth,
     cluesHeight: cluesHeight,
-    numRows: board.height,
-    numColumns: board.width,
-    cellSize: cellSize
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Components_Cells__WEBPACK_IMPORTED_MODULE_8__.Cells, {
-    board: board,
-    cells: cells,
-    gridOffsetLeft: offsetLeft + cluesWidth,
-    gridOffsetTop: offsetTop + cluesHeight,
     cellSize: cellSize,
     setAttributes: setAttributes
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_7__.Layer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_7__.Text, {
-    text: `numRows: ${board.height}, numColumns: ${board.width}`
-  })))));
+  })));
 }
 const ASPECT_RATIO = 2 / 3;
 
@@ -360,7 +462,9 @@ function useBlockSize() {
       setWidth(newWidth);
     });
     observer.observe(wrapperRef.current);
-    return () => observer.unobserve(wrapperRef.current);
+    return () => {
+      wrapperRef.current && observer.unobserve(wrapperRef.current);
+    };
   }, [wrapperRef.current]);
   return [wrapperRef, width];
 }
