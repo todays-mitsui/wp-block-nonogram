@@ -4,6 +4,9 @@ import { Layer, Rect } from 'react-konva';
 const COLOR_FILLED = '#333';
 const COLOR_EMPTY = 'transparent';
 
+const PADDING = 0.5;
+const STROKE_WIDTH = 1;
+
 /**
  *
  * @param {{
@@ -54,10 +57,10 @@ export function CellsView({
 				<Rect
 					key={id}
 					id={id}
-					x={gridOffsetLeft + x * cellSize + 0.5}
-					y={gridOffsetTop + y * cellSize + 0.5}
-					width={cellSize - 1.5}
-					height={cellSize - 1.5}
+					x={gridOffsetLeft + x * cellSize + PADDING}
+					y={gridOffsetTop + y * cellSize + PADDING}
+					width={cellSize - PADDING - STROKE_WIDTH}
+					height={cellSize - PADDING - STROKE_WIDTH}
 					fill={filled ? COLOR_FILLED : COLOR_EMPTY}
 					strokeEnabled={false}
 					onMouseDown={onMouseDown}

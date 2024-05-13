@@ -114,6 +114,8 @@ __webpack_require__.r(__webpack_exports__);
 
 const COLOR_FILLED = '#333';
 const COLOR_EMPTY = 'transparent';
+const PADDING = 0.5;
+const STROKE_WIDTH = 1;
 
 /**
  *
@@ -170,10 +172,10 @@ function CellsView({
   }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Rect, {
     key: id,
     id: id,
-    x: gridOffsetLeft + x * cellSize + 0.5,
-    y: gridOffsetTop + y * cellSize + 0.5,
-    width: cellSize - 1.5,
-    height: cellSize - 1.5,
+    x: gridOffsetLeft + x * cellSize + PADDING,
+    y: gridOffsetTop + y * cellSize + PADDING,
+    width: cellSize - PADDING - STROKE_WIDTH,
+    height: cellSize - PADDING - STROKE_WIDTH,
     fill: filled ? COLOR_FILLED : COLOR_EMPTY,
     strokeEnabled: false,
     onMouseDown: onMouseDown,
@@ -367,14 +369,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _Controls_BoardSize__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Controls/BoardSize */ "./src/Controls/BoardSize.jsx");
-/* harmony import */ var _src_render__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../src/render */ "../src/render.js");
-/* harmony import */ var _src_Board__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../src/Board */ "../src/Board.js");
-/* harmony import */ var react_konva__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-konva */ "./node_modules/react-konva/es/ReactKonva.js");
-/* harmony import */ var _Components_BoardView__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Components/BoardView */ "./src/Components/BoardView.jsx");
-/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./editor.scss */ "./src/editor.scss");
-
-
+/* harmony import */ var _src_Board__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../src/Board */ "../src/Board.js");
+/* harmony import */ var _Controls_BoardSize__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Controls/BoardSize */ "./src/Controls/BoardSize.jsx");
+/* harmony import */ var _Components_BoardView__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Components/BoardView */ "./src/Components/BoardView.jsx");
+/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./editor.scss */ "./src/editor.scss");
 
 
 
@@ -386,12 +384,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * The edit function describes the structure of your block in the context of the
- * editor. This represents what the editor will render when the block is used.
- *
- * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
- *
- * @return {Element} Element to render.
+ * @return {JSX.Element}
  */
 function Edit({
   attributes,
@@ -401,16 +394,7 @@ function Edit({
   const {
     boardData
   } = attributes;
-  const board = boardData == null ? new _src_Board__WEBPACK_IMPORTED_MODULE_6__.Board(15, 15) : _src_Board__WEBPACK_IMPORTED_MODULE_6__.Board.deserialize(boardData);
-  const cells = [...board.cells()];
-  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useEffect)(() => {
-    console.info({
-      data: boardData,
-      numRows: board.height,
-      numColumns: board.width,
-      cells: cells
-    });
-  }, [boardData]);
+  const board = boardData == null ? new _src_Board__WEBPACK_IMPORTED_MODULE_4__.Board(15, 15) : _src_Board__WEBPACK_IMPORTED_MODULE_4__.Board.deserialize(boardData);
   const [wrapperRef, width] = useBlockSize();
   const height = width && width * ASPECT_RATIO;
   const [cluesWidth, cluesHeight] = [100, 100];
@@ -425,12 +409,12 @@ function Edit({
     ref: wrapperRef
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.InspectorControls, {
     key: "settings"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Controls_BoardSize__WEBPACK_IMPORTED_MODULE_4__.BoardSize, {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Controls_BoardSize__WEBPACK_IMPORTED_MODULE_5__.BoardSize, {
     board: board,
     numRows: board.height,
     numColumns: board.width,
     setAttributes: setAttributes
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Components_BoardView__WEBPACK_IMPORTED_MODULE_8__.BoardView, {
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Components_BoardView__WEBPACK_IMPORTED_MODULE_6__.BoardView, {
     width: width,
     height: height,
     board: board,
@@ -1008,115 +992,6 @@ class Grid {
     grid._cells = new Uint8ClampedArray(cells);
     return grid;
   }
-}
-
-/***/ }),
-
-/***/ "../src/render.js":
-/*!************************!*\
-  !*** ../src/render.js ***!
-  \************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-/**
- * @param {number} numRows
- * @param {number} numColumns
- * @returns {(canvas: HTMLCanvasElement, width: number, height: number) => void}
- */
-function createRender(numRows, numColumns) {
-  const text = `numRows: ${numRows}, numColumns: ${numColumns}`;
-
-  /**
-   * @param {HTMLCanvasElement} canvas
-   */
-  return canvas => {
-    const ctx = canvas.getContext('2d');
-    if (!ctx) {
-      return;
-    }
-    const {
-      paddingLeft,
-      paddingTop,
-      gridWidth,
-      gridHeight,
-      cellSize
-    } = calcLayout(canvas.width, canvas.height, numRows, numColumns);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = '#eee';
-    ctx.fillRect(paddingLeft + CLUES_WIDTH, paddingTop, gridWidth, CLUES_HEIGHT);
-    ctx.fillRect(paddingLeft, paddingTop + CLUES_HEIGHT, CLUES_WIDTH, gridHeight);
-    for (let i = 0; i <= numRows; i++) {
-      ctx.beginPath();
-      ctx.strokeStyle = i % 5 === 0 || i === numRows ? '#333' : '#aaa';
-      const y = paddingTop + CLUES_HEIGHT + i * cellSize;
-      const xStart = paddingLeft;
-      const xEnd = paddingLeft + CLUES_WIDTH + gridWidth;
-      ctx.moveTo(xStart, y);
-      ctx.lineTo(xEnd, y);
-      ctx.stroke();
-    }
-    for (let i = 0; i <= numColumns; i++) {
-      ctx.beginPath();
-      ctx.strokeStyle = i % 5 === 0 || i === numColumns ? '#333' : '#aaa';
-      const x = paddingLeft + CLUES_WIDTH + i * cellSize;
-      const yStart = paddingTop;
-      const yEnd = paddingTop + CLUES_HEIGHT + gridHeight;
-      ctx.moveTo(x, yStart);
-      ctx.lineTo(x, yEnd);
-      ctx.stroke();
-    }
-    ctx.fillStyle = "red";
-    ctx.font = "20px serif";
-    ctx.fillText(text, 10, 50);
-  };
-}
-exports.createRender = createRender;
-const MIN_PADDING = 8;
-const CLUES_WIDTH = 100;
-const CLUES_HEIGHT = 100;
-
-/**
- * @param {number} canvasWidth
- * @param {number} canvasHeight
- * @param {number} numRows
- * @param {number} numColumns
- * @returns {{ paddingLeft: number; paddingTop: number; gridWidth: number; gridHeight: number; cellSize: number; }}
- */
-function calcLayout(canvasWidth, canvasHeight, numRows, numColumns) {
-  const {
-    cellSize,
-    gridWidth,
-    gridHeight
-  } = calcGridSize(canvasWidth, canvasHeight, numRows, numColumns);
-  const boardWidth = gridWidth + CLUES_WIDTH;
-  const paddingLeft = (canvasWidth - boardWidth) / 2;
-  const boardHeight = gridHeight + CLUES_HEIGHT;
-  const paddingTop = (canvasHeight - boardHeight) / 2;
-  return {
-    paddingLeft,
-    paddingTop,
-    gridWidth,
-    gridHeight,
-    cellSize
-  };
-}
-
-/**
- * @param {number} canvasWidth
- * @param {number} canvasHeight
- * @param {number} numRows
- * @param {number} numColumns
- * @returns {{ cellSize: number; gridWidth: number; gridHeight: number; }}
- */
-function calcGridSize(canvasWidth, canvasHeight, numRows, numColumns) {
-  const gridWidth = canvasWidth - CLUES_WIDTH - 2 * MIN_PADDING;
-  const gridHeight = canvasHeight - CLUES_HEIGHT - 2 * MIN_PADDING;
-  const cellSize = Math.min((gridWidth - 1) / numColumns, (gridHeight - 1) / numRows);
-  return {
-    cellSize,
-    gridWidth: cellSize * numColumns + 1,
-    gridHeight: cellSize * numRows + 1
-  };
 }
 
 /***/ }),

@@ -2,20 +2,13 @@ import { __ } from '@wordpress/i18n';
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
 import { useEffect, useRef, useState } from '@wordpress/element';
 import React from 'react';
-import { BoardSize } from './Controls/BoardSize';
-import { createRender } from '../../src/render';
 import { Board } from '../../src/Board';
-import { Stage, Layer, Star, Text } from 'react-konva';
+import { BoardSize } from './Controls/BoardSize';
 import { BoardView } from './Components/BoardView';
 import './editor.scss';
 
 /**
- * The edit function describes the structure of your block in the context of the
- * editor. This represents what the editor will render when the block is used.
- *
- * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
- *
- * @return {Element} Element to render.
+ * @return {JSX.Element}
  */
 export default function Edit({ attributes, setAttributes }) {
 	/** @type {{ boardData: string }} */
@@ -24,16 +17,6 @@ export default function Edit({ attributes, setAttributes }) {
 	const board = boardData == null
 		? new Board(15, 15)
 		: Board.deserialize(boardData);
-	const cells = [...board.cells()];
-
-	useEffect(() => {
-		console.info({
-			data: boardData,
-			numRows: board.height,
-			numColumns: board.width,
-			cells: cells,
-		});
-	}, [boardData]);
 
 	const [wrapperRef, width] = useBlockSize();
 	const height = width && width * ASPECT_RATIO;
