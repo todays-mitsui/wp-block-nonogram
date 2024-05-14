@@ -164,7 +164,7 @@ class Board {
 
     this._width = width;
     this._height = height;
-    this._grid.expand(width, height);
+    this._grid.resize(width, height);
 
     return this;
   }

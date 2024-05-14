@@ -138,7 +138,7 @@ export class Grid {
    * @param {number} height
    * @returns {this}
    */
-  expand(width, height) {
+  resize(width, height) {
     if (!Number.isInteger(width) || !Number.isInteger(height)) {
       throw new Error('width and height must be integers');
     }
@@ -147,11 +147,15 @@ export class Grid {
       throw new Error('Out of bounds');
     }
 
-    if (width > this._width) {
+    if (width < this._width) {
+      this._shrinkHorizontally(width);
+    } else if (width > this._width) {
       this._expandHorizontally(width);
     }
 
-    if (height > this._height) {
+    if (height < this._height) {
+      this._shrinkVertically(height);
+    } else if (height > this._height) {
       this._expandVertically(height);
     }
 
@@ -179,6 +183,37 @@ export class Grid {
   }
 
   /**
+   * @param {number} width
+   * @returns {this}
+   */
+  _shrinkHorizontally(width) {
+    const filledIndexes = [...this.rows()]
+      .flatMap((row) => {
+        return row
+          .map((filled, index) => filled ? index : null)
+          .filter((index) => index != null);
+      });
+    const maxFilledIndex = Math.max(...filledIndexes);
+
+    const newWidth = Math.max(width, maxFilledIndex + 1);
+
+    if (newWidth === this._width) { return this; }
+
+    const newCells = new Uint8ClampedArray(newWidth * this._height);
+    for (let y = 0; y < this._height; y++) {
+      newCells.set(
+        this._cells.subarray(y * this._width, y * this._width + newWidth),
+        y * newWidth
+      );
+    }
+
+    this._width = width;
+    this._cells = newCells;
+
+    return this;
+  }
+
+  /**
    * @param {number} height
    * @returns {this}
    */
@@ -189,6 +224,23 @@ export class Grid {
 
     this._height = height;
     this._cells = newCells;
+
+    return this;
+  }
+
+  /**
+   * @param {number} height
+   * @returns {this}
+   */
+  _shrinkVertically(height) {
+    const maxFilledIndex = [...this.rows()].findLastIndex((row) => row.some(Boolean))
+
+    const newHeight = Math.max(height, maxFilledIndex + 1);
+
+    if (newHeight === this._height) { return this; }
+
+    this._height = newHeight;
+    this._cells = this._cells.slice(0, this._width * newHeight);
 
     return this;
   }

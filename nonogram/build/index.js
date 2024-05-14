@@ -36,8 +36,8 @@ __webpack_require__.r(__webpack_exports__);
  * 		width: number;
  * 		height: number;
  * 		board: Board;
- * 		offsetLeft: number;
- * 		offsetTop: number;
+ * 		left: number;
+ * 		top: number;
  * 		cluesWidth: number;
  * 		cluesHeight: number;
  * 		cellSize: number;
@@ -49,8 +49,8 @@ function BoardView({
   width,
   height,
   board,
-  offsetLeft,
-  offsetTop,
+  left,
+  top,
   cluesWidth,
   cluesHeight,
   cellSize,
@@ -77,8 +77,8 @@ function BoardView({
     height: height,
     onMouseUp: onMouseUp
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Layer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_GridView__WEBPACK_IMPORTED_MODULE_5__.GridView, {
-    offsetLeft: offsetLeft,
-    offsetTop: offsetTop,
+    top: top,
+    left: left,
     cluesWidth: cluesWidth,
     cluesHeight: cluesHeight,
     numRows: board.height,
@@ -88,30 +88,28 @@ function BoardView({
     clues: columnClues,
     fontSize: fontSize,
     fill: "black",
-    left: offsetLeft + cluesWidth,
-    top: offsetTop,
+    top: top,
+    left: left + cluesWidth,
     cellSize: cellSize,
     cluesHeight: cluesHeight
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_RowCluesView__WEBPACK_IMPORTED_MODULE_7__.RowCluesView, {
     clues: rowClues,
     fontSize: fontSize,
     fill: "black",
-    top: offsetTop + cluesHeight,
-    left: offsetLeft,
+    top: top + cluesHeight,
+    left: left,
     cellSize: cellSize,
     cluesWidth: cluesWidth
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Layer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_CellsView__WEBPACK_IMPORTED_MODULE_4__.CellsView, {
     board: board,
     cells: cells,
-    gridOffsetLeft: offsetLeft + cluesWidth,
-    gridOffsetTop: offsetTop + cluesHeight,
+    top: top + cluesHeight,
+    left: left + cluesWidth,
     cellSize: cellSize,
     isDragging: isDragging,
     currentState: currentState,
     onMouseDown: onMouseDown,
     setAttributes: setAttributes
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Layer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Text, {
-    text: `numRows: ${board.height}, numColumns: ${board.width}`
   })));
 }
 
@@ -145,8 +143,8 @@ const STROKE_WIDTH = 1;
  * @param {{
  * 		board: Board;
  * 		cells: { id: string; x: number; y: number; filled: boolean; }[];
- * 		gridOffsetLeft: number;
- * 		gridOffsetTop: number;
+ * 		top: number;
+ * 		left: number;
  * 		cellSize: number;
  * 		isDragging: boolean;
  * 		currentState: 'fill' | 'clear' | null;
@@ -157,8 +155,8 @@ const STROKE_WIDTH = 1;
 function CellsView({
   board,
   cells,
-  gridOffsetLeft,
-  gridOffsetTop,
+  top,
+  left,
   cellSize,
   isDragging,
   currentState,
@@ -195,8 +193,8 @@ function CellsView({
   }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Rect, {
     key: id,
     id: id,
-    x: gridOffsetLeft + x * cellSize + PADDING,
-    y: gridOffsetTop + y * cellSize + PADDING,
+    x: left + x * cellSize + PADDING,
+    y: top + y * cellSize + PADDING,
     width: cellSize - PADDING - STROKE_WIDTH,
     height: cellSize - PADDING - STROKE_WIDTH,
     fill: filled ? COLOR_FILLED : COLOR_EMPTY,
@@ -283,8 +281,8 @@ __webpack_require__.r(__webpack_exports__);
  * 		clues: number[][];
  * 		fontSize: number;
  * 		fill: string;
- * 		left: number;
  * 		top: number;
+ * 		left: number;
  * 		cellSize: number;
  * 		cluesHeight: number;
  * }} props
@@ -294,8 +292,8 @@ function ColumnCluesView({
   clues,
   fontSize,
   fill,
-  left,
   top,
+  left,
   cellSize,
   cluesHeight
 }) {
@@ -334,8 +332,8 @@ const STROKE_COLOR_LIGHT = '#aaa';
 /**
  *
  * @param {{
- * 		offsetLeft: number;
- * 		offsetTop: number;
+ * 		top: number;
+ * 		left: number;
  * 		cluesWidth: number;
  * 		cluesHeight: number;
  * 		numRows: number;
@@ -345,8 +343,8 @@ const STROKE_COLOR_LIGHT = '#aaa';
  * @returns {JSX.Element}
  */
 function GridView({
-  offsetLeft,
-  offsetTop,
+  top,
+  left,
   cluesWidth,
   cluesHeight,
   numRows,
@@ -356,25 +354,25 @@ function GridView({
   const gridWidth = numColumns * cellSize;
   const gridHeight = numRows * cellSize;
   const verticalLines = Array.from(Array(numColumns + 1), (_, i) => ({
-    x: offsetLeft + cluesWidth + i * cellSize,
-    yStart: offsetTop,
-    yEnd: offsetTop + cluesHeight + gridHeight
+    x: left + cluesWidth + i * cellSize,
+    yStart: top,
+    yEnd: top + cluesHeight + gridHeight
   }));
   const horizontalLines = Array.from(Array(numRows + 1), (_, i) => ({
-    xStart: offsetLeft,
-    xEnd: offsetLeft + cluesWidth + gridWidth,
-    y: offsetTop + cluesHeight + i * cellSize
+    xStart: left,
+    xEnd: left + cluesWidth + gridWidth,
+    y: top + cluesHeight + i * cellSize
   }));
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Rect, {
-    x: offsetLeft + cluesWidth,
-    y: offsetTop,
+    x: left + cluesWidth,
+    y: top,
     width: gridWidth,
     height: cluesHeight,
     fill: "#eee",
     strokeEnabled: false
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Rect, {
-    x: offsetLeft,
-    y: offsetTop + cluesHeight,
+    x: left,
+    y: top + cluesHeight,
     width: cluesWidth,
     height: gridHeight,
     fill: "#eee",
@@ -484,8 +482,8 @@ __webpack_require__.r(__webpack_exports__);
 * 		fill: string;
 * 		top: number;
 * 		left: number;
-* 		cluesWidth: number;
 * 		cellSize: number;
+* 		cluesWidth: number;
 * }} props
 * @returns {JSX.Element}
 */
@@ -495,8 +493,8 @@ function RowCluesView({
   fill,
   top,
   left,
-  cluesWidth,
-  cellSize
+  cellSize,
+  cluesWidth
 }) {
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Group, null, clues.map((clue, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_RowClueView__WEBPACK_IMPORTED_MODULE_2__.RowClueView, {
     key: index,
@@ -653,8 +651,8 @@ function Edit({
     width: width,
     height: height,
     board: board,
-    offsetLeft: offsetLeft,
-    offsetTop: offsetTop,
+    left: offsetLeft,
+    top: offsetTop,
     cluesWidth: cluesWidth,
     cluesHeight: cluesHeight,
     cellSize: cellSize,
@@ -988,7 +986,7 @@ class Board {
     }
     this._width = width;
     this._height = height;
-    this._grid.expand(width, height);
+    this._grid.resize(width, height);
     return this;
   }
 
@@ -1163,17 +1161,21 @@ class Grid {
    * @param {number} height
    * @returns {this}
    */
-  expand(width, height) {
+  resize(width, height) {
     if (!Number.isInteger(width) || !Number.isInteger(height)) {
       throw new Error('width and height must be integers');
     }
     if (width < 0 || height < 0) {
       throw new Error('Out of bounds');
     }
-    if (width > this._width) {
+    if (width < this._width) {
+      this._shrinkHorizontally(width);
+    } else if (width > this._width) {
       this._expandHorizontally(width);
     }
-    if (height > this._height) {
+    if (height < this._height) {
+      this._shrinkVertically(height);
+    } else if (height > this._height) {
       this._expandVertically(height);
     }
     return this;
@@ -1194,6 +1196,28 @@ class Grid {
   }
 
   /**
+   * @param {number} width
+   * @returns {this}
+   */
+  _shrinkHorizontally(width) {
+    const filledIndexes = [...this.rows()].flatMap(row => {
+      return row.map((filled, index) => filled ? index : null).filter(index => index != null);
+    });
+    const maxFilledIndex = Math.max(...filledIndexes);
+    const newWidth = Math.max(width, maxFilledIndex + 1);
+    if (newWidth === this._width) {
+      return this;
+    }
+    const newCells = new Uint8ClampedArray(newWidth * this._height);
+    for (let y = 0; y < this._height; y++) {
+      newCells.set(this._cells.subarray(y * this._width, y * this._width + newWidth), y * newWidth);
+    }
+    this._width = width;
+    this._cells = newCells;
+    return this;
+  }
+
+  /**
    * @param {number} height
    * @returns {this}
    */
@@ -1202,6 +1226,21 @@ class Grid {
     newCells.set(this._cells);
     this._height = height;
     this._cells = newCells;
+    return this;
+  }
+
+  /**
+   * @param {number} height
+   * @returns {this}
+   */
+  _shrinkVertically(height) {
+    const maxFilledIndex = [...this.rows()].findLastIndex(row => row.some(Boolean));
+    const newHeight = Math.max(height, maxFilledIndex + 1);
+    if (newHeight === this._height) {
+      return this;
+    }
+    this._height = newHeight;
+    this._cells = this._cells.slice(0, this._width * newHeight);
     return this;
   }
 

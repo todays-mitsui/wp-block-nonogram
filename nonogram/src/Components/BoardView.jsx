@@ -71,8 +71,8 @@ export function BoardView({
 					clues={columnClues}
 					fontSize={fontSize}
 					fill="black"
-					x={left + cluesWidth}
-					y={top}
+					top={top}
+					left={left + cluesWidth}
 					cellSize={cellSize}
 					cluesHeight={cluesHeight}
 				/>
@@ -80,8 +80,8 @@ export function BoardView({
 					clues={rowClues}
 					fontSize={fontSize}
 					fill="black"
-					x={left}
-					y={top + cluesHeight}
+					top={top + cluesHeight}
+					left={left}
 					cellSize={cellSize}
 					cluesWidth={cluesWidth}
 				/>
