@@ -76,7 +76,7 @@ function BoardView({
     width: width,
     height: height,
     onMouseUp: onMouseUp
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_GridView__WEBPACK_IMPORTED_MODULE_5__.GridView, {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Layer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_GridView__WEBPACK_IMPORTED_MODULE_5__.GridView, {
     offsetLeft: offsetLeft,
     offsetTop: offsetTop,
     cluesWidth: cluesWidth,
@@ -84,7 +84,7 @@ function BoardView({
     numRows: board.height,
     numColumns: board.width,
     cellSize: cellSize
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Layer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ColumnCluesView__WEBPACK_IMPORTED_MODULE_6__.ColumnCluesView, {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ColumnCluesView__WEBPACK_IMPORTED_MODULE_6__.ColumnCluesView, {
     clues: columnClues,
     fontSize: fontSize,
     fill: "black",
@@ -99,7 +99,7 @@ function BoardView({
     left: offsetLeft,
     cellSize: cellSize,
     cluesWidth: cluesWidth
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_CellsView__WEBPACK_IMPORTED_MODULE_4__.CellsView, {
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Layer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_CellsView__WEBPACK_IMPORTED_MODULE_4__.CellsView, {
     board: board,
     cells: cells,
     gridOffsetLeft: offsetLeft + cluesWidth,
@@ -109,7 +109,7 @@ function BoardView({
     currentState: currentState,
     onMouseDown: onMouseDown,
     setAttributes: setAttributes
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Layer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Text, {
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Layer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Text, {
     text: `numRows: ${board.height}, numColumns: ${board.width}`
   })));
 }
@@ -186,7 +186,7 @@ function CellsView({
       });
     }
   };
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Layer, null, cells.map(({
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, cells.map(({
     id,
     x,
     y,
@@ -362,7 +362,7 @@ function GridView({
     xEnd: offsetLeft + cluesWidth + gridWidth,
     y: offsetTop + cluesHeight + i * cellSize
   }));
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Layer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Rect, {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Rect, {
     x: offsetLeft + cluesWidth,
     y: offsetTop,
     width: gridWidth,

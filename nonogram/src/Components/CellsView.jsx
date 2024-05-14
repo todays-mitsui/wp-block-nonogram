@@ -52,7 +52,7 @@ export function CellsView({
 	};
 
 	return (
-		<Layer>
+		<>
 			{cells.map(({ id, x, y, filled }) => (
 				<Rect
 					key={id}
@@ -67,6 +67,6 @@ export function CellsView({
 					onMouseOver={onMouseOver}
 				/>
 			))}
-		</Layer>
+		</>
 	);
 }

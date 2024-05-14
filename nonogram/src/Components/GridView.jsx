@@ -40,7 +40,7 @@ export function GridView({
 	}));
 
 	return (
-		<Layer>
+		<>
 			<Rect
 				x={offsetLeft + cluesWidth}
 				y={offsetTop}
@@ -75,6 +75,6 @@ export function GridView({
 					strokeWidth={1}
 				/>
 			)) }
-		</Layer>
+		</>
 	)
 }

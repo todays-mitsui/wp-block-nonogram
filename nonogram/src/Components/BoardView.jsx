@@ -57,16 +57,16 @@ export function BoardView({
 			height={height}
 			onMouseUp={onMouseUp}
 		>
-			<GridView
-				offsetLeft={offsetLeft}
-				offsetTop={offsetTop}
-				cluesWidth={cluesWidth}
-				cluesHeight={cluesHeight}
-				numRows={board.height}
-				numColumns={board.width}
-				cellSize={cellSize}
-			/>
 			<Layer>
+				<GridView
+					offsetLeft={offsetLeft}
+					offsetTop={offsetTop}
+					cluesWidth={cluesWidth}
+					cluesHeight={cluesHeight}
+					numRows={board.height}
+					numColumns={board.width}
+					cellSize={cellSize}
+				/>
 				<ColumnCluesView
 					clues={columnClues}
 					fontSize={fontSize}
@@ -85,17 +85,19 @@ export function BoardView({
 					cluesWidth={cluesWidth}
 				/>
 			</Layer>
-			<CellsView
-				board={board}
-				cells={cells}
-				gridOffsetLeft={offsetLeft + cluesWidth}
-				gridOffsetTop={offsetTop + cluesHeight}
-				cellSize={cellSize}
-				isDragging={isDragging}
-				currentState={currentState}
-				onMouseDown={onMouseDown}
-				setAttributes={setAttributes}
-			/>
+			<Layer>
+				<CellsView
+					board={board}
+					cells={cells}
+					gridOffsetLeft={offsetLeft + cluesWidth}
+					gridOffsetTop={offsetTop + cluesHeight}
+					cellSize={cellSize}
+					isDragging={isDragging}
+					currentState={currentState}
+					onMouseDown={onMouseDown}
+					setAttributes={setAttributes}
+				/>
+			</Layer>
 			<Layer>
 				<Text text={`numRows: ${board.height}, numColumns: ${board.width}`} />
 			</Layer>
