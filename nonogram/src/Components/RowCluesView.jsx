@@ -8,8 +8,8 @@ import { RowClueView } from './RowClueView';
 * 		fill: string;
 * 		top: number;
 * 		left: number;
-* 		cluesWidth: number;
 * 		cellSize: number;
+* 		cluesWidth: number;
 * }} props
 * @returns {JSX.Element}
 */
@@ -19,8 +19,8 @@ export function RowCluesView({
 	fill,
 	top,
 	left,
-	cluesWidth,
 	cellSize,
+	cluesWidth,
 }) {
 	return (
 		<Group>

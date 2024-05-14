@@ -6,9 +6,10 @@ import { ColumnClueView } from './ColumnClueView';
  * 		clues: number[][];
  * 		fontSize: number;
  * 		fill: string;
+ * 		top: number;
  * 		left: number;
- * 		bottom: number;
  * 		cellSize: number;
+ * 		cluesHeight: number;
  * }} props
  * @returns {JSX.Element}
  */
@@ -16,9 +17,10 @@ export function ColumnCluesView({
 	clues,
 	fontSize,
 	fill,
+	top,
 	left,
-	bottom,
 	cellSize,
+	cluesHeight,
 }) {
 	return (
 		<Group>
@@ -29,7 +31,7 @@ export function ColumnCluesView({
 					fontSize={fontSize}
 					fill={fill}
 					left={left + cellSize * index}
-					bottom={bottom}
+					bottom={top + cluesHeight}
 					width={cellSize}
 				/>
 			)) }

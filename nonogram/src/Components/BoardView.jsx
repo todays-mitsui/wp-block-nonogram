@@ -71,16 +71,17 @@ export function BoardView({
 					clues={columnClues}
 					fontSize={fontSize}
 					fill="black"
-					left={offsetLeft + cluesWidth}
-					bottom={offsetTop + cluesHeight}
+					x={offsetLeft + cluesWidth}
+					y={offsetTop}
 					cellSize={cellSize}
+					cluesHeight={cluesHeight}
 				/>
 				<RowCluesView
 					clues={rowClues}
 					fontSize={fontSize}
 					fill="black"
-					top={offsetTop + cluesHeight}
-					left={offsetLeft}
+					x={offsetLeft}
+					y={offsetTop + cluesHeight}
 					cellSize={cellSize}
 					cluesWidth={cluesWidth}
 				/>

@@ -89,8 +89,9 @@ function BoardView({
     fontSize: fontSize,
     fill: "black",
     left: offsetLeft + cluesWidth,
-    bottom: offsetTop + cluesHeight,
-    cellSize: cellSize
+    top: offsetTop,
+    cellSize: cellSize,
+    cluesHeight: cluesHeight
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_RowCluesView__WEBPACK_IMPORTED_MODULE_7__.RowCluesView, {
     clues: rowClues,
     fontSize: fontSize,
@@ -283,8 +284,9 @@ __webpack_require__.r(__webpack_exports__);
  * 		fontSize: number;
  * 		fill: string;
  * 		left: number;
- * 		bottom: number;
+ * 		top: number;
  * 		cellSize: number;
+ * 		cluesHeight: number;
  * }} props
  * @returns {JSX.Element}
  */
@@ -293,8 +295,9 @@ function ColumnCluesView({
   fontSize,
   fill,
   left,
-  bottom,
-  cellSize
+  top,
+  cellSize,
+  cluesHeight
 }) {
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Group, null, clues.map((clue, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ColumnClueView__WEBPACK_IMPORTED_MODULE_2__.ColumnClueView, {
     key: index,
@@ -302,7 +305,7 @@ function ColumnCluesView({
     fontSize: fontSize,
     fill: fill,
     left: left + cellSize * index,
-    bottom: bottom,
+    bottom: top + cluesHeight,
     width: cellSize
   })));
 }
