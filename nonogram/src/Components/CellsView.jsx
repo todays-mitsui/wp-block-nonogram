@@ -12,8 +12,8 @@ const STROKE_WIDTH = 1;
  * @param {{
  * 		board: Board;
  * 		cells: { id: string; x: number; y: number; filled: boolean; }[];
- * 		gridOffsetLeft: number;
- * 		gridOffsetTop: number;
+ * 		top: number;
+ * 		left: number;
  * 		cellSize: number;
  * 		isDragging: boolean;
  * 		currentState: 'fill' | 'clear' | null;
@@ -24,8 +24,8 @@ const STROKE_WIDTH = 1;
 export function CellsView({
 	board,
 	cells,
-	gridOffsetLeft,
-	gridOffsetTop,
+	top,
+	left,
 	cellSize,
 	isDragging,
 	currentState,
@@ -57,8 +57,8 @@ export function CellsView({
 				<Rect
 					key={id}
 					id={id}
-					x={gridOffsetLeft + x * cellSize + PADDING}
-					y={gridOffsetTop + y * cellSize + PADDING}
+					x={left + x * cellSize + PADDING}
+					y={top + y * cellSize + PADDING}
 					width={cellSize - PADDING - STROKE_WIDTH}
 					height={cellSize - PADDING - STROKE_WIDTH}
 					fill={filled ? COLOR_FILLED : COLOR_EMPTY}

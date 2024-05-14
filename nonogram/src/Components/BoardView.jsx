@@ -59,8 +59,8 @@ export function BoardView({
 		>
 			<Layer>
 				<GridView
-					offsetLeft={offsetLeft}
-					offsetTop={offsetTop}
+					top={offsetTop}
+					left={offsetLeft}
 					cluesWidth={cluesWidth}
 					cluesHeight={cluesHeight}
 					numRows={board.height}
@@ -90,8 +90,8 @@ export function BoardView({
 				<CellsView
 					board={board}
 					cells={cells}
-					gridOffsetLeft={offsetLeft + cluesWidth}
-					gridOffsetTop={offsetTop + cluesHeight}
+					top={offsetTop + cluesHeight}
+					left={offsetLeft + cluesWidth}
 					cellSize={cellSize}
 					isDragging={isDragging}
 					currentState={currentState}

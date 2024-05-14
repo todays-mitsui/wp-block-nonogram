@@ -6,8 +6,8 @@ const STROKE_COLOR_LIGHT = '#aaa';
 /**
  *
  * @param {{
- * 		offsetLeft: number;
- * 		offsetTop: number;
+ * 		top: number;
+ * 		left: number;
  * 		cluesWidth: number;
  * 		cluesHeight: number;
  * 		numRows: number;
@@ -17,8 +17,8 @@ const STROKE_COLOR_LIGHT = '#aaa';
  * @returns {JSX.Element}
  */
 export function GridView({
-	offsetLeft,
-	offsetTop,
+	top,
+	left,
 	cluesWidth,
 	cluesHeight,
 	numRows,
@@ -29,29 +29,29 @@ export function GridView({
 	const gridHeight = numRows * cellSize;
 
 	const verticalLines = Array.from(Array(numColumns + 1), (_, i) => ({
-		x: offsetLeft + cluesWidth + i * cellSize,
-		yStart: offsetTop,
-		yEnd: offsetTop + cluesHeight + gridHeight,
+		x: left + cluesWidth + i * cellSize,
+		yStart: top,
+		yEnd: top + cluesHeight + gridHeight,
 	}));
 	const horizontalLines = Array.from(Array(numRows + 1), (_, i) => ({
-		xStart: offsetLeft,
-		xEnd: offsetLeft + cluesWidth + gridWidth,
-		y: offsetTop + cluesHeight + i * cellSize,
+		xStart: left,
+		xEnd: left + cluesWidth + gridWidth,
+		y: top + cluesHeight + i * cellSize,
 	}));
 
 	return (
 		<>
 			<Rect
-				x={offsetLeft + cluesWidth}
-				y={offsetTop}
+				x={left + cluesWidth}
+				y={top}
 				width={gridWidth}
 				height={cluesHeight}
 				fill="#eee"
 				strokeEnabled={false}
 			/>
 			<Rect
-				x={offsetLeft}
-				y={offsetTop + cluesHeight}
+				x={left}
+				y={top + cluesHeight}
 				width={cluesWidth}
 				height={gridHeight}
 				fill="#eee"
