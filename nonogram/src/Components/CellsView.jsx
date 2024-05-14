@@ -1,5 +1,5 @@
 import { Board } from '../../../src/Board';
-import { Layer, Rect } from 'react-konva';
+import { Rect } from 'react-konva';
 
 const COLOR_FILLED = '#333';
 const COLOR_EMPTY = 'transparent';

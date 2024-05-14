@@ -1,4 +1,4 @@
-import { Layer, Line, Rect } from 'react-konva';
+import { Line, Rect } from 'react-konva';
 
 const STROKE_COLOR_DARK = '#666';
 const STROKE_COLOR_LIGHT = '#aaa';

@@ -40,8 +40,8 @@ export default function Edit({ attributes, setAttributes }) {
 					width={width}
 					height={height}
 					board={board}
-					offsetLeft={offsetLeft}
-					offsetTop={offsetTop}
+					left={offsetLeft}
+					top={offsetTop}
 					cluesWidth={cluesWidth}
 					cluesHeight={cluesHeight}
 					cellSize={cellSize}

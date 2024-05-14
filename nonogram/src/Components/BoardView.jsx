@@ -1,5 +1,5 @@
 import { useState } from '@wordpress/element';
-import { Stage, Layer, Text } from 'react-konva';
+import { Stage, Layer } from 'react-konva';
 import { Board } from '../../../src/Board';
 import { CellsView } from './CellsView';
 import { GridView } from './GridView';
@@ -11,8 +11,8 @@ import { RowCluesView } from './RowCluesView';
  * 		width: number;
  * 		height: number;
  * 		board: Board;
- * 		offsetLeft: number;
- * 		offsetTop: number;
+ * 		left: number;
+ * 		top: number;
  * 		cluesWidth: number;
  * 		cluesHeight: number;
  * 		cellSize: number;
@@ -24,8 +24,8 @@ export function BoardView({
 	width,
 	height,
 	board,
-	offsetLeft,
-	offsetTop,
+	left,
+	top,
 	cluesWidth,
 	cluesHeight,
 	cellSize,
@@ -59,8 +59,8 @@ export function BoardView({
 		>
 			<Layer>
 				<GridView
-					top={offsetTop}
-					left={offsetLeft}
+					top={top}
+					left={left}
 					cluesWidth={cluesWidth}
 					cluesHeight={cluesHeight}
 					numRows={board.height}
@@ -71,8 +71,8 @@ export function BoardView({
 					clues={columnClues}
 					fontSize={fontSize}
 					fill="black"
-					x={offsetLeft + cluesWidth}
-					y={offsetTop}
+					x={left + cluesWidth}
+					y={top}
 					cellSize={cellSize}
 					cluesHeight={cluesHeight}
 				/>
@@ -80,8 +80,8 @@ export function BoardView({
 					clues={rowClues}
 					fontSize={fontSize}
 					fill="black"
-					x={offsetLeft}
-					y={offsetTop + cluesHeight}
+					x={left}
+					y={top + cluesHeight}
 					cellSize={cellSize}
 					cluesWidth={cluesWidth}
 				/>
@@ -90,17 +90,14 @@ export function BoardView({
 				<CellsView
 					board={board}
 					cells={cells}
-					top={offsetTop + cluesHeight}
-					left={offsetLeft + cluesWidth}
+					top={top + cluesHeight}
+					left={left + cluesWidth}
 					cellSize={cellSize}
 					isDragging={isDragging}
 					currentState={currentState}
 					onMouseDown={onMouseDown}
 					setAttributes={setAttributes}
 				/>
-			</Layer>
-			<Layer>
-				<Text text={`numRows: ${board.height}, numColumns: ${board.width}`} />
 			</Layer>
 		</Stage>
 	);
