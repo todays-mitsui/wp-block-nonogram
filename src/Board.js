@@ -1,25 +1,41 @@
 const { Grid } = require('./Grid.js');
 
 class Board {
-  constructor(width, height) {
-    if (!Number.isInteger(width) || !Number.isInteger(height)) {
-      throw new Error('width and height must be integers');
+  constructor(numColumns, numRows) {
+    if (!Number.isInteger(numColumns) || !Number.isInteger(numRows)) {
+      throw new Error('numColumns and numRows must be integers');
     }
 
-    if (width < 0 || height < 0) {
+    if (numColumns < 0 || numRows < 0) {
       throw new Error('Out of bounds');
     }
 
-    this._width = width;
-    this._height = height;
-    this._grid = new Grid(width, height);
+    this._numColumns = numColumns;
+    this._numRows = numRows;
+    this._grid = new Grid(numColumns, numRows);
+  }
+
+  /**
+   * @returns {number}
+   */
+  get numRows() {
+    return this._numRows;
+  }
+
+  /**
+   * @returns {number}
+   */
+  get numColumns() {
+    return this._numColumns;
   }
 
   /**
    * @returns {number}
    */
   get width() {
-    return this._width;
+    console.warn('get width is deprecated');
+    console.trace();
+    return this._numColumns;
   }
 
   set width(_value) {
@@ -30,7 +46,9 @@ class Board {
    * @returns {number}
    */
   get height() {
-    return this._height;
+    console.warn('get height is deprecated');
+    console.trace();
+    return this._numRows;
   }
 
   set height(_value) {
@@ -47,7 +65,7 @@ class Board {
       throw new Error('x and y must be integers');
     }
 
-    if (x < 0 || x >= this._width || y < 0 || y >= this._height) {
+    if (x < 0 || x >= this._numColumns || y < 0 || y >= this._numRows) {
       throw new Error('Out of bounds');
     }
 
@@ -66,7 +84,7 @@ class Board {
       throw new Error('x and y must be integers');
     }
 
-    if (x < 0 || x >= this._width || y < 0 || y >= this._height) {
+    if (x < 0 || x >= this._numColumns || y < 0 || y >= this._numRows) {
       throw new Error('Out of bounds');
     }
 
@@ -79,8 +97,8 @@ class Board {
    * @returns {Generator<{ id: string; x: number; y: number; filled: boolean; }>}
    */
   * cells() {
-    for (let y = 0; y < this._height; y++) {
-      for (let x = 0; x < this._width; x++) {
+    for (let y = 0; y < this._numRows; y++) {
+      for (let x = 0; x < this._numColumns; x++) {
         const id = `(${x},${y})`;
         const filled = this._grid.get(x, y);
         yield { id, x, y, filled };
@@ -92,8 +110,8 @@ class Board {
    * @returns {Generator<boolean[]>}
    */
   * rows() {
-    for (let y = 0; y < this._height; y++) {
-      yield this._grid.getRow(y).slice(0, this._width);
+    for (let y = 0; y < this._numRows; y++) {
+      yield this._grid.getRow(y).slice(0, this._numColumns);
     }
   }
 
@@ -101,8 +119,8 @@ class Board {
    * @returns {Generator<boolean[]>}
    */
   * columns() {
-    for (let x = 0; x < this._width; x++) {
-      yield this._grid.getColumn(x).slice(0, this._height);
+    for (let x = 0; x < this._numColumns; x++) {
+      yield this._grid.getColumn(x).slice(0, this._numRows);
     }
   }
 
@@ -149,22 +167,22 @@ class Board {
   }
 
   /**
-   * @param {number} width
-   * @param {number} height
+   * @param {number} numColumns
+   * @param {number} numRows
    * @returns {this}
    */
-  resize(width, height) {
-    if (!Number.isInteger(width) || !Number.isInteger(height)) {
-      throw new Error('width and height must be integers');
+  resize(numColumns, numRows) {
+    if (!Number.isInteger(numColumns) || !Number.isInteger(numRows)) {
+      throw new Error('numColumns and numRows must be integers');
     }
 
-    if (width < 0 || height < 0) {
+    if (numColumns < 0 || numRows < 0) {
       throw new Error('Out of bounds');
     }
 
-    this._width = width;
-    this._height = height;
-    this._grid.resize(width, height);
+    this._numColumns = numColumns;
+    this._numRows = numRows;
+    this._grid.resize(numColumns, numRows);
 
     return this;
   }
@@ -173,7 +191,7 @@ class Board {
    * @returns {string}
    */
   serialize() {
-    return `${this._width}x${this._height};${this._grid.serialize()}`;
+    return `${this._numColumns}x${this._numRows};${this._grid.serialize()}`;
   }
 
   /**
@@ -189,13 +207,13 @@ class Board {
 
     const size = matches[1];
     const data = matches[2];
-    const [width, height] = size.split('x').map(Number);
+    const [numColumns, numRows] = size.split('x').map(Number);
 
-    if (width < 0 || height < 0) {
+    if (numColumns < 0 || numRows < 0) {
       throw new Error('Out of bounds');
     }
 
-    const board = new Board(width, height);
+    const board = new Board(numColumns, numRows);
 
     const grid = Grid.deserialize(data);
     board._grid = grid;

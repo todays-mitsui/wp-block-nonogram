@@ -833,23 +833,39 @@ const {
   Grid
 } = __webpack_require__(/*! ./Grid.js */ "../src/Grid.js");
 class Board {
-  constructor(width, height) {
-    if (!Number.isInteger(width) || !Number.isInteger(height)) {
-      throw new Error('width and height must be integers');
+  constructor(numColumns, numRows) {
+    if (!Number.isInteger(numColumns) || !Number.isInteger(numRows)) {
+      throw new Error('numColumns and numRows must be integers');
     }
-    if (width < 0 || height < 0) {
+    if (numColumns < 0 || numRows < 0) {
       throw new Error('Out of bounds');
     }
-    this._width = width;
-    this._height = height;
-    this._grid = new Grid(width, height);
+    this._numColumns = numColumns;
+    this._numRows = numRows;
+    this._grid = new Grid(numColumns, numRows);
+  }
+
+  /**
+   * @returns {number}
+   */
+  get numRows() {
+    return this._numRows;
+  }
+
+  /**
+   * @returns {number}
+   */
+  get numColumns() {
+    return this._numColumns;
   }
 
   /**
    * @returns {number}
    */
   get width() {
-    return this._width;
+    console.warn('get width is deprecated');
+    console.trace();
+    return this._numColumns;
   }
   set width(_value) {
     throw new Error('Cannot set width');
@@ -859,7 +875,9 @@ class Board {
    * @returns {number}
    */
   get height() {
-    return this._height;
+    console.warn('get height is deprecated');
+    console.trace();
+    return this._numRows;
   }
   set height(_value) {
     throw new Error('Cannot set height');
@@ -874,7 +892,7 @@ class Board {
     if (!Number.isInteger(x) || !Number.isInteger(y)) {
       throw new Error('x and y must be integers');
     }
-    if (x < 0 || x >= this._width || y < 0 || y >= this._height) {
+    if (x < 0 || x >= this._numColumns || y < 0 || y >= this._numRows) {
       throw new Error('Out of bounds');
     }
     this._grid.set(x, y, true);
@@ -890,7 +908,7 @@ class Board {
     if (!Number.isInteger(x) || !Number.isInteger(y)) {
       throw new Error('x and y must be integers');
     }
-    if (x < 0 || x >= this._width || y < 0 || y >= this._height) {
+    if (x < 0 || x >= this._numColumns || y < 0 || y >= this._numRows) {
       throw new Error('Out of bounds');
     }
     this._grid.set(x, y, false);
@@ -901,8 +919,8 @@ class Board {
    * @returns {Generator<{ id: string; x: number; y: number; filled: boolean; }>}
    */
   *cells() {
-    for (let y = 0; y < this._height; y++) {
-      for (let x = 0; x < this._width; x++) {
+    for (let y = 0; y < this._numRows; y++) {
+      for (let x = 0; x < this._numColumns; x++) {
         const id = `(${x},${y})`;
         const filled = this._grid.get(x, y);
         yield {
@@ -919,8 +937,8 @@ class Board {
    * @returns {Generator<boolean[]>}
    */
   *rows() {
-    for (let y = 0; y < this._height; y++) {
-      yield this._grid.getRow(y).slice(0, this._width);
+    for (let y = 0; y < this._numRows; y++) {
+      yield this._grid.getRow(y).slice(0, this._numColumns);
     }
   }
 
@@ -928,8 +946,8 @@ class Board {
    * @returns {Generator<boolean[]>}
    */
   *columns() {
-    for (let x = 0; x < this._width; x++) {
-      yield this._grid.getColumn(x).slice(0, this._height);
+    for (let x = 0; x < this._numColumns; x++) {
+      yield this._grid.getColumn(x).slice(0, this._numRows);
     }
   }
 
@@ -973,20 +991,20 @@ class Board {
   }
 
   /**
-   * @param {number} width
-   * @param {number} height
+   * @param {number} numColumns
+   * @param {number} numRows
    * @returns {this}
    */
-  resize(width, height) {
-    if (!Number.isInteger(width) || !Number.isInteger(height)) {
-      throw new Error('width and height must be integers');
+  resize(numColumns, numRows) {
+    if (!Number.isInteger(numColumns) || !Number.isInteger(numRows)) {
+      throw new Error('numColumns and numRows must be integers');
     }
-    if (width < 0 || height < 0) {
+    if (numColumns < 0 || numRows < 0) {
       throw new Error('Out of bounds');
     }
-    this._width = width;
-    this._height = height;
-    this._grid.resize(width, height);
+    this._numColumns = numColumns;
+    this._numRows = numRows;
+    this._grid.resize(numColumns, numRows);
     return this;
   }
 
@@ -994,7 +1012,7 @@ class Board {
    * @returns {string}
    */
   serialize() {
-    return `${this._width}x${this._height};${this._grid.serialize()}`;
+    return `${this._numColumns}x${this._numRows};${this._grid.serialize()}`;
   }
 
   /**
@@ -1008,11 +1026,11 @@ class Board {
     }
     const size = matches[1];
     const data = matches[2];
-    const [width, height] = size.split('x').map(Number);
-    if (width < 0 || height < 0) {
+    const [numColumns, numRows] = size.split('x').map(Number);
+    if (numColumns < 0 || numRows < 0) {
       throw new Error('Out of bounds');
     }
-    const board = new Board(width, height);
+    const board = new Board(numColumns, numRows);
     const grid = Grid.deserialize(data);
     board._grid = grid;
     return board;
@@ -1039,39 +1057,19 @@ const {
 } = __webpack_require__(/*! ./util.js */ "../src/util.js");
 class Grid {
   /**
-   * @param {number} width
-   * @param {number} height
+   * @param {number} numColumns
+   * @param {number} numRows
    */
-  constructor(width, height) {
-    if (!Number.isInteger(width) || !Number.isInteger(height)) {
-      throw new Error('width and height must be integers');
+  constructor(numColumns, numRows) {
+    if (!Number.isInteger(numColumns) || !Number.isInteger(numRows)) {
+      throw new Error('numColumns and numRows must be integers');
     }
-    if (width < 0 || height < 0) {
+    if (numColumns < 0 || numRows < 0) {
       throw new Error('Out of bounds');
     }
-    this._width = width;
-    this._height = height;
-    this._cells = new Uint8ClampedArray(width * height);
-  }
-
-  /**
-   * @returns {number}
-   */
-  get width() {
-    return this._width;
-  }
-  set width(_value) {
-    throw new Error('Cannot set width');
-  }
-
-  /**
-   * @returns {number}
-   */
-  get height() {
-    return this._height;
-  }
-  set height(_value) {
-    throw new Error('Cannot set height');
+    this._numColumns = numColumns;
+    this._numRows = numRows;
+    this._cells = new Uint8ClampedArray(numColumns * numRows);
   }
 
   /**
@@ -1083,10 +1081,10 @@ class Grid {
     if (!Number.isInteger(x) || !Number.isInteger(y)) {
       throw new Error('x and y must be integers');
     }
-    if (x < 0 || x >= this._width || y < 0 || y >= this._height) {
+    if (x < 0 || x >= this._numColumns || y < 0 || y >= this._numRows) {
       throw new Error('Out of bounds');
     }
-    return !!this._cells[y * this._width + x];
+    return !!this._cells[y * this._numColumns + x];
   }
 
   /**
@@ -1099,10 +1097,10 @@ class Grid {
     if (!Number.isInteger(x) || !Number.isInteger(y)) {
       throw new Error('x and y must be integers');
     }
-    if (x < 0 || x >= this._width || y < 0 || y >= this._height) {
+    if (x < 0 || x >= this._numColumns || y < 0 || y >= this._numRows) {
       throw new Error('Out of bounds');
     }
-    this._cells[y * this._width + x] = active ? 1 : 0;
+    this._cells[y * this._numColumns + x] = active ? 1 : 0;
     return this;
   }
 
@@ -1114,17 +1112,17 @@ class Grid {
     if (!Number.isInteger(y)) {
       throw new Error('y must be an integer');
     }
-    if (y < 0 || y >= this._height) {
+    if (y < 0 || y >= this._numRows) {
       throw new Error('Out of bounds');
     }
-    return Array.from(this._cells.subarray(y * this._width, (y + 1) * this._width)).map(Boolean);
+    return Array.from(this._cells.subarray(y * this._numColumns, (y + 1) * this._numColumns)).map(Boolean);
   }
 
   /**
    * @returns {Generator<boolean[]>}
    */
   *rows() {
-    for (let y = 0; y < this._height; y++) {
+    for (let y = 0; y < this._numRows; y++) {
       yield this.getRow(y);
     }
   }
@@ -1137,11 +1135,11 @@ class Grid {
     if (!Number.isInteger(x)) {
       throw new Error('x must be an integer');
     }
-    if (x < 0 || x >= this._width) {
+    if (x < 0 || x >= this._numColumns) {
       throw new Error('Out of bounds');
     }
     const column = [];
-    for (let y = 0; y < this._height; y++) {
+    for (let y = 0; y < this._numRows; y++) {
       column.push(this.get(x, y));
     }
     return column;
@@ -1151,96 +1149,96 @@ class Grid {
    * @returns {Generator<boolean[]>}
    */
   *columns() {
-    for (let x = 0; x < this._width; x++) {
+    for (let x = 0; x < this._numColumns; x++) {
       yield this.getColumn(x);
     }
   }
 
   /**
-   * @param {number} width
-   * @param {number} height
+   * @param {number} numColumns
+   * @param {number} numRows
    * @returns {this}
    */
-  resize(width, height) {
-    if (!Number.isInteger(width) || !Number.isInteger(height)) {
-      throw new Error('width and height must be integers');
+  resize(numColumns, numRows) {
+    if (!Number.isInteger(numColumns) || !Number.isInteger(numRows)) {
+      throw new Error('numColumns and numRows must be integers');
     }
-    if (width < 0 || height < 0) {
+    if (numColumns < 0 || numRows < 0) {
       throw new Error('Out of bounds');
     }
-    if (width < this._width) {
-      this._shrinkHorizontally(width);
-    } else if (width > this._width) {
-      this._expandHorizontally(width);
+    if (numColumns < this._numColumns) {
+      this._shrinkHorizontally(numColumns);
+    } else if (numColumns > this._numColumns) {
+      this._expandHorizontally(numColumns);
     }
-    if (height < this._height) {
-      this._shrinkVertically(height);
-    } else if (height > this._height) {
-      this._expandVertically(height);
+    if (numRows < this._numRows) {
+      this._shrinkVertically(numRows);
+    } else if (numRows > this._numRows) {
+      this._expandVertically(numRows);
     }
     return this;
   }
 
   /**
-   * @param {number} width
+   * @param {number} numColumns
    * @returns {this}
    */
-  _expandHorizontally(width) {
-    const newCells = new Uint8ClampedArray(width * this._height);
-    for (let y = 0; y < this._height; y++) {
-      newCells.set(this._cells.subarray(y * this._width, (y + 1) * this._width), y * width);
+  _expandHorizontally(numColumns) {
+    const newCells = new Uint8ClampedArray(numColumns * this._numRows);
+    for (let y = 0; y < this._numRows; y++) {
+      newCells.set(this._cells.subarray(y * this._numColumns, (y + 1) * this._numColumns), y * numColumns);
     }
-    this._width = width;
+    this._numColumns = numColumns;
     this._cells = newCells;
     return this;
   }
 
   /**
-   * @param {number} width
+   * @param {number} numColumns
    * @returns {this}
    */
-  _shrinkHorizontally(width) {
+  _shrinkHorizontally(numColumns) {
     const filledIndexes = [...this.rows()].flatMap(row => {
       return row.map((filled, index) => filled ? index : null).filter(index => index != null);
     });
     const maxFilledIndex = Math.max(...filledIndexes);
-    const newWidth = Math.max(width, maxFilledIndex + 1);
-    if (newWidth === this._width) {
+    const newNumColumns = Math.max(numColumns, maxFilledIndex + 1);
+    if (newNumColumns === this._numColumns) {
       return this;
     }
-    const newCells = new Uint8ClampedArray(newWidth * this._height);
-    for (let y = 0; y < this._height; y++) {
-      newCells.set(this._cells.subarray(y * this._width, y * this._width + newWidth), y * newWidth);
+    const newCells = new Uint8ClampedArray(newNumColumns * this._numRows);
+    for (let y = 0; y < this._numRows; y++) {
+      newCells.set(this._cells.subarray(y * this._numColumns, y * this._numColumns + newNumColumns), y * newNumColumns);
     }
-    this._width = width;
+    this._numColumns = numColumns;
     this._cells = newCells;
     return this;
   }
 
   /**
-   * @param {number} height
+   * @param {number} numRows
    * @returns {this}
    */
-  _expandVertically(height) {
-    const newCells = new Uint8ClampedArray(this._width * height);
+  _expandVertically(numRows) {
+    const newCells = new Uint8ClampedArray(this._numColumns * numRows);
     newCells.set(this._cells);
-    this._height = height;
+    this._numRows = numRows;
     this._cells = newCells;
     return this;
   }
 
   /**
-   * @param {number} height
+   * @param {number} numRows
    * @returns {this}
    */
-  _shrinkVertically(height) {
+  _shrinkVertically(numRows) {
     const maxFilledIndex = [...this.rows()].findLastIndex(row => row.some(Boolean));
-    const newHeight = Math.max(height, maxFilledIndex + 1);
-    if (newHeight === this._height) {
+    const newNumRows = Math.max(numRows, maxFilledIndex + 1);
+    if (newNumRows === this._numRows) {
       return this;
     }
-    this._height = newHeight;
-    this._cells = this._cells.slice(0, this._width * newHeight);
+    this._numRows = newNumRows;
+    this._cells = this._cells.slice(0, this._numColumns * newNumRows);
     return this;
   }
 
@@ -1248,7 +1246,7 @@ class Grid {
    * @returns {string}
    */
   serialize() {
-    return `${this._width}x${this._height};${bitsToString(this._cells.map(Boolean))}`;
+    return `${this._numColumns}x${this._numRows};${bitsToString(this._cells.map(Boolean))}`;
   }
 
   /**
@@ -1257,12 +1255,12 @@ class Grid {
    */
   static deserialize(str) {
     const [size, data] = str.split(';');
-    const [width, height] = size.split('x').map(Number);
-    if (width < 0 || height < 0) {
+    const [numColumns, numRows] = size.split('x').map(Number);
+    if (numColumns < 0 || numRows < 0) {
       throw new Error('Out of bounds');
     }
-    const grid = new Grid(width, height);
-    const cells = stringToBits(data).slice(0, width * height).map(Number);
+    const grid = new Grid(numColumns, numRows);
+    const cells = stringToBits(data).slice(0, numColumns * numRows).map(Number);
     grid._cells = new Uint8ClampedArray(cells);
     return grid;
   }
