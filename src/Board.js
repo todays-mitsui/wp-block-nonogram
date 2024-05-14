@@ -92,8 +92,8 @@ class Board {
    * @returns {Generator<boolean[]>}
    */
   * rows() {
-    for (const row of this._grid.rows()) {
-      yield row.slice(0, this._width);
+    for (let y = 0; y < this._height; y++) {
+      yield this._grid.getRow(y).slice(0, this._width);
     }
   }
 

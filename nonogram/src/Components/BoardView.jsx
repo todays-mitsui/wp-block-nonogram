@@ -4,6 +4,7 @@ import { Board } from '../../../src/Board';
 import { CellsView } from './CellsView';
 import { GridView } from './GridView';
 import { ColumnCluesView } from './ColumnCluesView';
+import { RowCluesView } from './RowCluesView';
 
 /**
  * @param {{
@@ -73,6 +74,15 @@ export function BoardView({
 					left={offsetLeft + cluesWidth}
 					bottom={offsetTop + cluesHeight}
 					cellSize={cellSize}
+				/>
+				<RowCluesView
+					clues={rowClues}
+					fontSize={fontSize}
+					fill="black"
+					top={offsetTop + cluesHeight}
+					left={offsetLeft}
+					cellSize={cellSize}
+					cluesWidth={cluesWidth}
 				/>
 			</Layer>
 			<CellsView

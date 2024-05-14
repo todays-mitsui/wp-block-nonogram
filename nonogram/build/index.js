@@ -21,6 +21,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _CellsView__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./CellsView */ "./src/Components/CellsView.jsx");
 /* harmony import */ var _GridView__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./GridView */ "./src/Components/GridView.jsx");
 /* harmony import */ var _ColumnCluesView__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./ColumnCluesView */ "./src/Components/ColumnCluesView.jsx");
+/* harmony import */ var _RowCluesView__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./RowCluesView */ "./src/Components/RowCluesView.jsx");
+
 
 
 
@@ -89,6 +91,14 @@ function BoardView({
     left: offsetLeft + cluesWidth,
     bottom: offsetTop + cluesHeight,
     cellSize: cellSize
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_RowCluesView__WEBPACK_IMPORTED_MODULE_7__.RowCluesView, {
+    clues: rowClues,
+    fontSize: fontSize,
+    fill: "black",
+    top: offsetTop + cluesHeight,
+    left: offsetLeft,
+    cellSize: cellSize,
+    cluesWidth: cluesWidth
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_CellsView__WEBPACK_IMPORTED_MODULE_4__.CellsView, {
     board: board,
     cells: cells,
@@ -386,6 +396,114 @@ function GridView({
     points: [xStart, y, xEnd, y],
     stroke: i % 5 === 0 || i === numRows ? STROKE_COLOR_DARK : STROKE_COLOR_LIGHT,
     strokeWidth: 1
+  })));
+}
+
+/***/ }),
+
+/***/ "./src/Components/RowClueView.jsx":
+/*!****************************************!*\
+  !*** ./src/Components/RowClueView.jsx ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   RowClueView: () => (/* binding */ RowClueView)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_konva__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-konva */ "./node_modules/react-konva/es/ReactKonva.js");
+
+
+
+/**
+ * @param {{
+* 		clue: number[];
+* 		fontSize: number;
+* 		fill: string;
+* 		top: number;
+* 		left: number;
+* 		height: number;
+* 		width: number;
+* }} props
+* @returns {JSX.Element}
+*/
+function RowClueView({
+  clue,
+  fontSize,
+  fill,
+  top,
+  left,
+  height,
+  width
+}) {
+  const text = clue.map(num => num.toString()).join('  ');
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Text, {
+    text: text,
+    fontSize: fontSize,
+    fill: fill,
+    x: left,
+    y: top,
+    width: width - fontSize * 0.5,
+    height: height,
+    align: "right",
+    verticalAlign: "middle"
+  });
+}
+
+/***/ }),
+
+/***/ "./src/Components/RowCluesView.jsx":
+/*!*****************************************!*\
+  !*** ./src/Components/RowCluesView.jsx ***!
+  \*****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   RowCluesView: () => (/* binding */ RowCluesView)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_konva__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-konva */ "./node_modules/react-konva/es/ReactKonva.js");
+/* harmony import */ var _RowClueView__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./RowClueView */ "./src/Components/RowClueView.jsx");
+
+
+
+
+/**
+ * @param {{
+* 		clues: number[][];
+* 		fontSize: number;
+* 		fill: string;
+* 		top: number;
+* 		left: number;
+* 		cluesWidth: number;
+* 		cellSize: number;
+* }} props
+* @returns {JSX.Element}
+*/
+function RowCluesView({
+  clues,
+  fontSize,
+  fill,
+  top,
+  left,
+  cluesWidth,
+  cellSize
+}) {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Group, null, clues.map((clue, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_RowClueView__WEBPACK_IMPORTED_MODULE_2__.RowClueView, {
+    key: index,
+    clue: clue,
+    fontSize: fontSize,
+    fill: fill,
+    top: top + cellSize * index,
+    left: left,
+    width: cluesWidth,
+    height: cellSize
   })));
 }
 
@@ -800,8 +918,8 @@ class Board {
    * @returns {Generator<boolean[]>}
    */
   *rows() {
-    for (const row of this._grid.rows()) {
-      yield row.slice(0, this._width);
+    for (let y = 0; y < this._height; y++) {
+      yield this._grid.getRow(y).slice(0, this._width);
     }
   }
 
