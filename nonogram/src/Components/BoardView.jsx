@@ -63,8 +63,8 @@ export function BoardView({
 					left={left}
 					cluesWidth={cluesWidth}
 					cluesHeight={cluesHeight}
-					numRows={board.height}
-					numColumns={board.width}
+					numRows={board.numRows}
+					numColumns={board.numColumns}
 					cellSize={cellSize}
 				/>
 				<ColumnCluesView

@@ -22,7 +22,7 @@ export default function Edit({ attributes, setAttributes }) {
 	const height = width && width * ASPECT_RATIO;
 
 	const [cluesWidth, cluesHeight] = [100, 100];
-	const { offsetLeft, offsetTop, cellSize } = calcLayout(width, height, cluesWidth, cluesHeight, board.height, board.width);
+	const { offsetLeft, offsetTop, cellSize } = calcLayout(width, height, cluesWidth, cluesHeight, board.numRows, board.numColumns);
 
 	return (
 		<div {...useBlockProps()}>
@@ -30,8 +30,8 @@ export default function Edit({ attributes, setAttributes }) {
 				<InspectorControls key="settings">
 					<BoardSize
 						board={board}
-						numRows={board.height}
-						numColumns={board.width}
+						numRows={board.numRows}
+						numColumns={board.numColumns}
 						setAttributes={setAttributes}
 					/>
 				</InspectorControls>

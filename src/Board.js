@@ -22,6 +22,10 @@ class Board {
     return this._numRows;
   }
 
+  set numRows(_value) {
+    throw new Error('Cannot set numRows');
+  }
+
   /**
    * @returns {number}
    */
@@ -29,30 +33,8 @@ class Board {
     return this._numColumns;
   }
 
-  /**
-   * @returns {number}
-   */
-  get width() {
-    console.warn('get width is deprecated');
-    console.trace();
-    return this._numColumns;
-  }
-
-  set width(_value) {
-    throw new Error('Cannot set width');
-  }
-
-  /**
-   * @returns {number}
-   */
-  get height() {
-    console.warn('get height is deprecated');
-    console.trace();
-    return this._numRows;
-  }
-
-  set height(_value) {
-    throw new Error('Cannot set height');
+  set numColumns(_value) {
+    throw new Error('Cannot set numColumns');
   }
 
   /**

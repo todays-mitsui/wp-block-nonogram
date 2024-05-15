@@ -81,8 +81,8 @@ function BoardView({
     left: left,
     cluesWidth: cluesWidth,
     cluesHeight: cluesHeight,
-    numRows: board.height,
-    numColumns: board.width,
+    numRows: board.numRows,
+    numColumns: board.numColumns,
     cellSize: cellSize
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ColumnCluesView__WEBPACK_IMPORTED_MODULE_6__.ColumnCluesView, {
     clues: columnClues,
@@ -635,7 +635,7 @@ function Edit({
     offsetLeft,
     offsetTop,
     cellSize
-  } = calcLayout(width, height, cluesWidth, cluesHeight, board.height, board.width);
+  } = calcLayout(width, height, cluesWidth, cluesHeight, board.numRows, board.numColumns);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)()
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -644,8 +644,8 @@ function Edit({
     key: "settings"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Controls_BoardSize__WEBPACK_IMPORTED_MODULE_5__.BoardSize, {
     board: board,
-    numRows: board.height,
-    numColumns: board.width,
+    numRows: board.numRows,
+    numColumns: board.numColumns,
     setAttributes: setAttributes
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Components_BoardView__WEBPACK_IMPORTED_MODULE_6__.BoardView, {
     width: width,
@@ -851,6 +851,9 @@ class Board {
   get numRows() {
     return this._numRows;
   }
+  set numRows(_value) {
+    throw new Error('Cannot set numRows');
+  }
 
   /**
    * @returns {number}
@@ -858,29 +861,8 @@ class Board {
   get numColumns() {
     return this._numColumns;
   }
-
-  /**
-   * @returns {number}
-   */
-  get width() {
-    console.warn('get width is deprecated');
-    console.trace();
-    return this._numColumns;
-  }
-  set width(_value) {
-    throw new Error('Cannot set width');
-  }
-
-  /**
-   * @returns {number}
-   */
-  get height() {
-    console.warn('get height is deprecated');
-    console.trace();
-    return this._numRows;
-  }
-  set height(_value) {
-    throw new Error('Cannot set height');
+  set numColumns(_value) {
+    throw new Error('Cannot set numColumns');
   }
 
   /**
