@@ -30,8 +30,6 @@ export default function Edit({ attributes, setAttributes }) {
 				<InspectorControls key="settings">
 					<BoardSize
 						board={board}
-						numRows={board.numRows}
-						numColumns={board.numColumns}
 						setAttributes={setAttributes}
 					/>
 				</InspectorControls>

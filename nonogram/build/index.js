@@ -533,22 +533,18 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * @param {{
  * 		board: Board;
- * 		numRows: number;
- * 		numColumns: number;
  * 		setAttributes: (newParam: { boardData: string }) => void;
  * }} param
  * @returns
  */
 function BoardSize({
   board,
-  numRows,
-  numColumns,
   setAttributes
 }) {
   const setNumRows = numRowsStr => {
     const numRows = parseInt(numRowsStr, 10);
     if (numRows > 0) {
-      board.resize(numColumns, numRows);
+      board.resize(board.numColumns, numRows);
       setAttributes({
         boardData: board.serialize()
       });
@@ -557,7 +553,7 @@ function BoardSize({
   const setNumColumns = numColumnsStr => {
     const numColumns = parseInt(numColumnsStr, 10);
     if (numColumns > 0) {
-      board.resize(numColumns, numRows);
+      board.resize(numColumns, board.numRows);
       setAttributes({
         boardData: board.serialize()
       });
@@ -570,13 +566,13 @@ function BoardSize({
     isShiftStepEnabled: true,
     onChange: setNumRows,
     shiftStep: 5,
-    value: numRows,
+    value: board.numRows,
     min: 1
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("fieldset", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("legend", null, "\u5217\u6570"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.__experimentalNumberControl, {
     isShiftStepEnabled: true,
     onChange: setNumColumns,
     shiftStep: 5,
-    value: numColumns,
+    value: board.numColumns,
     min: 1
   })));
 }
@@ -644,8 +640,6 @@ function Edit({
     key: "settings"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Controls_BoardSize__WEBPACK_IMPORTED_MODULE_5__.BoardSize, {
     board: board,
-    numRows: board.numRows,
-    numColumns: board.numColumns,
     setAttributes: setAttributes
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Components_BoardView__WEBPACK_IMPORTED_MODULE_6__.BoardView, {
     width: width,
