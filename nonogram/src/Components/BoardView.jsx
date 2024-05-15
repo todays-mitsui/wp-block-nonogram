@@ -1,10 +1,10 @@
-import { useState } from '@wordpress/element';
-import { Stage, Layer } from 'react-konva';
-import { Board } from '../../../src/Board';
-import { CellsView } from './CellsView';
-import { GridView } from './GridView';
-import { ColumnCluesView } from './ColumnCluesView';
-import { RowCluesView } from './RowCluesView';
+import { useState } from "@wordpress/element";
+import { Layer, Stage } from "react-konva";
+import { Board } from "../../../src/Board";
+import { CellsView } from "./CellsView";
+import { GridView } from "./GridView";
+import { ColumnCluesView } from "./ColumnCluesView";
+import { RowCluesView } from "./RowCluesView";
 
 /**
  * @param {{
@@ -21,84 +21,84 @@ import { RowCluesView } from './RowCluesView';
  * @returns {JSX.Element}
  */
 export function BoardView({
-	width,
-	height,
-	board,
-	left,
-	top,
-	cluesWidth,
-	cluesHeight,
-	cellSize,
-	setAttributes,
+  width,
+  height,
+  board,
+  left,
+  top,
+  cluesWidth,
+  cluesHeight,
+  cellSize,
+  setAttributes,
 }) {
-	const [isDragging, setIsDragging] = useState(false);
-	const [currentState, setCurrentState] = useState(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [currentState, setCurrentState] = useState(null);
 
-	// 各セルでマウスが押されたときに呼ばれる想定のハンドラ
-	const onMouseDown = (currentState) => {
-		setIsDragging(true);
-		setCurrentState(currentState);
-	};
+  // 各セルでマウスが押されたときに呼ばれる想定のハンドラ
+  const onMouseDown = (currentState) => {
+    setIsDragging(true);
+    setCurrentState(currentState);
+  };
 
-	const onMouseUp = () => {
-		setIsDragging(false);
-		setCurrentState(null);
-	};
+  const onMouseUp = () => {
+    setIsDragging(false);
+    setCurrentState(null);
+  };
 
-	const cells = [...board.cells()];
-	const rowClues = [...board.rowClues()];
-	const columnClues = [...board.columnClues()];
+  const cells = [...board.cells()];
+  const rowClues = [...board.rowClues()];
+  const columnClues = [...board.columnClues()];
 
-	const fontSize = Math.min(cellSize / 2, 20);
+  const fontSize = Math.min(cellSize / 2, 20);
 
-	return (
-		<Stage
-			width={width}
-			height={height}
-			onMouseUp={onMouseUp}
-		>
-			<Layer>
-				<GridView
-					top={top}
-					left={left}
-					cluesWidth={cluesWidth}
-					cluesHeight={cluesHeight}
-					numRows={board.numRows}
-					numColumns={board.numColumns}
-					cellSize={cellSize}
-				/>
-				<ColumnCluesView
-					clues={columnClues}
-					fontSize={fontSize}
-					fill="black"
-					top={top}
-					left={left + cluesWidth}
-					cellSize={cellSize}
-					cluesHeight={cluesHeight}
-				/>
-				<RowCluesView
-					clues={rowClues}
-					fontSize={fontSize}
-					fill="black"
-					top={top + cluesHeight}
-					left={left}
-					cellSize={cellSize}
-					cluesWidth={cluesWidth}
-				/>
-			</Layer>
-			<Layer>
-				<CellsView
-					board={board}
-					cells={cells}
-					top={top + cluesHeight}
-					left={left + cluesWidth}
-					cellSize={cellSize}
-					isDragging={isDragging}
-					currentState={currentState}
-					onMouseDown={onMouseDown}
-					setAttributes={setAttributes}
-				/>
-			</Layer>
-		</Stage>
-	);
+  return (
+    <Stage
+      width={width}
+      height={height}
+      onMouseUp={onMouseUp}
+    >
+      <Layer>
+        <GridView
+          top={top}
+          left={left}
+          cluesWidth={cluesWidth}
+          cluesHeight={cluesHeight}
+          numRows={board.numRows}
+          numColumns={board.numColumns}
+          cellSize={cellSize}
+        />
+        <ColumnCluesView
+          clues={columnClues}
+          fontSize={fontSize}
+          fill="black"
+          top={top}
+          left={left + cluesWidth}
+          cellSize={cellSize}
+          cluesHeight={cluesHeight}
+        />
+        <RowCluesView
+          clues={rowClues}
+          fontSize={fontSize}
+          fill="black"
+          top={top + cluesHeight}
+          left={left}
+          cellSize={cellSize}
+          cluesWidth={cluesWidth}
+        />
+      </Layer>
+      <Layer>
+        <CellsView
+          board={board}
+          cells={cells}
+          top={top + cluesHeight}
+          left={left + cluesWidth}
+          cellSize={cellSize}
+          isDragging={isDragging}
+          currentState={currentState}
+          onMouseDown={onMouseDown}
+          setAttributes={setAttributes}
+        />
+      </Layer>
+    </Stage>
+  );
 }

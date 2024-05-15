@@ -1,4 +1,4 @@
-import { Group, Text } from 'react-konva';
+import { Group, Text } from "react-konva";
 
 /**
  * @param {{
@@ -12,29 +12,29 @@ import { Group, Text } from 'react-konva';
  * @returns {JSX.Element}
  */
 export function ColumnClueView({
-	clue,
-	fontSize,
-	fill,
-	left,
-	bottom,
-	width,
+  clue,
+  fontSize,
+  fill,
+  left,
+  bottom,
+  width,
 }) {
-	const texts = clue.map((num) => num.toString()).reverse();
+  const texts = clue.map((num) => num.toString()).reverse();
 
-	return (
-		<Group>
-			{ texts.map((text, index) => (
-				<Text
-					key={index}
-					text={text}
-					fontSize={fontSize}
-					fill={fill}
-					x={left}
-					y={bottom - (index * 1.5 + 1.5) * fontSize}
-					width={width}
-					align="center"
-				/>
-			)) }
-		</Group>
-	);
+  return (
+    <Group>
+      {texts.map((text, index) => (
+        <Text
+          key={index}
+          text={text}
+          fontSize={fontSize}
+          fill={fill}
+          x={left}
+          y={bottom - (index * 1.5 + 1.5) * fontSize}
+          width={width}
+          align="center"
+        />
+      ))}
+    </Group>
+  );
 }

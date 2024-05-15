@@ -1,33 +1,33 @@
 {
-	"$schema": "https://schemas.wp.org/trunk/block.json",
-	"apiVersion": 3,
-	"name": "todays-mitsui/nonogram",
-	"version": "0.1.0",
-	"title": "Nonogram",
-	"category": "widgets",
-	"icon": "smiley",
-	"description": "Example block scaffolded with Create Block tool.",
-	"example": {},
-	"supports": {
-		"html": false
-	},
-	"attributes": {
-		"numRows": {
-			"type": "number",
-			"default": 15
-		},
-		"numColumns": {
-			"type": "number",
-			"default": 15
-		},
-		"boardData": {
-			"type": "string",
-			"default": null
-		}
-	},
-	"textdomain": "nonogram",
-	"editorScript": "file:./index.js",
-	"editorStyle": "file:./index.css",
-	"style": "file:./style-index.css",
-	"viewScript": "file:./view.js"
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "todays-mitsui/nonogram",
+  "version": "0.1.0",
+  "title": "Nonogram",
+  "category": "widgets",
+  "icon": "smiley",
+  "description": "Example block scaffolded with Create Block tool.",
+  "example": {},
+  "supports": {
+    "html": false
+  },
+  "attributes": {
+    "numRows": {
+      "type": "number",
+      "default": 15
+    },
+    "numColumns": {
+      "type": "number",
+      "default": 15
+    },
+    "boardData": {
+      "type": "string",
+      "default": null
+    }
+  },
+  "textdomain": "nonogram",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "viewScript": "file:./view.js"
 }
