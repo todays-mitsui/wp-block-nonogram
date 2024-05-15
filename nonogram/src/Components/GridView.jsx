@@ -40,6 +40,7 @@ export function GridView({
 
   return (
     <>
+      { /* columnClues の背景 */ }
       <Rect
         x={left + cluesWidth}
         y={top}
@@ -48,6 +49,8 @@ export function GridView({
         fill="#eee"
         strokeEnabled={false}
       />
+
+      { /* rowClues の背景 */ }
       <Rect
         x={left}
         y={top + cluesHeight}
@@ -56,6 +59,17 @@ export function GridView({
         fill="#eee"
         strokeEnabled={false}
       />
+
+      { /* grid の背景 */ }
+      <Rect
+        x={left + cluesWidth}
+        y={top + cluesHeight}
+        width={gridWidth}
+        height={gridHeight}
+        fill="#fff"
+        strokeEnabled={false}
+      />
+
       {verticalLines.map(({ x, yStart, yEnd }, i) => (
         <Line
           key={i}

@@ -10,7 +10,7 @@ import "./editor.scss";
 /**
  * @return {JSX.Element}
  */
-export default function Edit({ attributes, setAttributes }) {
+export function Edit({ attributes, setAttributes }) {
   /** @type {{ boardData: string }} */
   const { boardData } = attributes;
 

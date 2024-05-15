@@ -133,13 +133,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const COLOR_FILLED = '#333';
-const COLOR_EMPTY = 'transparent';
+const COLOR_FILLED = "#333";
+const COLOR_EMPTY = "transparent";
 const PADDING = 0.5;
 const STROKE_WIDTH = 1;
 
 /**
- *
  * @param {{
  * 		board: Board;
  * 		cells: { id: string; x: number; y: number; filled: boolean; }[];
@@ -167,19 +166,17 @@ function CellsView({
     const cell = cells.find(cell => cell.id === event.target.attrs.id);
     if (cell) {
       cell.filled ? board.clear(cell.x, cell.y) : board.fill(cell.x, cell.y);
-      onParentMouseDown(cell.filled ? 'clear' : 'fill');
+      onParentMouseDown(cell.filled ? "clear" : "fill");
       setAttributes({
         boardData: board.serialize()
       });
     }
   };
   const onMouseOver = event => {
-    if (!isDragging || currentState == null) {
-      return;
-    }
+    if (!isDragging || currentState == null) return;
     const cell = cells.find(cell => cell.id === event.target.attrs.id);
     if (cell) {
-      currentState === 'fill' ? board.fill(cell.x, cell.y) : board.clear(cell.x, cell.y);
+      currentState === "fill" ? board.fill(cell.x, cell.y) : board.clear(cell.x, cell.y);
       setAttributes({
         boardData: board.serialize()
       });
@@ -326,11 +323,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_konva__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-konva */ "./node_modules/react-konva/es/ReactKonva.js");
 
 
-const STROKE_COLOR_DARK = '#666';
-const STROKE_COLOR_LIGHT = '#aaa';
+const STROKE_COLOR_DARK = "#666";
+const STROKE_COLOR_LIGHT = "#aaa";
 
 /**
- *
  * @param {{
  * 		top: number;
  * 		left: number;
@@ -377,6 +373,13 @@ function GridView({
     height: gridHeight,
     fill: "#eee",
     strokeEnabled: false
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Rect, {
+    x: left + cluesWidth,
+    y: top + cluesHeight,
+    width: gridWidth,
+    height: gridHeight,
+    fill: "#fff",
+    strokeEnabled: false
   }), verticalLines.map(({
     x,
     yStart,
@@ -421,16 +424,16 @@ __webpack_require__.r(__webpack_exports__);
 
 /**
  * @param {{
-* 		clue: number[];
-* 		fontSize: number;
-* 		fill: string;
-* 		top: number;
-* 		left: number;
-* 		height: number;
-* 		width: number;
-* }} props
-* @returns {JSX.Element}
-*/
+ * 		clue: number[];
+ * 		fontSize: number;
+ * 		fill: string;
+ * 		top: number;
+ * 		left: number;
+ * 		height: number;
+ * 		width: number;
+ * }} props
+ * @returns {JSX.Element}
+ */
 function RowClueView({
   clue,
   fontSize,
@@ -440,7 +443,7 @@ function RowClueView({
   height,
   width
 }) {
-  const text = clue.map(num => num.toString()).join('  ');
+  const text = clue.map(num => num.toString()).join("  ");
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Text, {
     text: text,
     fontSize: fontSize,
@@ -477,16 +480,16 @@ __webpack_require__.r(__webpack_exports__);
 
 /**
  * @param {{
-* 		clues: number[][];
-* 		fontSize: number;
-* 		fill: string;
-* 		top: number;
-* 		left: number;
-* 		cellSize: number;
-* 		cluesWidth: number;
-* }} props
-* @returns {JSX.Element}
-*/
+ * 		clues: number[][];
+ * 		fontSize: number;
+ * 		fill: string;
+ * 		top: number;
+ * 		left: number;
+ * 		cellSize: number;
+ * 		cluesWidth: number;
+ * }} props
+ * @returns {JSX.Element}
+ */
 function RowCluesView({
   clues,
   fontSize,
@@ -588,7 +591,7 @@ function BoardSize({
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ Edit)
+/* harmony export */   Edit: () => (/* binding */ Edit)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
@@ -662,14 +665,10 @@ function useBlockSize() {
   const wrapperRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useRef)(null);
   const [width, setWidth] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(null);
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useEffect)(() => {
-    if (wrapperRef.current == null) {
-      return;
-    }
+    if (wrapperRef.current == null) return;
     const observer = new ResizeObserver(entries => {
       const newWidth = entries[0]?.contentRect?.width;
-      if (newWidth == null) {
-        return;
-      }
+      if (newWidth == null) return;
       setWidth(newWidth);
     });
     observer.observe(wrapperRef.current);
@@ -767,7 +766,7 @@ __webpack_require__.r(__webpack_exports__);
   /**
    * @see ./edit.js
    */
-  edit: _edit__WEBPACK_IMPORTED_MODULE_2__["default"],
+  edit: _edit__WEBPACK_IMPORTED_MODULE_2__.Edit,
   /**
    * @see ./save.js
    */
@@ -812,7 +811,7 @@ __webpack_require__.r(__webpack_exports__);
 function save() {
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
     ..._wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps.save()
-  }, 'Nonogram – hello from the saved content!');
+  }, "Nonogram – hello from the saved content!");
 }
 
 /***/ }),
