@@ -40,7 +40,7 @@ export function GridView({
 
   return (
     <>
-      { /* columnClues の背景 */ }
+      {/* columnClues の背景 */}
       <Rect
         x={left + cluesWidth}
         y={top}
@@ -50,7 +50,7 @@ export function GridView({
         strokeEnabled={false}
       />
 
-      { /* rowClues の背景 */ }
+      {/* rowClues の背景 */}
       <Rect
         x={left}
         y={top + cluesHeight}
@@ -60,7 +60,7 @@ export function GridView({
         strokeEnabled={false}
       />
 
-      { /* grid の背景 */ }
+      {/* grid の背景 */}
       <Rect
         x={left + cluesWidth}
         y={top + cluesHeight}

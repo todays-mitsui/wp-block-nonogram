@@ -17,7 +17,7 @@ const STROKE_WIDTH = 1;
  * 		isDragging: boolean;
  * 		currentState: 'fill' | 'clear' | null;
  * 		onMouseDown: (event: KonvaEventObject<MouseEvent>) => void;
- * 		setAttributes: (newParam: { boardData: string }) => void;
+ * 		setBoardData: (boardData: string) => void;
  * }} param
  */
 export function CellsView({
@@ -29,14 +29,14 @@ export function CellsView({
   isDragging,
   currentState,
   onMouseDown: onParentMouseDown,
-  setAttributes,
+  setBoardData,
 }) {
   const onMouseDown = (event) => {
     const cell = cells.find((cell) => cell.id === event.target.attrs.id);
     if (cell) {
       cell.filled ? board.clear(cell.x, cell.y) : board.fill(cell.x, cell.y);
       onParentMouseDown(cell.filled ? "clear" : "fill");
-      setAttributes({ boardData: board.serialize() });
+      setBoardData(board.serialize());
     }
   };
 
@@ -48,7 +48,7 @@ export function CellsView({
       currentState === "fill"
         ? board.fill(cell.x, cell.y)
         : board.clear(cell.x, cell.y);
-      setAttributes({ boardData: board.serialize() });
+      setBoardData(board.serialize());
     }
   };
 

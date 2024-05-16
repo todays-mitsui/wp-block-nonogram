@@ -13,10 +13,12 @@ import { RowCluesView } from "./RowCluesView";
  * 		board: Board;
  * 		left: number;
  * 		top: number;
+ *    rowClues: number[][];
+ *    columnClues: number[][];
  * 		cluesWidth: number;
  * 		cluesHeight: number;
  * 		cellSize: number;
- * 		setAttributes: (newParam: { boardData: string }) => void;
+ * 		setBoardData: (boardData: string) => void;
  * }} param
  * @returns {JSX.Element}
  */
@@ -26,10 +28,12 @@ export function BoardView({
   board,
   left,
   top,
+  rowClues,
+  columnClues,
   cluesWidth,
   cluesHeight,
   cellSize,
-  setAttributes,
+  setBoardData,
 }) {
   const [isDragging, setIsDragging] = useState(false);
   const [currentState, setCurrentState] = useState(null);
@@ -46,8 +50,8 @@ export function BoardView({
   };
 
   const cells = [...board.cells()];
-  const rowClues = [...board.rowClues()];
-  const columnClues = [...board.columnClues()];
+
+  console.log({ rowClues, columnClues });
 
   const fontSize = Math.min(cellSize / 2, 20);
 
@@ -96,7 +100,7 @@ export function BoardView({
           isDragging={isDragging}
           currentState={currentState}
           onMouseDown={onMouseDown}
-          setAttributes={setAttributes}
+          setBoardData={setBoardData}
         />
       </Layer>
     </Stage>
