@@ -143,7 +143,7 @@ __webpack_require__.r(__webpack_exports__);
 const COLOR_FILLED = "#333";
 const COLOR_EMPTY = "white";
 const STROKE_COLOR_LIGHT = "#aaa";
-const PADDING = 0.5;
+const PADDING = 0;
 const STROKE_WIDTH = 1;
 
 /**
@@ -169,167 +169,29 @@ function Cell({
   onMouseDown,
   onMouseOver
 }) {
-  if (enableSpaceStatus) {
-    switch (true) {
-      case status === "unknown":
-        return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(UnknownCell, {
-          id: id,
-          top: top,
-          left: left,
-          cellSize: cellSize,
-          onMouseDown: onMouseDown,
-          onMouseOver: onMouseOver
-        });
-      case status === "space":
-        return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(SpaceCell, {
-          id: id,
-          top: top,
-          left: left,
-          cellSize: cellSize,
-          onMouseDown: onMouseDown,
-          onMouseOver: onMouseOver
-        });
-      case status === "filled":
-        return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(FilledCell, {
-          id: id,
-          top: top,
-          left: left,
-          cellSize: cellSize,
-          onMouseDown: onMouseDown,
-          onMouseOver: onMouseOver
-        });
-      default:
-        throw new Error("Invalid status");
-    }
-  } else {
-    switch (true) {
-      case status === "unknown" || status === "space":
-        return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(UnknownCell, {
-          id: id,
-          top: top,
-          left: left,
-          cellSize: cellSize,
-          onMouseDown: onMouseDown,
-          onMouseOver: onMouseOver
-        });
-      case status === "filled":
-        return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(FilledCell, {
-          id: id,
-          top: top,
-          left: left,
-          cellSize: cellSize,
-          onMouseDown: onMouseDown,
-          onMouseOver: onMouseOver
-        });
-      default:
-        throw new Error("Invalid status");
-    }
+  if (!enableSpaceStatus && status === 'space') {
+    status = 'unknown';
   }
-}
-
-/**
- * @param {{
- *  id: string;
- *  top: number;
- *  left: number;
- *  cellSize: number;
- *  onMouseDown: (event: KonvaEventObject<MouseEvent>) => void;
- *  onMouseOver: (event: KonvaEventObject<MouseEvent>) => void;
- * }} param
- * @returns
- */
-function UnknownCell({
-  id,
-  top,
-  left,
-  cellSize,
-  onMouseDown,
-  onMouseOver
-}) {
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Rect, {
-    id: id,
-    x: left + PADDING,
-    y: top + PADDING,
-    width: cellSize - 2 * PADDING,
-    height: cellSize - 2 * PADDING,
-    fill: COLOR_EMPTY,
-    strokeEnabled: false,
-    onMouseDown: onMouseDown,
-    onMouseOver: onMouseOver
-  });
-}
-
-/**
- * @param {{
- *  id: string;
- *  top: number;
- *  left: number;
- *  cellSize: number;
- *  onMouseDown: (event: KonvaEventObject<MouseEvent>) => void;
- *  onMouseOver: (event: KonvaEventObject<MouseEvent>) => void;
- * }} param
- * @returns
- */
-function SpaceCell({
-  id,
-  top,
-  left,
-  cellSize,
-  onMouseDown,
-  onMouseOver
-}) {
-  const p = cellSize * 0.25;
+  const crossPadding = cellSize * 0.25;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Rect, {
     id: id,
     x: left + PADDING,
     y: top + PADDING,
     width: cellSize - 2 * PADDING,
     height: cellSize - 2 * PADDING,
-    fill: COLOR_EMPTY,
+    fill: status === 'filled' ? COLOR_FILLED : COLOR_EMPTY,
     strokeEnabled: false,
     onMouseDown: onMouseDown,
     onMouseOver: onMouseOver
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Line, {
-    points: [left + p, top + p, left + cellSize - p, top + cellSize - p],
+  }), status === 'space' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Line, {
+    points: [left + crossPadding, top + crossPadding, left + cellSize - crossPadding, top + cellSize - crossPadding],
     stroke: STROKE_COLOR_LIGHT,
     strokeWidth: STROKE_WIDTH
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Line, {
-    points: [left + p, top + cellSize - p, left + cellSize - p, top + p],
+  }), status === 'space' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Line, {
+    points: [left + crossPadding, top + cellSize - crossPadding, left + cellSize - crossPadding, top + crossPadding],
     stroke: STROKE_COLOR_LIGHT,
     strokeWidth: STROKE_WIDTH
   }));
-}
-
-/**
- * @param {{
- *  id: string;
- *  top: number;
- *  left: number;
- *  cellSize: number;
- *  onMouseDown: (event: KonvaEventObject<MouseEvent>) => void;
- *  onMouseOver: (event: KonvaEventObject<MouseEvent>) => void;
- * }} param
- * @returns
- */
-function FilledCell({
-  id,
-  top,
-  left,
-  cellSize,
-  onMouseDown,
-  onMouseOver
-}) {
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Rect, {
-    id: id,
-    x: left + PADDING,
-    y: top + PADDING,
-    width: cellSize - 2 * PADDING,
-    height: cellSize - 2 * PADDING,
-    fill: COLOR_FILLED,
-    strokeEnabled: false,
-    onMouseDown: onMouseDown,
-    onMouseOver: onMouseOver
-  });
 }
 
 /***/ }),

@@ -1,10 +1,10 @@
-import { Group, Rect, Line } from "react-konva";
+import { Rect, Line } from "react-konva";
 
 const COLOR_FILLED = "#333";
 const COLOR_EMPTY = "white";
 const STROKE_COLOR_LIGHT = "#aaa";
 
-const PADDING = 0.5;
+const PADDING = 0;
 const STROKE_WIDTH = 1;
 
 /**
@@ -21,69 +21,12 @@ const STROKE_WIDTH = 1;
  * @returns {JSX.Element}
  */
 export function Cell({ id, top, left, cellSize, status, enableSpaceStatus, onMouseDown, onMouseOver }) {
-  if (enableSpaceStatus) {
-    switch (true) {
-      case status === "unknown":
-        return <UnknownCell id={id} top={top} left={left} cellSize={cellSize} onMouseDown={onMouseDown} onMouseOver={onMouseOver} />;
-      case status === "space":
-        return <SpaceCell id={id} top={top} left={left} cellSize={cellSize} onMouseDown={onMouseDown} onMouseOver={onMouseOver} />;
-      case status === "filled":
-        return <FilledCell id={id} top={top} left={left} cellSize={cellSize} onMouseDown={onMouseDown} onMouseOver={onMouseOver} />;
-      default:
-        throw new Error("Invalid status");
-    }
-  } else {
-    switch (true) {
-      case status === "unknown" || status === "space":
-        return <UnknownCell id={id} top={top} left={left} cellSize={cellSize} onMouseDown={onMouseDown} onMouseOver={onMouseOver} />;
-      case status === "filled":
-        return <FilledCell id={id} top={top} left={left} cellSize={cellSize} onMouseDown={onMouseDown} onMouseOver={onMouseOver} />;
-      default:
-        throw new Error("Invalid status");
-    }
+  if (!enableSpaceStatus && status === 'space') {
+    status = 'unknown';
   }
-}
 
-/**
- * @param {{
- *  id: string;
- *  top: number;
- *  left: number;
- *  cellSize: number;
- *  onMouseDown: (event: KonvaEventObject<MouseEvent>) => void;
- *  onMouseOver: (event: KonvaEventObject<MouseEvent>) => void;
- * }} param
- * @returns
- */
-function UnknownCell({ id, top, left, cellSize, onMouseDown, onMouseOver }) {
-  return (
-    <Rect
-      id={id}
-      x={left + PADDING}
-      y={top + PADDING}
-      width={cellSize - 2 * PADDING}
-      height={cellSize - 2 * PADDING}
-      fill={COLOR_EMPTY}
-      strokeEnabled={false}
-      onMouseDown={onMouseDown}
-      onMouseOver={onMouseOver}
-    />
-  );
-}
+  const crossPadding = cellSize * 0.25;
 
-/**
- * @param {{
- *  id: string;
- *  top: number;
- *  left: number;
- *  cellSize: number;
- *  onMouseDown: (event: KonvaEventObject<MouseEvent>) => void;
- *  onMouseOver: (event: KonvaEventObject<MouseEvent>) => void;
- * }} param
- * @returns
- */
-function SpaceCell({ id, top, left, cellSize, onMouseDown, onMouseOver }) {
-  const p = cellSize * 0.25;
   return (
     <>
       <Rect
@@ -92,58 +35,35 @@ function SpaceCell({ id, top, left, cellSize, onMouseDown, onMouseOver }) {
         y={top + PADDING}
         width={cellSize - 2 * PADDING}
         height={cellSize - 2 * PADDING}
-        fill={COLOR_EMPTY}
+        fill={status === 'filled' ? COLOR_FILLED : COLOR_EMPTY}
         strokeEnabled={false}
         onMouseDown={onMouseDown}
         onMouseOver={onMouseOver}
       />
-      <Line
-        points={[
-          left + p,
-          top + p,
-          left + cellSize - p,
-          top + cellSize - p,
-        ]}
-        stroke={STROKE_COLOR_LIGHT}
-        strokeWidth={STROKE_WIDTH}
-      />
-      <Line
-        points={[
-          left + p,
-          top + cellSize - p,
-          left + cellSize - p,
-          top + p,
-        ]}
-        stroke={STROKE_COLOR_LIGHT}
-        strokeWidth={STROKE_WIDTH}
-      />
+      { status === 'space' &&
+        <Line
+          points={[
+            left + crossPadding,
+            top + crossPadding,
+            left + cellSize - crossPadding,
+            top + cellSize - crossPadding,
+          ]}
+          stroke={STROKE_COLOR_LIGHT}
+          strokeWidth={STROKE_WIDTH}
+        />
+      }
+      { status === 'space' &&
+        <Line
+          points={[
+            left + crossPadding,
+            top + cellSize - crossPadding,
+            left + cellSize - crossPadding,
+            top + crossPadding,
+          ]}
+          stroke={STROKE_COLOR_LIGHT}
+          strokeWidth={STROKE_WIDTH}
+        />
+      }
     </>
-  );
-}
-
-/**
- * @param {{
- *  id: string;
- *  top: number;
- *  left: number;
- *  cellSize: number;
- *  onMouseDown: (event: KonvaEventObject<MouseEvent>) => void;
- *  onMouseOver: (event: KonvaEventObject<MouseEvent>) => void;
- * }} param
- * @returns
- */
-function FilledCell({ id, top, left, cellSize, onMouseDown, onMouseOver }) {
-  return (
-    <Rect
-      id={id}
-      x={left + PADDING}
-      y={top + PADDING}
-      width={cellSize - 2 * PADDING}
-      height={cellSize - 2 * PADDING}
-      fill={COLOR_FILLED}
-      strokeEnabled={false}
-      onMouseDown={onMouseDown}
-      onMouseOver={onMouseOver}
-    />
   );
 }
