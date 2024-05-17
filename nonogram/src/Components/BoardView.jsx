@@ -62,6 +62,20 @@ export function BoardView({
       onMouseUp={onMouseUp}
     >
       <Layer>
+        <CellsView
+          board={board}
+          cells={cells}
+          top={top + cluesHeight}
+          left={left + cluesWidth}
+          cellSize={cellSize}
+          isDragging={isDragging}
+          nextStatus={nextStatus}
+          enableSpaceStatus={true}
+          onMouseDown={onMouseDown}
+          setBoardData={setBoardData}
+        />
+      </Layer>
+      <Layer>
         <GridView
           top={top}
           left={left}
@@ -88,19 +102,6 @@ export function BoardView({
           left={left}
           cellSize={cellSize}
           cluesWidth={cluesWidth}
-        />
-      </Layer>
-      <Layer>
-        <CellsView
-          board={board}
-          cells={cells}
-          top={top + cluesHeight}
-          left={left + cluesWidth}
-          cellSize={cellSize}
-          isDragging={isDragging}
-          nextStatus={nextStatus}
-          onMouseDown={onMouseDown}
-          setBoardData={setBoardData}
         />
       </Layer>
     </Stage>

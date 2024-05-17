@@ -82,7 +82,18 @@ function BoardView({
     width: width,
     height: height,
     onMouseUp: onMouseUp
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Layer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_GridView__WEBPACK_IMPORTED_MODULE_5__.GridView, {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Layer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_CellsView__WEBPACK_IMPORTED_MODULE_4__.CellsView, {
+    board: board,
+    cells: cells,
+    top: top + cluesHeight,
+    left: left + cluesWidth,
+    cellSize: cellSize,
+    isDragging: isDragging,
+    nextStatus: nextStatus,
+    enableSpaceStatus: true,
+    onMouseDown: onMouseDown,
+    setBoardData: setBoardData
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Layer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_GridView__WEBPACK_IMPORTED_MODULE_5__.GridView, {
     top: top,
     left: left,
     cluesWidth: cluesWidth,
@@ -106,114 +117,32 @@ function BoardView({
     left: left,
     cellSize: cellSize,
     cluesWidth: cluesWidth
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Layer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_CellsView__WEBPACK_IMPORTED_MODULE_4__.CellsView, {
-    board: board,
-    cells: cells,
-    top: top + cluesHeight,
-    left: left + cluesWidth,
-    cellSize: cellSize,
-    isDragging: isDragging,
-    nextStatus: nextStatus,
-    onMouseDown: onMouseDown,
-    setBoardData: setBoardData
   })));
 }
 
 /***/ }),
 
-/***/ "./src/Components/CellsView.jsx":
-/*!**************************************!*\
-  !*** ./src/Components/CellsView.jsx ***!
-  \**************************************/
+/***/ "./src/Components/Cell.jsx":
+/*!*********************************!*\
+  !*** ./src/Components/Cell.jsx ***!
+  \*********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   CellsView: () => (/* binding */ CellsView)
+/* harmony export */   Cell: () => (/* binding */ Cell)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _src_Board__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../src/Board */ "../src/Board.js");
-/* harmony import */ var react_konva__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-konva */ "./node_modules/react-konva/es/ReactKonva.js");
-
+/* harmony import */ var react_konva__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-konva */ "./node_modules/react-konva/es/ReactKonva.js");
 
 
 const COLOR_FILLED = "#333";
-const COLOR_EMPTY = "transparent";
+const COLOR_EMPTY = "white";
+const STROKE_COLOR_LIGHT = "#aaa";
 const PADDING = 0.5;
 const STROKE_WIDTH = 1;
-
-/**
- * @param {{
- * 		board: Board;
- * 		cells: { id: string; x: number; y: number; status: 'unknown' | 'space' | 'filled'; }[];
- * 		top: number;
- * 		left: number;
- * 		cellSize: number;
- * 		isDragging: boolean;
- * 		currentState: 'fill' | 'clear' | null;
- * 		onMouseDown: (event: KonvaEventObject<MouseEvent>) => void;
- * 		setBoardData: (boardData: string) => void;
- * }} param
- */
-function CellsView({
-  board,
-  cells,
-  top,
-  left,
-  cellSize,
-  isDragging,
-  nextStatus,
-  onMouseDown: onParentMouseDown,
-  setBoardData
-}) {
-  const onMouseDown = event => {
-    const cell = cells.find(cell => cell.id === event.target.attrs.id);
-    if (cell) {
-      const prevStatus = cell.status;
-      const nextStatus = prevStatus === "filled" ? "unknown" : "filled";
-      board.changeStatus(cell.x, cell.y, nextStatus);
-      onParentMouseDown(nextStatus);
-      setBoardData(board.serialize());
-    }
-  };
-  const onMouseOver = event => {
-    if (!isDragging || nextStatus == null) return;
-    const cell = cells.find(cell => cell.id === event.target.attrs.id);
-    if (cell) {
-      board.changeStatus(cell.x, cell.y, nextStatus);
-      setBoardData(board.serialize());
-    }
-  };
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, cells.map(({
-    id,
-    x,
-    y,
-    status
-  }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Cell, {
-    key: id,
-    id: id,
-    top: top + y * cellSize,
-    left: left + x * cellSize,
-    cellSize: cellSize,
-    status: status,
-    onMouseDown: onMouseDown,
-    onMouseOver: onMouseOver
-  })));
-}
-{/* <Rect
- key={id}
- id={id}
- x={left + x * cellSize + PADDING}
- y={top + y * cellSize + PADDING}
- width={cellSize - PADDING - STROKE_WIDTH}
- height={cellSize - PADDING - STROKE_WIDTH}
- fill={status === 'filled' ? COLOR_FILLED : COLOR_EMPTY}
- strokeEnabled={false}
- onMouseDown={onMouseDown}
- onMouseOver={onMouseOver}
- /> */}
 
 /**
  * @param {{
@@ -222,6 +151,7 @@ function CellsView({
  *  left: number;
  *  cellSize: number;
  *  status: 'unknown' | 'space' | 'filled';
+ *  enableSpaceStatus: boolean;
  *  onMouseDown: (event: KonvaEventObject<MouseEvent>) => void;
  *  onMouseOver: (event: KonvaEventObject<MouseEvent>) => void;
  * }} param
@@ -233,12 +163,13 @@ function Cell({
   left,
   cellSize,
   status,
+  enableSpaceStatus,
   onMouseDown,
   onMouseOver
 }) {
-  const cell = (() => {
-    switch (status) {
-      case "unknown":
+  if (enableSpaceStatus) {
+    switch (true) {
+      case status === "unknown":
         return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(UnknownCell, {
           id: id,
           top: top,
@@ -247,7 +178,7 @@ function Cell({
           onMouseDown: onMouseDown,
           onMouseOver: onMouseOver
         });
-      case "space":
+      case status === "space":
         return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(SpaceCell, {
           id: id,
           top: top,
@@ -256,7 +187,7 @@ function Cell({
           onMouseDown: onMouseDown,
           onMouseOver: onMouseOver
         });
-      case "filled":
+      case status === "filled":
         return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(FilledCell, {
           id: id,
           top: top,
@@ -268,12 +199,30 @@ function Cell({
       default:
         throw new Error("Invalid status");
     }
-  })();
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Group, {
-    id: id,
-    onMouseDown: onMouseDown,
-    onMouseOver: onMouseOver
-  }, cell);
+  } else {
+    switch (true) {
+      case status === "unknown" || status === "space":
+        return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(UnknownCell, {
+          id: id,
+          top: top,
+          left: left,
+          cellSize: cellSize,
+          onMouseDown: onMouseDown,
+          onMouseOver: onMouseOver
+        });
+      case status === "filled":
+        return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(FilledCell, {
+          id: id,
+          top: top,
+          left: left,
+          cellSize: cellSize,
+          onMouseDown: onMouseDown,
+          onMouseOver: onMouseOver
+        });
+      default:
+        throw new Error("Invalid status");
+    }
+  }
 }
 
 /**
@@ -295,12 +244,12 @@ function UnknownCell({
   onMouseDown,
   onMouseOver
 }) {
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Rect, {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Rect, {
     id: id,
-    x: left + PADDING,
-    y: top + PADDING,
-    width: cellSize - PADDING - STROKE_WIDTH,
-    height: cellSize - PADDING - STROKE_WIDTH,
+    x: left,
+    y: top,
+    width: cellSize,
+    height: cellSize,
     fill: COLOR_EMPTY,
     strokeEnabled: false,
     onMouseDown: onMouseDown,
@@ -327,17 +276,25 @@ function SpaceCell({
   onMouseDown,
   onMouseOver
 }) {
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Rect, {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Group, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Rect, {
     id: id,
-    x: left + PADDING,
-    y: top + PADDING,
-    width: cellSize - PADDING - STROKE_WIDTH,
-    height: cellSize - PADDING - STROKE_WIDTH,
-    fill: 'yellow',
+    x: left,
+    y: top,
+    width: cellSize,
+    height: cellSize,
+    fill: COLOR_EMPTY,
     strokeEnabled: false,
     onMouseDown: onMouseDown,
     onMouseOver: onMouseOver
-  });
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Line, {
+    points: [left, top, left + cellSize, top + cellSize],
+    stroke: STROKE_COLOR_LIGHT,
+    strokeWidth: STROKE_WIDTH
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Line, {
+    points: [left, top + cellSize, left + cellSize, top],
+    stroke: STROKE_COLOR_LIGHT,
+    strokeWidth: STROKE_WIDTH
+  }));
 }
 
 /**
@@ -359,17 +316,128 @@ function FilledCell({
   onMouseDown,
   onMouseOver
 }) {
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Rect, {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Rect, {
     id: id,
-    x: left + PADDING,
-    y: top + PADDING,
-    width: cellSize - PADDING - STROKE_WIDTH,
-    height: cellSize - PADDING - STROKE_WIDTH,
+    x: left,
+    y: top,
+    width: cellSize,
+    height: cellSize,
     fill: COLOR_FILLED,
     strokeEnabled: false,
     onMouseDown: onMouseDown,
     onMouseOver: onMouseOver
   });
+}
+
+/***/ }),
+
+/***/ "./src/Components/CellsView.jsx":
+/*!**************************************!*\
+  !*** ./src/Components/CellsView.jsx ***!
+  \**************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   CellsView: () => (/* binding */ CellsView)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _src_Board__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../src/Board */ "../src/Board.js");
+/* harmony import */ var _Cell__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Cell */ "./src/Components/Cell.jsx");
+
+
+
+
+
+/**
+ * @param {{
+ *  board: Board;
+ *  cells: { id: string; x: number; y: number; status: 'unknown' | 'space' | 'filled'; }[];
+ *  top: number;
+ *  left: number;
+ *  cellSize: number;
+ *  isDragging: boolean;
+ *  nextStatus: 'unknown' | 'space' | 'filled' | null;
+ *  enableSpaceStatus: boolean;
+ *  onMouseDown: (event: KonvaEventObject<MouseEvent>) => void;
+ *  setBoardData: (boardData: string) => void;
+ * }} param
+ */
+function CellsView({
+  board,
+  cells,
+  top,
+  left,
+  cellSize,
+  isDragging,
+  nextStatus,
+  enableSpaceStatus,
+  onMouseDown: onParentMouseDown,
+  setBoardData
+}) {
+  const decideNextStatus = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)(prevStatus => {
+    return enableSpaceStatus ? decideNextStatusWithSpaceStatus(prevStatus) : decideNextStatusWithoutSpaceStatus(prevStatus);
+  }, [enableSpaceStatus]);
+  const onMouseDown = event => {
+    const cell = cells.find(cell => cell.id === event.target.attrs.id);
+    if (cell) {
+      const prevStatus = cell.status;
+      const nextStatus = decideNextStatus(prevStatus);
+      board.changeStatus(cell.x, cell.y, nextStatus);
+      onParentMouseDown(nextStatus);
+      setBoardData(board.serialize());
+    }
+  };
+  const onMouseOver = event => {
+    if (!isDragging || nextStatus == null) return;
+    const cell = cells.find(cell => cell.id === event.target.attrs.id);
+    if (cell) {
+      board.changeStatus(cell.x, cell.y, nextStatus);
+      setBoardData(board.serialize());
+    }
+  };
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, cells.map(({
+    id,
+    x,
+    y,
+    status
+  }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Cell__WEBPACK_IMPORTED_MODULE_3__.Cell, {
+    key: id,
+    id: id,
+    top: top + y * cellSize,
+    left: left + x * cellSize,
+    cellSize: cellSize,
+    status: status,
+    enableSpaceStatus: enableSpaceStatus,
+    onMouseDown: onMouseDown,
+    onMouseOver: onMouseOver
+  })));
+}
+function decideNextStatusWithSpaceStatus(prevStatus) {
+  switch (true) {
+    case prevStatus === "filled":
+      return "space";
+    case prevStatus === "space":
+      return "unknown";
+    case prevStatus === "unknown":
+      return "filled";
+    default:
+      throw new Error("Invalid status");
+  }
+}
+function decideNextStatusWithoutSpaceStatus(prevStatus) {
+  switch (true) {
+    case prevStatus === "filled":
+      return "space";
+    case prevStatus === "space" || prevStatus === "unknown":
+      return "filled";
+    default:
+      throw new Error("Invalid status");
+  }
 }
 
 /***/ }),
@@ -615,13 +683,6 @@ function GridView({
     width: cluesWidth,
     height: gridHeight,
     fill: "#eee",
-    strokeEnabled: false
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Rect, {
-    x: left + cluesWidth,
-    y: top + cluesHeight,
-    width: gridWidth,
-    height: gridHeight,
-    fill: "#fff",
     strokeEnabled: false
   }), verticalLines.map(({
     x,

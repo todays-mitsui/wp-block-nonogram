@@ -60,16 +60,6 @@ export function GridView({
         strokeEnabled={false}
       />
 
-      {/* grid の背景 */}
-      <Rect
-        x={left + cluesWidth}
-        y={top + cluesHeight}
-        width={gridWidth}
-        height={gridHeight}
-        fill="#fff"
-        strokeEnabled={false}
-      />
-
       {verticalLines.map(({ x, yStart, yEnd }, i) => (
         <Line
           key={i}
