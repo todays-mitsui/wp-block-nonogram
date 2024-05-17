@@ -40,7 +40,27 @@ class Board {
   /**
    * @param {number} x
    * @param {number} y
-   * @returns {boolean}
+   * @param {'unknown' | 'space' | 'filled'} nextStatus
+   * @returns {this}
+   */
+  changeStatus(x, y, nextStatus) {
+    if (!Number.isInteger(x) || !Number.isInteger(y)) {
+      throw new Error("x and y must be integers");
+    }
+
+    if (x < 0 || x >= this._numColumns || y < 0 || y >= this._numRows) {
+      throw new Error("Out of bounds");
+    }
+
+    this._grid.set(x, y, nextStatus);
+
+    return this;
+  }
+
+  /**
+   * @param {number} x
+   * @param {number} y
+   * @returns {this}
    */
   fill(x, y) {
     if (!Number.isInteger(x) || !Number.isInteger(y)) {
@@ -51,7 +71,7 @@ class Board {
       throw new Error("Out of bounds");
     }
 
-    this._grid.set(x, y, true);
+    this._grid.set(x, y, 'filled');
 
     return this;
   }
@@ -59,7 +79,7 @@ class Board {
   /**
    * @param {number} x
    * @param {number} y
-   * @returns {boolean}
+   * @returns {this}
    */
   clear(x, y) {
     if (!Number.isInteger(x) || !Number.isInteger(y)) {
@@ -70,26 +90,26 @@ class Board {
       throw new Error("Out of bounds");
     }
 
-    this._grid.set(x, y, false);
+    this._grid.set(x, y, 'unknown');
 
     return this;
   }
 
   /**
-   * @returns {Generator<{ id: string; x: number; y: number; filled: boolean; }>}
+   * @returns {Generator<{ id: string; x: number; y: number; status: 'unknown' | 'space' | 'filled'; }>}
    */
   *cells() {
     for (let y = 0; y < this._numRows; y++) {
       for (let x = 0; x < this._numColumns; x++) {
         const id = `(${x},${y})`;
-        const filled = this._grid.get(x, y);
-        yield { id, x, y, filled };
+        const status = this._grid.get(x, y);
+        yield { id, x, y, status };
       }
     }
   }
 
   /**
-   * @returns {Generator<boolean[]>}
+   * @returns {Generator<('unknown' | 'space' | 'filled')[]>}
    */
   *rows() {
     for (let y = 0; y < this._numRows; y++) {
@@ -98,7 +118,7 @@ class Board {
   }
 
   /**
-   * @returns {Generator<boolean[]>}
+   * @returns {Generator<('unknown' | 'space' | 'filled')[]>}
    */
   *columns() {
     for (let x = 0; x < this._numColumns; x++) {
@@ -125,15 +145,15 @@ class Board {
   }
 
   /**
-   * @param {boolean[]} cells
+   * @param {('unknown' | 'space' | 'filled')[]} cells
    * @returns {number[]}
    */
   static _calcClue(cells) {
     const clue = [];
 
     let count = 0;
-    for (const cell of cells) {
-      if (cell) {
+    for (const status of cells) {
+      if (status === 'filled') {
         count++;
       } else if (count > 0) {
         clue.push(count);

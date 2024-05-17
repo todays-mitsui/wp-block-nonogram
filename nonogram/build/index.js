@@ -61,16 +61,16 @@ function BoardView({
   setBoardData
 }) {
   const [isDragging, setIsDragging] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
-  const [currentState, setCurrentState] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
+  const [nextStatus, setNextStatus] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
 
   // 各セルでマウスが押されたときに呼ばれる想定のハンドラ
-  const onMouseDown = currentState => {
+  const onMouseDown = nextStatus => {
     setIsDragging(true);
-    setCurrentState(currentState);
+    setNextStatus(nextStatus);
   };
   const onMouseUp = () => {
     setIsDragging(false);
-    setCurrentState(null);
+    setNextStatus(null);
   };
   const cells = [...board.cells()];
   console.log({
@@ -113,7 +113,7 @@ function BoardView({
     left: left + cluesWidth,
     cellSize: cellSize,
     isDragging: isDragging,
-    currentState: currentState,
+    nextStatus: nextStatus,
     onMouseDown: onMouseDown,
     setBoardData: setBoardData
   })));
@@ -147,7 +147,7 @@ const STROKE_WIDTH = 1;
 /**
  * @param {{
  * 		board: Board;
- * 		cells: { id: string; x: number; y: number; filled: boolean; }[];
+ * 		cells: { id: string; x: number; y: number; status: 'unknown' | 'space' | 'filled'; }[];
  * 		top: number;
  * 		left: number;
  * 		cellSize: number;
@@ -164,23 +164,25 @@ function CellsView({
   left,
   cellSize,
   isDragging,
-  currentState,
+  nextStatus,
   onMouseDown: onParentMouseDown,
   setBoardData
 }) {
   const onMouseDown = event => {
     const cell = cells.find(cell => cell.id === event.target.attrs.id);
     if (cell) {
-      cell.filled ? board.clear(cell.x, cell.y) : board.fill(cell.x, cell.y);
-      onParentMouseDown(cell.filled ? "clear" : "fill");
+      const prevStatus = cell.status;
+      const nextStatus = prevStatus === "filled" ? "unknown" : "filled";
+      board.changeStatus(cell.x, cell.y, nextStatus);
+      onParentMouseDown(nextStatus);
       setBoardData(board.serialize());
     }
   };
   const onMouseOver = event => {
-    if (!isDragging || currentState == null) return;
+    if (!isDragging || nextStatus == null) return;
     const cell = cells.find(cell => cell.id === event.target.attrs.id);
     if (cell) {
-      currentState === "fill" ? board.fill(cell.x, cell.y) : board.clear(cell.x, cell.y);
+      board.changeStatus(cell.x, cell.y, nextStatus);
       setBoardData(board.serialize());
     }
   };
@@ -188,19 +190,186 @@ function CellsView({
     id,
     x,
     y,
-    filled
-  }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Rect, {
+    status
+  }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Cell, {
     key: id,
     id: id,
-    x: left + x * cellSize + PADDING,
-    y: top + y * cellSize + PADDING,
-    width: cellSize - PADDING - STROKE_WIDTH,
-    height: cellSize - PADDING - STROKE_WIDTH,
-    fill: filled ? COLOR_FILLED : COLOR_EMPTY,
-    strokeEnabled: false,
+    top: top + y * cellSize,
+    left: left + x * cellSize,
+    cellSize: cellSize,
+    status: status,
     onMouseDown: onMouseDown,
     onMouseOver: onMouseOver
   })));
+}
+{/* <Rect
+ key={id}
+ id={id}
+ x={left + x * cellSize + PADDING}
+ y={top + y * cellSize + PADDING}
+ width={cellSize - PADDING - STROKE_WIDTH}
+ height={cellSize - PADDING - STROKE_WIDTH}
+ fill={status === 'filled' ? COLOR_FILLED : COLOR_EMPTY}
+ strokeEnabled={false}
+ onMouseDown={onMouseDown}
+ onMouseOver={onMouseOver}
+ /> */}
+
+/**
+ * @param {{
+ *  id: string;
+ *  top: number;
+ *  left: number;
+ *  cellSize: number;
+ *  status: 'unknown' | 'space' | 'filled';
+ *  onMouseDown: (event: KonvaEventObject<MouseEvent>) => void;
+ *  onMouseOver: (event: KonvaEventObject<MouseEvent>) => void;
+ * }} param
+ * @returns {JSX.Element}
+ */
+function Cell({
+  id,
+  top,
+  left,
+  cellSize,
+  status,
+  onMouseDown,
+  onMouseOver
+}) {
+  const cell = (() => {
+    switch (status) {
+      case "unknown":
+        return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(UnknownCell, {
+          id: id,
+          top: top,
+          left: left,
+          cellSize: cellSize,
+          onMouseDown: onMouseDown,
+          onMouseOver: onMouseOver
+        });
+      case "space":
+        return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(SpaceCell, {
+          id: id,
+          top: top,
+          left: left,
+          cellSize: cellSize,
+          onMouseDown: onMouseDown,
+          onMouseOver: onMouseOver
+        });
+      case "filled":
+        return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(FilledCell, {
+          id: id,
+          top: top,
+          left: left,
+          cellSize: cellSize,
+          onMouseDown: onMouseDown,
+          onMouseOver: onMouseOver
+        });
+      default:
+        throw new Error("Invalid status");
+    }
+  })();
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Group, {
+    id: id,
+    onMouseDown: onMouseDown,
+    onMouseOver: onMouseOver
+  }, cell);
+}
+
+/**
+ * @param {{
+ *  id: string;
+ *  top: number;
+ *  left: number;
+ *  cellSize: number;
+ *  onMouseDown: (event: KonvaEventObject<MouseEvent>) => void;
+ *  onMouseOver: (event: KonvaEventObject<MouseEvent>) => void;
+ * }} param
+ * @returns
+ */
+function UnknownCell({
+  id,
+  top,
+  left,
+  cellSize,
+  onMouseDown,
+  onMouseOver
+}) {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Rect, {
+    id: id,
+    x: left + PADDING,
+    y: top + PADDING,
+    width: cellSize - PADDING - STROKE_WIDTH,
+    height: cellSize - PADDING - STROKE_WIDTH,
+    fill: COLOR_EMPTY,
+    strokeEnabled: false,
+    onMouseDown: onMouseDown,
+    onMouseOver: onMouseOver
+  });
+}
+
+/**
+ * @param {{
+ *  id: string;
+ *  top: number;
+ *  left: number;
+ *  cellSize: number;
+ *  onMouseDown: (event: KonvaEventObject<MouseEvent>) => void;
+ *  onMouseOver: (event: KonvaEventObject<MouseEvent>) => void;
+ * }} param
+ * @returns
+ */
+function SpaceCell({
+  id,
+  top,
+  left,
+  cellSize,
+  onMouseDown,
+  onMouseOver
+}) {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Rect, {
+    id: id,
+    x: left + PADDING,
+    y: top + PADDING,
+    width: cellSize - PADDING - STROKE_WIDTH,
+    height: cellSize - PADDING - STROKE_WIDTH,
+    fill: 'yellow',
+    strokeEnabled: false,
+    onMouseDown: onMouseDown,
+    onMouseOver: onMouseOver
+  });
+}
+
+/**
+ * @param {{
+ *  id: string;
+ *  top: number;
+ *  left: number;
+ *  cellSize: number;
+ *  onMouseDown: (event: KonvaEventObject<MouseEvent>) => void;
+ *  onMouseOver: (event: KonvaEventObject<MouseEvent>) => void;
+ * }} param
+ * @returns
+ */
+function FilledCell({
+  id,
+  top,
+  left,
+  cellSize,
+  onMouseDown,
+  onMouseOver
+}) {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Rect, {
+    id: id,
+    x: left + PADDING,
+    y: top + PADDING,
+    width: cellSize - PADDING - STROKE_WIDTH,
+    height: cellSize - PADDING - STROKE_WIDTH,
+    fill: COLOR_FILLED,
+    strokeEnabled: false,
+    onMouseDown: onMouseDown,
+    onMouseOver: onMouseOver
+  });
 }
 
 /***/ }),
@@ -870,10 +1039,10 @@ const {
 class Board {
   constructor(numColumns, numRows) {
     if (!Number.isInteger(numColumns) || !Number.isInteger(numRows)) {
-      throw new Error('numColumns and numRows must be integers');
+      throw new Error("numColumns and numRows must be integers");
     }
     if (numColumns < 0 || numRows < 0) {
-      throw new Error('Out of bounds');
+      throw new Error("Out of bounds");
     }
     this._numColumns = numColumns;
     this._numRows = numRows;
@@ -887,7 +1056,7 @@ class Board {
     return this._numRows;
   }
   set numRows(_value) {
-    throw new Error('Cannot set numRows');
+    throw new Error("Cannot set numRows");
   }
 
   /**
@@ -897,61 +1066,78 @@ class Board {
     return this._numColumns;
   }
   set numColumns(_value) {
-    throw new Error('Cannot set numColumns');
+    throw new Error("Cannot set numColumns");
   }
 
   /**
    * @param {number} x
    * @param {number} y
-   * @returns {boolean}
+   * @param {'unknown' | 'space' | 'filled'} nextStatus
+   * @returns {this}
+   */
+  changeStatus(x, y, nextStatus) {
+    if (!Number.isInteger(x) || !Number.isInteger(y)) {
+      throw new Error("x and y must be integers");
+    }
+    if (x < 0 || x >= this._numColumns || y < 0 || y >= this._numRows) {
+      throw new Error("Out of bounds");
+    }
+    this._grid.set(x, y, nextStatus);
+    return this;
+  }
+
+  /**
+   * @param {number} x
+   * @param {number} y
+   * @returns {this}
    */
   fill(x, y) {
     if (!Number.isInteger(x) || !Number.isInteger(y)) {
-      throw new Error('x and y must be integers');
+      throw new Error("x and y must be integers");
     }
     if (x < 0 || x >= this._numColumns || y < 0 || y >= this._numRows) {
-      throw new Error('Out of bounds');
+      throw new Error("Out of bounds");
     }
-    this._grid.set(x, y, true);
+    this._grid.set(x, y, 'filled');
     return this;
   }
 
   /**
    * @param {number} x
    * @param {number} y
-   * @returns {boolean}
+   * @returns {this}
    */
   clear(x, y) {
     if (!Number.isInteger(x) || !Number.isInteger(y)) {
-      throw new Error('x and y must be integers');
+      throw new Error("x and y must be integers");
     }
     if (x < 0 || x >= this._numColumns || y < 0 || y >= this._numRows) {
-      throw new Error('Out of bounds');
+      throw new Error("Out of bounds");
     }
-    this._grid.set(x, y, false);
+    this._grid.set(x, y, 'unknown');
     return this;
   }
 
   /**
-   * @returns {Generator<{ id: string; x: number; y: number; filled: boolean; }>}
+   * @returns {Generator<{ id: string; x: number; y: number; status: 'unknown' | 'space' | 'filled'; }>}
    */
   *cells() {
     for (let y = 0; y < this._numRows; y++) {
       for (let x = 0; x < this._numColumns; x++) {
         const id = `(${x},${y})`;
-        const filled = this._grid.get(x, y);
+        const status = this._grid.get(x, y);
         yield {
           id,
           x,
           y,
-          filled
+          status
         };
       }
     }
   }
 
   /**
-   * @returns {Generator<boolean[]>}
+   * @returns {Generator<('unknown' | 'space' | 'filled')[]>}
    */
   *rows() {
     for (let y = 0; y < this._numRows; y++) {
@@ -960,7 +1146,7 @@ class Board {
   }
 
   /**
-   * @returns {Generator<boolean[]>}
+   * @returns {Generator<('unknown' | 'space' | 'filled')[]>}
    */
   *columns() {
     for (let x = 0; x < this._numColumns; x++) {
@@ -987,14 +1173,14 @@ class Board {
   }
 
   /**
-   * @param {boolean[]} cells
+   * @param {('unknown' | 'space' | 'filled')[]} cells
    * @returns {number[]}
    */
   static _calcClue(cells) {
     const clue = [];
     let count = 0;
-    for (const cell of cells) {
-      if (cell) {
+    for (const status of cells) {
+      if (status === 'filled') {
         count++;
       } else if (count > 0) {
         clue.push(count);
@@ -1014,10 +1200,10 @@ class Board {
    */
   resize(numColumns, numRows) {
     if (!Number.isInteger(numColumns) || !Number.isInteger(numRows)) {
-      throw new Error('numColumns and numRows must be integers');
+      throw new Error("numColumns and numRows must be integers");
     }
     if (numColumns < 0 || numRows < 0) {
-      throw new Error('Out of bounds');
+      throw new Error("Out of bounds");
     }
     this._numColumns = numColumns;
     this._numRows = numRows;
@@ -1039,13 +1225,13 @@ class Board {
   static deserialize(str) {
     const matches = str.match(/^(\d+x\d+);(.+)$/);
     if (matches == null) {
-      throw new Error('Invalid format');
+      throw new Error("Invalid format");
     }
     const size = matches[1];
     const data = matches[2];
-    const [numColumns, numRows] = size.split('x').map(Number);
+    const [numColumns, numRows] = size.split("x").map(Number);
     if (numColumns < 0 || numRows < 0) {
-      throw new Error('Out of bounds');
+      throw new Error("Out of bounds");
     }
     const board = new Board(numColumns, numRows);
     const grid = Grid.deserialize(data);
@@ -1074,10 +1260,10 @@ class Grid {
    */
   constructor(numColumns, numRows) {
     if (!Number.isInteger(numColumns) || !Number.isInteger(numRows)) {
-      throw new Error('numColumns and numRows must be integers');
+      throw new Error("numColumns and numRows must be integers");
     }
     if (numColumns < 0 || numRows < 0) {
-      throw new Error('Out of bounds');
+      throw new Error("Out of bounds");
     }
     this._numColumns = numColumns;
     this._numRows = numRows;
@@ -1091,10 +1277,10 @@ class Grid {
    */
   get(x, y) {
     if (!Number.isInteger(x) || !Number.isInteger(y)) {
-      throw new Error('x and y must be integers');
+      throw new Error("x and y must be integers");
     }
     if (x < 0 || x >= this._numColumns || y < 0 || y >= this._numRows) {
-      throw new Error('Out of bounds');
+      throw new Error("Out of bounds");
     }
     const serial = this._cells[y * this._numColumns + x];
     return Grid.serialToStatus(serial);
@@ -1108,10 +1294,10 @@ class Grid {
    */
   set(x, y, status) {
     if (!Number.isInteger(x) || !Number.isInteger(y)) {
-      throw new Error('x and y must be integers');
+      throw new Error("x and y must be integers");
     }
     if (x < 0 || x >= this._numColumns || y < 0 || y >= this._numRows) {
-      throw new Error('Out of bounds');
+      throw new Error("Out of bounds");
     }
     const serial = Grid.statusToSerial(status);
     this._cells[y * this._numColumns + x] = serial;
@@ -1125,13 +1311,13 @@ class Grid {
   static serialToStatus(serial) {
     switch (serial) {
       case 0:
-        return 'unknown';
+        return "unknown";
       case 1:
-        return 'space';
+        return "space";
       case 2:
-        return 'filled';
+        return "filled";
       default:
-        throw new Error('Invalid serial');
+        throw new Error("Invalid serial");
     }
   }
 
@@ -1141,14 +1327,14 @@ class Grid {
    */
   static statusToSerial(status) {
     switch (status) {
-      case 'unknown':
+      case "unknown":
         return 0;
-      case 'space':
+      case "space":
         return 1;
-      case 'filled':
+      case "filled":
         return 2;
       default:
-        throw new Error('Invalid status');
+        throw new Error("Invalid status");
     }
   }
 
@@ -1158,10 +1344,10 @@ class Grid {
    */
   getRow(y) {
     if (!Number.isInteger(y)) {
-      throw new Error('y must be an integer');
+      throw new Error("y must be an integer");
     }
     if (y < 0 || y >= this._numRows) {
-      throw new Error('Out of bounds');
+      throw new Error("Out of bounds");
     }
     return Array.from(this._cells.subarray(y * this._numColumns, (y + 1) * this._numColumns)).map(Grid.serialToStatus);
   }
@@ -1181,10 +1367,10 @@ class Grid {
    */
   getColumn(x) {
     if (!Number.isInteger(x)) {
-      throw new Error('x must be an integer');
+      throw new Error("x must be an integer");
     }
     if (x < 0 || x >= this._numColumns) {
-      throw new Error('Out of bounds');
+      throw new Error("Out of bounds");
     }
     const column = [];
     for (let y = 0; y < this._numRows; y++) {
@@ -1209,10 +1395,10 @@ class Grid {
    */
   resize(numColumns, numRows) {
     if (!Number.isInteger(numColumns) || !Number.isInteger(numRows)) {
-      throw new Error('numColumns and numRows must be integers');
+      throw new Error("numColumns and numRows must be integers");
     }
     if (numColumns < 0 || numRows < 0) {
-      throw new Error('Out of bounds');
+      throw new Error("Out of bounds");
     }
     if (numColumns < this._numColumns) {
       this._shrinkHorizontally(numColumns);
@@ -1247,13 +1433,11 @@ class Grid {
    */
   _shrinkHorizontally(numColumns) {
     const nonSpaceIndexes = [...this.rows()].flatMap(row => {
-      return row.map((serial, index) => Grid.serialToStatus(serial) !== 'space' ? index : null).filter(index => index != null);
+      return row.map((serial, index) => Grid.serialToStatus(serial) !== "space" ? index : null).filter(index => index != null);
     });
     const maxNonSpaceIndex = Math.max(...nonSpaceIndexes);
     const newNumColumns = Math.max(numColumns, maxNonSpaceIndex + 1);
-    if (newNumColumns === this._numColumns) {
-      return this;
-    }
+    if (newNumColumns === this._numColumns) return this;
     const newCells = new Uint8ClampedArray(newNumColumns * this._numRows);
     for (let y = 0; y < this._numRows; y++) {
       newCells.set(this._cells.subarray(y * this._numColumns, y * this._numColumns + newNumColumns), y * newNumColumns);
@@ -1280,11 +1464,9 @@ class Grid {
    * @returns {this}
    */
   _shrinkVertically(numRows) {
-    const maxNonSpaceIndex = [...this.rows()].findLastIndex(row => row.some(serial => Grid.serialToStatus(serial) !== 'space'));
+    const maxNonSpaceIndex = [...this.rows()].findLastIndex(row => row.some(serial => Grid.serialToStatus(serial) !== "space"));
     const newNumRows = Math.max(numRows, maxNonSpaceIndex + 1);
-    if (newNumRows === this._numRows) {
-      return this;
-    }
+    if (newNumRows === this._numRows) return this;
     this._numRows = newNumRows;
     this._cells = this._cells.slice(0, this._numColumns * newNumRows);
     return this;
@@ -1302,10 +1484,10 @@ class Grid {
    * @returns {Grid}
    */
   static deserialize(str) {
-    const [size, data] = str.split(';');
-    const [numColumns, numRows] = size.split('x').map(Number);
+    const [size, data] = str.split(";");
+    const [numColumns, numRows] = size.split("x").map(Number);
     if (numColumns < 0 || numRows < 0) {
-      throw new Error('Out of bounds');
+      throw new Error("Out of bounds");
     }
     const grid = new Grid(numColumns, numRows);
     const cells = decode(data).slice(0, numColumns * numRows);
@@ -1330,7 +1512,7 @@ const BASE64_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0
  * @returns {string}
  */
 function bitsToString(bits) {
-  let str = '';
+  let str = "";
   for (const b6 of chunks(bits, 6)) {
     const index = (b6[0] ? 0b100000 : 0b000000) + (b6[1] ? 0b010000 : 0b000000) + (b6[2] ? 0b001000 : 0b000000) + (b6[3] ? 0b000100 : 0b000000) + (b6[4] ? 0b000010 : 0b000000) + (b6[5] ? 0b000001 : 0b000000);
     str += BASE64_CHARACTERS.charAt(index);
@@ -1374,7 +1556,7 @@ function* chunks(array, size) {
  */
 function encode(serials) {
   /** @type string */
-  let code = '';
+  let code = "";
   for (const chunk of chunks(serials, 3)) {
     const index = (chunk[0] << 4) + (chunk[1] << 2) + (chunk[2] << 0);
     code += BASE64_CHARACTERS.charAt(index);

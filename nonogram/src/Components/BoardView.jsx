@@ -36,17 +36,17 @@ export function BoardView({
   setBoardData,
 }) {
   const [isDragging, setIsDragging] = useState(false);
-  const [currentState, setCurrentState] = useState(null);
+  const [nextStatus, setNextStatus] = useState(null);
 
   // 各セルでマウスが押されたときに呼ばれる想定のハンドラ
-  const onMouseDown = (currentState) => {
+  const onMouseDown = (nextStatus) => {
     setIsDragging(true);
-    setCurrentState(currentState);
+    setNextStatus(nextStatus);
   };
 
   const onMouseUp = () => {
     setIsDragging(false);
-    setCurrentState(null);
+    setNextStatus(null);
   };
 
   const cells = [...board.cells()];
@@ -98,7 +98,7 @@ export function BoardView({
           left={left + cluesWidth}
           cellSize={cellSize}
           isDragging={isDragging}
-          currentState={currentState}
+          nextStatus={nextStatus}
           onMouseDown={onMouseDown}
           setBoardData={setBoardData}
         />
