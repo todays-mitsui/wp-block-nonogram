@@ -1,4 +1,4 @@
-const { Board } = require('./Board');
+const { Board } = require("./Board");
 
 class Game {
   /**
@@ -19,7 +19,7 @@ class Game {
   }
 
   set board(_value) {
-    throw new Error('Cannot set board');
+    throw new Error("Cannot set board");
   }
 }
 module.exports.Game = Game;

@@ -1,13 +1,13 @@
-const { Grid } = require('./Grid.js');
+const { Grid } = require("./Grid.js");
 
 class Board {
   constructor(numColumns, numRows) {
     if (!Number.isInteger(numColumns) || !Number.isInteger(numRows)) {
-      throw new Error('numColumns and numRows must be integers');
+      throw new Error("numColumns and numRows must be integers");
     }
 
     if (numColumns < 0 || numRows < 0) {
-      throw new Error('Out of bounds');
+      throw new Error("Out of bounds");
     }
 
     this._numColumns = numColumns;
@@ -23,7 +23,7 @@ class Board {
   }
 
   set numRows(_value) {
-    throw new Error('Cannot set numRows');
+    throw new Error("Cannot set numRows");
   }
 
   /**
@@ -34,7 +34,7 @@ class Board {
   }
 
   set numColumns(_value) {
-    throw new Error('Cannot set numColumns');
+    throw new Error("Cannot set numColumns");
   }
 
   /**
@@ -44,11 +44,11 @@ class Board {
    */
   fill(x, y) {
     if (!Number.isInteger(x) || !Number.isInteger(y)) {
-      throw new Error('x and y must be integers');
+      throw new Error("x and y must be integers");
     }
 
     if (x < 0 || x >= this._numColumns || y < 0 || y >= this._numRows) {
-      throw new Error('Out of bounds');
+      throw new Error("Out of bounds");
     }
 
     this._grid.set(x, y, true);
@@ -63,11 +63,11 @@ class Board {
    */
   clear(x, y) {
     if (!Number.isInteger(x) || !Number.isInteger(y)) {
-      throw new Error('x and y must be integers');
+      throw new Error("x and y must be integers");
     }
 
     if (x < 0 || x >= this._numColumns || y < 0 || y >= this._numRows) {
-      throw new Error('Out of bounds');
+      throw new Error("Out of bounds");
     }
 
     this._grid.set(x, y, false);
@@ -78,7 +78,7 @@ class Board {
   /**
    * @returns {Generator<{ id: string; x: number; y: number; filled: boolean; }>}
    */
-  * cells() {
+  *cells() {
     for (let y = 0; y < this._numRows; y++) {
       for (let x = 0; x < this._numColumns; x++) {
         const id = `(${x},${y})`;
@@ -91,7 +91,7 @@ class Board {
   /**
    * @returns {Generator<boolean[]>}
    */
-  * rows() {
+  *rows() {
     for (let y = 0; y < this._numRows; y++) {
       yield this._grid.getRow(y).slice(0, this._numColumns);
     }
@@ -100,7 +100,7 @@ class Board {
   /**
    * @returns {Generator<boolean[]>}
    */
-  * columns() {
+  *columns() {
     for (let x = 0; x < this._numColumns; x++) {
       yield this._grid.getColumn(x).slice(0, this._numRows);
     }
@@ -109,7 +109,7 @@ class Board {
   /**
    * @returns {Generator<number[]>}
    */
-  * rowClues() {
+  *rowClues() {
     for (const row of this.rows()) {
       yield Board._calcClue(row);
     }
@@ -118,7 +118,7 @@ class Board {
   /**
    * @returns {Generator<number[]>}
    */
-  * columnClues() {
+  *columnClues() {
     for (const column of this.columns()) {
       yield Board._calcClue(column);
     }
@@ -155,11 +155,11 @@ class Board {
    */
   resize(numColumns, numRows) {
     if (!Number.isInteger(numColumns) || !Number.isInteger(numRows)) {
-      throw new Error('numColumns and numRows must be integers');
+      throw new Error("numColumns and numRows must be integers");
     }
 
     if (numColumns < 0 || numRows < 0) {
-      throw new Error('Out of bounds');
+      throw new Error("Out of bounds");
     }
 
     this._numColumns = numColumns;
@@ -184,15 +184,15 @@ class Board {
     const matches = str.match(/^(\d+x\d+);(.+)$/);
 
     if (matches == null) {
-      throw new Error('Invalid format');
+      throw new Error("Invalid format");
     }
 
     const size = matches[1];
     const data = matches[2];
-    const [numColumns, numRows] = size.split('x').map(Number);
+    const [numColumns, numRows] = size.split("x").map(Number);
 
     if (numColumns < 0 || numRows < 0) {
-      throw new Error('Out of bounds');
+      throw new Error("Out of bounds");
     }
 
     const board = new Board(numColumns, numRows);

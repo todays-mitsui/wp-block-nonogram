@@ -1,4 +1,4 @@
-const { encode, decode } = require('./util.js');
+const { encode, decode } = require("./util.js");
 
 class Grid {
   /**
@@ -7,11 +7,11 @@ class Grid {
    */
   constructor(numColumns, numRows) {
     if (!Number.isInteger(numColumns) || !Number.isInteger(numRows)) {
-      throw new Error('numColumns and numRows must be integers');
+      throw new Error("numColumns and numRows must be integers");
     }
 
     if (numColumns < 0 || numRows < 0) {
-      throw new Error('Out of bounds');
+      throw new Error("Out of bounds");
     }
 
     this._numColumns = numColumns;
@@ -26,11 +26,11 @@ class Grid {
    */
   get(x, y) {
     if (!Number.isInteger(x) || !Number.isInteger(y)) {
-      throw new Error('x and y must be integers');
+      throw new Error("x and y must be integers");
     }
 
     if (x < 0 || x >= this._numColumns || y < 0 || y >= this._numRows) {
-      throw new Error('Out of bounds');
+      throw new Error("Out of bounds");
     }
 
     const serial = this._cells[y * this._numColumns + x];
@@ -45,11 +45,11 @@ class Grid {
    */
   set(x, y, status) {
     if (!Number.isInteger(x) || !Number.isInteger(y)) {
-      throw new Error('x and y must be integers');
+      throw new Error("x and y must be integers");
     }
 
     if (x < 0 || x >= this._numColumns || y < 0 || y >= this._numRows) {
-      throw new Error('Out of bounds');
+      throw new Error("Out of bounds");
     }
 
     const serial = Grid.statusToSerial(status);
@@ -64,13 +64,13 @@ class Grid {
   static serialToStatus(serial) {
     switch (serial) {
       case 0:
-        return 'unknown';
+        return "unknown";
       case 1:
-        return 'space';
+        return "space";
       case 2:
-        return 'filled';
+        return "filled";
       default:
-        throw new Error('Invalid serial');
+        throw new Error("Invalid serial");
     }
   }
 
@@ -80,14 +80,14 @@ class Grid {
    */
   static statusToSerial(status) {
     switch (status) {
-      case 'unknown':
+      case "unknown":
         return 0;
-      case 'space':
+      case "space":
         return 1;
-      case 'filled':
+      case "filled":
         return 2;
       default:
-        throw new Error('Invalid status');
+        throw new Error("Invalid status");
     }
   }
 
@@ -97,21 +97,23 @@ class Grid {
    */
   getRow(y) {
     if (!Number.isInteger(y)) {
-      throw new Error('y must be an integer');
+      throw new Error("y must be an integer");
     }
 
     if (y < 0 || y >= this._numRows) {
-      throw new Error('Out of bounds');
+      throw new Error("Out of bounds");
     }
 
-    return Array.from(this._cells.subarray(y * this._numColumns, (y + 1) * this._numColumns))
+    return Array.from(
+      this._cells.subarray(y * this._numColumns, (y + 1) * this._numColumns),
+    )
       .map(Grid.serialToStatus);
   }
 
   /**
    * @returns {Generator<boolean[]>}
    */
-  * rows() {
+  *rows() {
     for (let y = 0; y < this._numRows; y++) {
       yield this.getRow(y);
     }
@@ -123,11 +125,11 @@ class Grid {
    */
   getColumn(x) {
     if (!Number.isInteger(x)) {
-      throw new Error('x must be an integer');
+      throw new Error("x must be an integer");
     }
 
     if (x < 0 || x >= this._numColumns) {
-      throw new Error('Out of bounds');
+      throw new Error("Out of bounds");
     }
 
     const column = [];
@@ -142,7 +144,7 @@ class Grid {
   /**
    * @returns {Generator<boolean[]>}
    */
-  * columns() {
+  *columns() {
     for (let x = 0; x < this._numColumns; x++) {
       yield this.getColumn(x);
     }
@@ -155,11 +157,11 @@ class Grid {
    */
   resize(numColumns, numRows) {
     if (!Number.isInteger(numColumns) || !Number.isInteger(numRows)) {
-      throw new Error('numColumns and numRows must be integers');
+      throw new Error("numColumns and numRows must be integers");
     }
 
     if (numColumns < 0 || numRows < 0) {
-      throw new Error('Out of bounds');
+      throw new Error("Out of bounds");
     }
 
     if (numColumns < this._numColumns) {
@@ -187,7 +189,7 @@ class Grid {
     for (let y = 0; y < this._numRows; y++) {
       newCells.set(
         this._cells.subarray(y * this._numColumns, (y + 1) * this._numColumns),
-        y * numColumns
+        y * numColumns,
       );
     }
 
@@ -205,20 +207,25 @@ class Grid {
     const nonSpaceIndexes = [...this.rows()]
       .flatMap((row) => {
         return row
-          .map((serial, index) => Grid.serialToStatus(serial) !== 'space' ? index : null)
+          .map((serial, index) =>
+            Grid.serialToStatus(serial) !== "space" ? index : null
+          )
           .filter((index) => index != null);
       });
     const maxNonSpaceIndex = Math.max(...nonSpaceIndexes);
 
     const newNumColumns = Math.max(numColumns, maxNonSpaceIndex + 1);
 
-    if (newNumColumns === this._numColumns) { return this; }
+    if (newNumColumns === this._numColumns) return this;
 
     const newCells = new Uint8ClampedArray(newNumColumns * this._numRows);
     for (let y = 0; y < this._numRows; y++) {
       newCells.set(
-        this._cells.subarray(y * this._numColumns, y * this._numColumns + newNumColumns),
-        y * newNumColumns
+        this._cells.subarray(
+          y * this._numColumns,
+          y * this._numColumns + newNumColumns,
+        ),
+        y * newNumColumns,
       );
     }
 
@@ -248,11 +255,13 @@ class Grid {
    * @returns {this}
    */
   _shrinkVertically(numRows) {
-    const maxNonSpaceIndex = [...this.rows()].findLastIndex((row) => row.some((serial) => Grid.serialToStatus(serial) !== 'space'))
+    const maxNonSpaceIndex = [...this.rows()].findLastIndex((row) =>
+      row.some((serial) => Grid.serialToStatus(serial) !== "space")
+    );
 
     const newNumRows = Math.max(numRows, maxNonSpaceIndex + 1);
 
-    if (newNumRows === this._numRows) { return this; }
+    if (newNumRows === this._numRows) return this;
 
     this._numRows = newNumRows;
     this._cells = this._cells.slice(0, this._numColumns * newNumRows);
@@ -272,11 +281,11 @@ class Grid {
    * @returns {Grid}
    */
   static deserialize(str) {
-    const [size, data] = str.split(';');
-    const [numColumns, numRows] = size.split('x').map(Number);
+    const [size, data] = str.split(";");
+    const [numColumns, numRows] = size.split("x").map(Number);
 
     if (numColumns < 0 || numRows < 0) {
-      throw new Error('Out of bounds');
+      throw new Error("Out of bounds");
     }
 
     const grid = new Grid(numColumns, numRows);

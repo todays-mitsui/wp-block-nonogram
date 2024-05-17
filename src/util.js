@@ -6,7 +6,7 @@ const BASE64_CHARACTERS =
  * @returns {string}
  */
 function bitsToString(bits) {
-  let str = '';
+  let str = "";
   for (const b6 of chunks(bits, 6)) {
     const index = (b6[0] ? 0b100000 : 0b000000) +
       (b6[1] ? 0b010000 : 0b000000) +
@@ -67,7 +67,7 @@ function* chunks(array, size) {
  */
 function encode(serials) {
   /** @type string */
-  let code = '';
+  let code = "";
 
   for (const chunk of chunks(serials, 3)) {
     const index = (chunk[0] << 4) + (chunk[1] << 2) + (chunk[2] << 0);
@@ -96,7 +96,7 @@ function decode(code) {
     serials.push(
       (index & 0b110000) >> 4,
       (index & 0b001100) >> 2,
-      index & 0b000011
+      index & 0b000011,
     );
   });
 

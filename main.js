@@ -1,3 +1,3 @@
-export { Board } from './src/Board';
+export { Board } from "./src/Board";
 
-console.info('main.js');
+console.info("main.js");
