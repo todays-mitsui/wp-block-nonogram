@@ -44,7 +44,9 @@ export function BoardView({
     setNextStatus(nextStatus);
   };
 
-  const onMouseUp = () => {
+  const onMouseUp = (event) => {
+    console.info({ event });
+    console.info({ onMouseUp: event.target.attrs.id });
     setIsDragging(false);
     setNextStatus(null);
   };

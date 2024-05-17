@@ -68,7 +68,13 @@ function BoardView({
     setIsDragging(true);
     setNextStatus(nextStatus);
   };
-  const onMouseUp = () => {
+  const onMouseUp = event => {
+    console.info({
+      event
+    });
+    console.info({
+      onMouseUp: event.target.attrs.id
+    });
     setIsDragging(false);
     setNextStatus(null);
   };
@@ -242,10 +248,10 @@ function UnknownCell({
 }) {
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Rect, {
     id: id,
-    x: left,
-    y: top,
-    width: cellSize,
-    height: cellSize,
+    x: left + PADDING,
+    y: top + PADDING,
+    width: cellSize - 2 * PADDING,
+    height: cellSize - 2 * PADDING,
     fill: COLOR_EMPTY,
     strokeEnabled: false,
     onMouseDown: onMouseDown,
@@ -273,12 +279,12 @@ function SpaceCell({
   onMouseOver
 }) {
   const p = cellSize * 0.25;
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Group, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Rect, {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Rect, {
     id: id,
-    x: left,
-    y: top,
-    width: cellSize,
-    height: cellSize,
+    x: left + PADDING,
+    y: top + PADDING,
+    width: cellSize - 2 * PADDING,
+    height: cellSize - 2 * PADDING,
     fill: COLOR_EMPTY,
     strokeEnabled: false,
     onMouseDown: onMouseDown,
@@ -315,10 +321,10 @@ function FilledCell({
 }) {
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Rect, {
     id: id,
-    x: left,
-    y: top,
-    width: cellSize,
-    height: cellSize,
+    x: left + PADDING,
+    y: top + PADDING,
+    width: cellSize - 2 * PADDING,
+    height: cellSize - 2 * PADDING,
     fill: COLOR_FILLED,
     strokeEnabled: false,
     onMouseDown: onMouseDown,
@@ -380,6 +386,9 @@ function CellsView({
     return enableSpaceStatus ? decideNextStatusWithSpaceStatusAndRightClick(event, prevStatus) : decideNextStatusWithoutSpaceStatus(prevStatus);
   }, [enableSpaceStatus]);
   const onMouseDown = event => {
+    console.info({
+      event
+    });
     const cell = cells.find(cell => cell.id === event.target.attrs.id);
     if (cell) {
       console.info({
@@ -388,14 +397,17 @@ function CellsView({
       const prevStatus = cell.status;
       const nextStatus = decideNextStatus(event, prevStatus);
       board.changeStatus(cell.x, cell.y, nextStatus);
-      onParentMouseDown(nextStatus);
       setBoardData(board.serialize());
+      onParentMouseDown(nextStatus);
     }
   };
   const onMouseOver = event => {
     if (!isDragging || nextStatus == null) return;
     const cell = cells.find(cell => cell.id === event.target.attrs.id);
     if (cell) {
+      console.info({
+        event
+      });
       console.info({
         onMouseOver: cell.id
       });

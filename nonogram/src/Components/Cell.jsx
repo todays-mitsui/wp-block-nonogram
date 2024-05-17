@@ -59,10 +59,10 @@ function UnknownCell({ id, top, left, cellSize, onMouseDown, onMouseOver }) {
   return (
     <Rect
       id={id}
-      x={left}
-      y={top}
-      width={cellSize}
-      height={cellSize}
+      x={left + PADDING}
+      y={top + PADDING}
+      width={cellSize - 2 * PADDING}
+      height={cellSize - 2 * PADDING}
       fill={COLOR_EMPTY}
       strokeEnabled={false}
       onMouseDown={onMouseDown}
@@ -85,13 +85,13 @@ function UnknownCell({ id, top, left, cellSize, onMouseDown, onMouseOver }) {
 function SpaceCell({ id, top, left, cellSize, onMouseDown, onMouseOver }) {
   const p = cellSize * 0.25;
   return (
-    <Group>
+    <>
       <Rect
         id={id}
-        x={left}
-        y={top}
-        width={cellSize}
-        height={cellSize}
+        x={left + PADDING}
+        y={top + PADDING}
+        width={cellSize - 2 * PADDING}
+        height={cellSize - 2 * PADDING}
         fill={COLOR_EMPTY}
         strokeEnabled={false}
         onMouseDown={onMouseDown}
@@ -117,7 +117,7 @@ function SpaceCell({ id, top, left, cellSize, onMouseDown, onMouseOver }) {
         stroke={STROKE_COLOR_LIGHT}
         strokeWidth={STROKE_WIDTH}
       />
-    </Group>
+    </>
   );
 }
 
@@ -136,10 +136,10 @@ function FilledCell({ id, top, left, cellSize, onMouseDown, onMouseOver }) {
   return (
     <Rect
       id={id}
-      x={left}
-      y={top}
-      width={cellSize}
-      height={cellSize}
+      x={left + PADDING}
+      y={top + PADDING}
+      width={cellSize - 2 * PADDING}
+      height={cellSize - 2 * PADDING}
       fill={COLOR_FILLED}
       strokeEnabled={false}
       onMouseDown={onMouseDown}
