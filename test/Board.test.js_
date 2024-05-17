@@ -1,4 +1,4 @@
-import { Board } from '../src/Board';
+const { Board } = require('../src/Board');
 
 describe('Board', () => {
   test('constructor', () => {

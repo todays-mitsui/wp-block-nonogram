@@ -1,6 +1,6 @@
-const { bitsToString, stringToBits } = require('./util.js');
+const { encode, decode } = require('./util.js');
 
-export class Grid {
+class Grid {
   /**
    * @param {number} numColumns
    * @param {number} numRows
@@ -22,7 +22,7 @@ export class Grid {
   /**
    * @param {number} x
    * @param {number} y
-   * @returns {boolean}
+   * @returns {'unknown' | 'space' | 'filled'}
    */
   get(x, y) {
     if (!Number.isInteger(x) || !Number.isInteger(y)) {
@@ -33,16 +33,17 @@ export class Grid {
       throw new Error('Out of bounds');
     }
 
-    return !!this._cells[y * this._numColumns + x];
+    const serial = this._cells[y * this._numColumns + x];
+    return Grid.serialToStatus(serial);
   }
 
   /**
    * @param {number} x
    * @param {number} y
-   * @param {boolean} active
+   * @param {'unknown' | 'space' | 'filled'} status
    * @returns {this}
    */
-  set(x, y, active) {
+  set(x, y, status) {
     if (!Number.isInteger(x) || !Number.isInteger(y)) {
       throw new Error('x and y must be integers');
     }
@@ -51,8 +52,43 @@ export class Grid {
       throw new Error('Out of bounds');
     }
 
-    this._cells[y * this._numColumns + x] = active ? 1 : 0;
+    const serial = Grid.statusToSerial(status);
+    this._cells[y * this._numColumns + x] = serial;
     return this;
+  }
+
+  /**
+   * @param {number} serial
+   * @returns {'unknown' | 'space' | 'filled'}
+   */
+  static serialToStatus(serial) {
+    switch (serial) {
+      case 0:
+        return 'unknown';
+      case 1:
+        return 'space';
+      case 2:
+        return 'filled';
+      default:
+        throw new Error('Invalid serial');
+    }
+  }
+
+  /**
+   * @param {'unknown' | 'space' | 'filled'} status
+   * @returns {number}
+   */
+  static statusToSerial(status) {
+    switch (status) {
+      case 'unknown':
+        return 0;
+      case 'space':
+        return 1;
+      case 'filled':
+        return 2;
+      default:
+        throw new Error('Invalid status');
+    }
   }
 
   /**
@@ -68,7 +104,8 @@ export class Grid {
       throw new Error('Out of bounds');
     }
 
-    return Array.from(this._cells.subarray(y * this._numColumns, (y + 1) * this._numColumns)).map(Boolean);
+    return Array.from(this._cells.subarray(y * this._numColumns, (y + 1) * this._numColumns))
+      .map(Grid.serialToStatus);
   }
 
   /**
@@ -165,15 +202,15 @@ export class Grid {
    * @returns {this}
    */
   _shrinkHorizontally(numColumns) {
-    const filledIndexes = [...this.rows()]
+    const nonSpaceIndexes = [...this.rows()]
       .flatMap((row) => {
         return row
-          .map((filled, index) => filled ? index : null)
+          .map((serial, index) => Grid.serialToStatus(serial) !== 'space' ? index : null)
           .filter((index) => index != null);
       });
-    const maxFilledIndex = Math.max(...filledIndexes);
+    const maxNonSpaceIndex = Math.max(...nonSpaceIndexes);
 
-    const newNumColumns = Math.max(numColumns, maxFilledIndex + 1);
+    const newNumColumns = Math.max(numColumns, maxNonSpaceIndex + 1);
 
     if (newNumColumns === this._numColumns) { return this; }
 
@@ -211,9 +248,9 @@ export class Grid {
    * @returns {this}
    */
   _shrinkVertically(numRows) {
-    const maxFilledIndex = [...this.rows()].findLastIndex((row) => row.some(Boolean))
+    const maxNonSpaceIndex = [...this.rows()].findLastIndex((row) => row.some((serial) => Grid.serialToStatus(serial) !== 'space'))
 
-    const newNumRows = Math.max(numRows, maxFilledIndex + 1);
+    const newNumRows = Math.max(numRows, maxNonSpaceIndex + 1);
 
     if (newNumRows === this._numRows) { return this; }
 
@@ -227,7 +264,7 @@ export class Grid {
    * @returns {string}
    */
   serialize() {
-    return `${this._numColumns}x${this._numRows};${bitsToString(this._cells.map(Boolean))}`;
+    return `${this._numColumns}x${this._numRows};${encode(this._cells)}`;
   }
 
   /**
@@ -244,9 +281,10 @@ export class Grid {
 
     const grid = new Grid(numColumns, numRows);
 
-    const cells = stringToBits(data).slice(0, numColumns * numRows).map(Number);
+    const cells = decode(data).slice(0, numColumns * numRows);
     grid._cells = new Uint8ClampedArray(cells);
 
     return grid;
   }
 }
+exports.Grid = Grid;
