@@ -169,9 +169,6 @@ function CellsView({
   setBoardData
 }) {
   const onMouseDown = event => {
-    console.info({
-      event
-    });
     const cell = cells.find(cell => cell.id === event.target.attrs.id);
     if (cell) {
       cell.filled ? board.clear(cell.x, cell.y) : board.fill(cell.x, cell.y);
