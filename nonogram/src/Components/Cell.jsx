@@ -83,6 +83,7 @@ function UnknownCell({ id, top, left, cellSize, onMouseDown, onMouseOver }) {
  * @returns
  */
 function SpaceCell({ id, top, left, cellSize, onMouseDown, onMouseOver }) {
+  const p = cellSize * 0.25;
   return (
     <Group>
       <Rect
@@ -98,20 +99,20 @@ function SpaceCell({ id, top, left, cellSize, onMouseDown, onMouseOver }) {
       />
       <Line
         points={[
-          left,
-          top,
-          left + cellSize,
-          top + cellSize,
+          left + p,
+          top + p,
+          left + cellSize - p,
+          top + cellSize - p,
         ]}
         stroke={STROKE_COLOR_LIGHT}
         strokeWidth={STROKE_WIDTH}
       />
       <Line
         points={[
-          left,
-          top + cellSize,
-          left + cellSize,
-          top,
+          left + p,
+          top + cellSize - p,
+          left + cellSize - p,
+          top + p,
         ]}
         stroke={STROKE_COLOR_LIGHT}
         strokeWidth={STROKE_WIDTH}

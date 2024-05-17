@@ -276,6 +276,7 @@ function SpaceCell({
   onMouseDown,
   onMouseOver
 }) {
+  const p = cellSize * 0.25;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Group, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Rect, {
     id: id,
     x: left,
@@ -287,11 +288,11 @@ function SpaceCell({
     onMouseDown: onMouseDown,
     onMouseOver: onMouseOver
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Line, {
-    points: [left, top, left + cellSize, top + cellSize],
+    points: [left + p, top + p, left + cellSize - p, top + cellSize - p],
     stroke: STROKE_COLOR_LIGHT,
     strokeWidth: STROKE_WIDTH
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Line, {
-    points: [left, top + cellSize, left + cellSize, top],
+    points: [left + p, top + cellSize - p, left + cellSize - p, top + p],
     stroke: STROKE_COLOR_LIGHT,
     strokeWidth: STROKE_WIDTH
   }));
