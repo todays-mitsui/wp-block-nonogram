@@ -104,12 +104,6 @@ class Grid {
       throw new Error("Out of bounds");
     }
 
-    console.log('getRow', {
-      y, subarray: Array.from(
-        this._cells.subarray(y * this._numColumns, (y + 1) * this._numColumns),
-      )
-    })
-
     return Array.from(
       this._cells.subarray(y * this._numColumns, (y + 1) * this._numColumns),
     )

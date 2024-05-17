@@ -1,4 +1,4 @@
-import { useState } from "@wordpress/element";
+import { useState, useRef, useEffect } from "@wordpress/element";
 import { Layer, Stage } from "react-konva";
 import { Board } from "../../../src/Board";
 import { CellsView } from "./CellsView";
@@ -37,6 +37,8 @@ export function BoardView({
   setBoardData,
   enableSpaceStatus,
 }) {
+  const stageRef = useDisableContextMenu();
+
   const [isDragging, setIsDragging] = useState(false);
   const [nextStatus, setNextStatus] = useState(null);
 
@@ -47,8 +49,6 @@ export function BoardView({
   };
 
   const onMouseUp = (event) => {
-    console.info({ event });
-    console.info({ onMouseUp: event.target.attrs.id });
     setIsDragging(false);
     setNextStatus(null);
   };
@@ -62,6 +62,7 @@ export function BoardView({
       width={width}
       height={height}
       onMouseUp={onMouseUp}
+      ref={stageRef}
     >
       <Layer>
         <CellsView
@@ -76,8 +77,6 @@ export function BoardView({
           onMouseDown={onMouseDown}
           setBoardData={setBoardData}
         />
-      </Layer>
-      <Layer>
         <GridView
           top={top}
           left={left}
@@ -108,4 +107,19 @@ export function BoardView({
       </Layer>
     </Stage>
   );
+}
+
+function useDisableContextMenu() {
+  const stageRef = useRef(null);
+  useEffect(() => {
+    /** @type HTMLCanvasElement */
+    const canvas = stageRef.current;
+    if (canvas) {
+      // 右クリック時のコンテキストメニューを無効化
+      canvas.addEventListener("contextmenu", (event) => {
+        event.preventDefault();
+      });
+    }
+  });
+  return stageRef;
 }

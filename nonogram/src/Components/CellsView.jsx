@@ -35,10 +35,8 @@ export function CellsView({
   }, [enableSpaceStatus]);
 
   const onMouseDown = (event) => {
-    console.info({ event });
     const cell = cells.find((cell) => cell.id === event.target.attrs.id);
     if (cell) {
-      console.info({ onMouseDown: cell.id });
       const prevStatus = cell.status;
       const nextStatus = decideNextStatus(event, prevStatus);
       board.changeStatus(cell.x, cell.y, nextStatus);
@@ -52,8 +50,6 @@ export function CellsView({
 
     const cell = cells.find((cell) => cell.id === event.target.attrs.id);
     if (cell) {
-      console.info({ event });
-      console.info({ onMouseOver: cell.id });
       board.changeStatus(cell.x, cell.y, nextStatus);
       setBoardData(board.serialize());
     }
@@ -92,15 +88,21 @@ function decideNextStatusWithSpaceStatus(prevStatus) {
 }
 
 function decideNextStatusWithSpaceStatusAndRightClick(event, prevStatus) {
-  // console.info({ event: event, evt: event.evt, button: event.evt.button });
+  const isRightClick = event.evt.button === 2;
 
   switch (true) {
-    case prevStatus === "filled":
-      return "space";
-    case prevStatus === "space":
+    case prevStatus === "filled" && !isRightClick:
       return "unknown";
-    case prevStatus === "unknown":
+    case prevStatus === "filled" && isRightClick:
+      return "space"
+    case prevStatus === "space" && !isRightClick:
       return "filled";
+    case prevStatus === "space" && isRightClick:
+      return "unknown";
+    case prevStatus === "unknown" && !isRightClick:
+      return "filled";
+    case prevStatus === "unknown" && isRightClick:
+      return "space";
     default:
       throw new Error("Invalid status");
   }

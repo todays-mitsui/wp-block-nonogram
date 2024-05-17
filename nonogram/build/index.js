@@ -62,6 +62,7 @@ function BoardView({
   setBoardData,
   enableSpaceStatus
 }) {
+  const stageRef = useDisableContextMenu();
   const [isDragging, setIsDragging] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
   const [nextStatus, setNextStatus] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
 
@@ -71,12 +72,6 @@ function BoardView({
     setNextStatus(nextStatus);
   };
   const onMouseUp = event => {
-    console.info({
-      event
-    });
-    console.info({
-      onMouseUp: event.target.attrs.id
-    });
     setIsDragging(false);
     setNextStatus(null);
   };
@@ -85,7 +80,8 @@ function BoardView({
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Stage, {
     width: width,
     height: height,
-    onMouseUp: onMouseUp
+    onMouseUp: onMouseUp,
+    ref: stageRef
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Layer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_CellsView__WEBPACK_IMPORTED_MODULE_4__.CellsView, {
     board: board,
     cells: cells,
@@ -97,7 +93,7 @@ function BoardView({
     enableSpaceStatus: enableSpaceStatus,
     onMouseDown: onMouseDown,
     setBoardData: setBoardData
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Layer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_GridView__WEBPACK_IMPORTED_MODULE_5__.GridView, {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_GridView__WEBPACK_IMPORTED_MODULE_5__.GridView, {
     top: top,
     left: left,
     cluesWidth: cluesWidth,
@@ -122,6 +118,20 @@ function BoardView({
     cellSize: cellSize,
     cluesWidth: cluesWidth
   })));
+}
+function useDisableContextMenu() {
+  const stageRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+    /** @type HTMLCanvasElement */
+    const canvas = stageRef.current;
+    if (canvas) {
+      // 右クリック時のコンテキストメニューを無効化
+      canvas.addEventListener("contextmenu", event => {
+        event.preventDefault();
+      });
+    }
+  });
+  return stageRef;
 }
 
 /***/ }),
@@ -250,14 +260,8 @@ function CellsView({
     return enableSpaceStatus ? decideNextStatusWithSpaceStatusAndRightClick(event, prevStatus) : decideNextStatusWithoutSpaceStatus(prevStatus);
   }, [enableSpaceStatus]);
   const onMouseDown = event => {
-    console.info({
-      event
-    });
     const cell = cells.find(cell => cell.id === event.target.attrs.id);
     if (cell) {
-      console.info({
-        onMouseDown: cell.id
-      });
       const prevStatus = cell.status;
       const nextStatus = decideNextStatus(event, prevStatus);
       board.changeStatus(cell.x, cell.y, nextStatus);
@@ -269,12 +273,6 @@ function CellsView({
     if (!isDragging || nextStatus == null) return;
     const cell = cells.find(cell => cell.id === event.target.attrs.id);
     if (cell) {
-      console.info({
-        event
-      });
-      console.info({
-        onMouseOver: cell.id
-      });
       board.changeStatus(cell.x, cell.y, nextStatus);
       setBoardData(board.serialize());
     }
@@ -309,15 +307,20 @@ function decideNextStatusWithSpaceStatus(prevStatus) {
   }
 }
 function decideNextStatusWithSpaceStatusAndRightClick(event, prevStatus) {
-  // console.info({ event: event, evt: event.evt, button: event.evt.button });
-
+  const isRightClick = event.evt.button === 2;
   switch (true) {
-    case prevStatus === "filled":
-      return "space";
-    case prevStatus === "space":
+    case prevStatus === "filled" && !isRightClick:
       return "unknown";
-    case prevStatus === "unknown":
+    case prevStatus === "filled" && isRightClick:
+      return "space";
+    case prevStatus === "space" && !isRightClick:
       return "filled";
+    case prevStatus === "space" && isRightClick:
+      return "unknown";
+    case prevStatus === "unknown" && !isRightClick:
+      return "filled";
+    case prevStatus === "unknown" && isRightClick:
+      return "space";
     default:
       throw new Error("Invalid status");
   }
@@ -1160,10 +1163,6 @@ class Board {
     if (numColumns < 0 || numRows < 0) {
       throw new Error("Out of bounds");
     }
-    console.log({
-      numColumns,
-      numRows
-    });
     this._numColumns = numColumns;
     this._numRows = numRows;
     this._grid.resize(numColumns, numRows);
@@ -1308,10 +1307,6 @@ class Grid {
     if (y < 0 || y >= this._numRows) {
       throw new Error("Out of bounds");
     }
-    console.log('getRow', {
-      y,
-      subarray: Array.from(this._cells.subarray(y * this._numColumns, (y + 1) * this._numColumns))
-    });
     return Array.from(this._cells.subarray(y * this._numColumns, (y + 1) * this._numColumns)).map(Grid.serialToStatus);
   }
 
