@@ -56,6 +56,7 @@ export function Edit({ attributes, setAttributes }) {
           cluesHeight={cluesHeight}
           cellSize={cellSize}
           setBoardData={(boardData) => setAttributes({ boardData })}
+          enableSpaceStatus={false}
         />
       </div>
     </div>

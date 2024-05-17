@@ -33,17 +33,18 @@ __webpack_require__.r(__webpack_exports__);
 
 /**
  * @param {{
- * 		width: number;
- * 		height: number;
- * 		board: Board;
- * 		left: number;
- * 		top: number;
- *    rowClues: number[][];
- *    columnClues: number[][];
- * 		cluesWidth: number;
- * 		cluesHeight: number;
- * 		cellSize: number;
- * 		setBoardData: (boardData: string) => void;
+ *  width: number;
+ *  height: number;
+ *  board: Board;
+ *  left: number;
+ *  top: number;
+ *  rowClues: number[][];
+ *  columnClues: number[][];
+ *  cluesWidth: number;
+ *  cluesHeight: number;
+ *  cellSize: number;
+ *  setBoardData: (boardData: string) => void;
+ *  enableSpaceStatus: boolean
  * }} param
  * @returns {JSX.Element}
  */
@@ -58,7 +59,8 @@ function BoardView({
   cluesWidth,
   cluesHeight,
   cellSize,
-  setBoardData
+  setBoardData,
+  enableSpaceStatus
 }) {
   const [isDragging, setIsDragging] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
   const [nextStatus, setNextStatus] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
@@ -92,7 +94,7 @@ function BoardView({
     cellSize: cellSize,
     isDragging: isDragging,
     nextStatus: nextStatus,
-    enableSpaceStatus: true,
+    enableSpaceStatus: enableSpaceStatus,
     onMouseDown: onMouseDown,
     setBoardData: setBoardData
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Layer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_GridView__WEBPACK_IMPORTED_MODULE_5__.GridView, {
@@ -782,7 +784,8 @@ function Edit({
     cellSize: cellSize,
     setBoardData: boardData => setAttributes({
       boardData
-    })
+    }),
+    enableSpaceStatus: false
   })));
 }
 

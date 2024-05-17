@@ -8,17 +8,18 @@ import { RowCluesView } from "./RowCluesView";
 
 /**
  * @param {{
- * 		width: number;
- * 		height: number;
- * 		board: Board;
- * 		left: number;
- * 		top: number;
- *    rowClues: number[][];
- *    columnClues: number[][];
- * 		cluesWidth: number;
- * 		cluesHeight: number;
- * 		cellSize: number;
- * 		setBoardData: (boardData: string) => void;
+ *  width: number;
+ *  height: number;
+ *  board: Board;
+ *  left: number;
+ *  top: number;
+ *  rowClues: number[][];
+ *  columnClues: number[][];
+ *  cluesWidth: number;
+ *  cluesHeight: number;
+ *  cellSize: number;
+ *  setBoardData: (boardData: string) => void;
+ *  enableSpaceStatus: boolean
  * }} param
  * @returns {JSX.Element}
  */
@@ -34,6 +35,7 @@ export function BoardView({
   cluesHeight,
   cellSize,
   setBoardData,
+  enableSpaceStatus,
 }) {
   const [isDragging, setIsDragging] = useState(false);
   const [nextStatus, setNextStatus] = useState(null);
@@ -70,7 +72,7 @@ export function BoardView({
           cellSize={cellSize}
           isDragging={isDragging}
           nextStatus={nextStatus}
-          enableSpaceStatus={true}
+          enableSpaceStatus={enableSpaceStatus}
           onMouseDown={onMouseDown}
           setBoardData={setBoardData}
         />
