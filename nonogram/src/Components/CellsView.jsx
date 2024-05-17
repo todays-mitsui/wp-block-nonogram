@@ -94,7 +94,7 @@ function decideNextStatusWithSpaceStatusAndRightClick(event, prevStatus) {
     case prevStatus === "filled" && !isRightClick:
       return "unknown";
     case prevStatus === "filled" && isRightClick:
-      return "space"
+      return "space";
     case prevStatus === "space" && !isRightClick:
       return "filled";
     case prevStatus === "space" && isRightClick:

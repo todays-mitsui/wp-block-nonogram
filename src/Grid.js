@@ -207,9 +207,7 @@ class Grid {
     const nonSpaceIndexes = [...this.rows()]
       .flatMap((row) => {
         return row
-          .map((status, index) =>
-            status !== "space" ? index : null
-          )
+          .map((status, index) => status !== "space" ? index : null)
           .filter((index) => index != null);
       });
     const maxNonSpaceIndex = Math.max(...nonSpaceIndexes);

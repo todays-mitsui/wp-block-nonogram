@@ -1,4 +1,4 @@
-import { Rect, Line } from "react-konva";
+import { Line, Rect } from "react-konva";
 
 const COLOR_FILLED = "#333";
 const COLOR_EMPTY = "white";
@@ -20,9 +20,20 @@ const STROKE_WIDTH = 1;
  * }} param
  * @returns {JSX.Element}
  */
-export function Cell({ id, top, left, cellSize, status, enableSpaceStatus, onMouseDown, onMouseOver }) {
-  if (!enableSpaceStatus && status === 'space') {
-    status = 'unknown';
+export function Cell(
+  {
+    id,
+    top,
+    left,
+    cellSize,
+    status,
+    enableSpaceStatus,
+    onMouseDown,
+    onMouseOver,
+  },
+) {
+  if (!enableSpaceStatus && status === "space") {
+    status = "unknown";
   }
 
   const crossPadding = cellSize * 0.25;
@@ -35,35 +46,37 @@ export function Cell({ id, top, left, cellSize, status, enableSpaceStatus, onMou
         y={top + PADDING}
         width={cellSize - 2 * PADDING}
         height={cellSize - 2 * PADDING}
-        fill={status === 'filled' ? COLOR_FILLED : COLOR_EMPTY}
+        fill={status === "filled" ? COLOR_FILLED : COLOR_EMPTY}
         strokeEnabled={false}
         onMouseDown={onMouseDown}
         onMouseOver={onMouseOver}
       />
-      { status === 'space' &&
-        <Line
-          points={[
-            left + crossPadding,
-            top + crossPadding,
-            left + cellSize - crossPadding,
-            top + cellSize - crossPadding,
-          ]}
-          stroke={STROKE_COLOR_LIGHT}
-          strokeWidth={STROKE_WIDTH}
-        />
-      }
-      { status === 'space' &&
-        <Line
-          points={[
-            left + crossPadding,
-            top + cellSize - crossPadding,
-            left + cellSize - crossPadding,
-            top + crossPadding,
-          ]}
-          stroke={STROKE_COLOR_LIGHT}
-          strokeWidth={STROKE_WIDTH}
-        />
-      }
+      {status === "space" &&
+        (
+          <Line
+            points={[
+              left + crossPadding,
+              top + crossPadding,
+              left + cellSize - crossPadding,
+              top + cellSize - crossPadding,
+            ]}
+            stroke={STROKE_COLOR_LIGHT}
+            strokeWidth={STROKE_WIDTH}
+          />
+        )}
+      {status === "space" &&
+        (
+          <Line
+            points={[
+              left + crossPadding,
+              top + cellSize - crossPadding,
+              left + cellSize - crossPadding,
+              top + crossPadding,
+            ]}
+            stroke={STROKE_COLOR_LIGHT}
+            strokeWidth={STROKE_WIDTH}
+          />
+        )}
     </>
   );
 }

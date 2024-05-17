@@ -71,7 +71,7 @@ class Board {
       throw new Error("Out of bounds");
     }
 
-    this._grid.set(x, y, 'filled');
+    this._grid.set(x, y, "filled");
 
     return this;
   }
@@ -90,7 +90,7 @@ class Board {
       throw new Error("Out of bounds");
     }
 
-    this._grid.set(x, y, 'unknown');
+    this._grid.set(x, y, "unknown");
 
     return this;
   }
@@ -153,7 +153,7 @@ class Board {
 
     let count = 0;
     for (const status of cells) {
-      if (status === 'filled') {
+      if (status === "filled") {
         count++;
       } else if (count > 0) {
         clue.push(count);

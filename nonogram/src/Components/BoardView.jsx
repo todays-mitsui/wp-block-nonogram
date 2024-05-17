@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "@wordpress/element";
+import { useEffect, useRef, useState } from "@wordpress/element";
 import { Layer, Stage } from "react-konva";
 import { Board } from "../../../src/Board";
 import { CellsView } from "./CellsView";
