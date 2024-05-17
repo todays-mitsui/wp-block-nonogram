@@ -73,10 +73,6 @@ function BoardView({
     setNextStatus(null);
   };
   const cells = [...board.cells()];
-  console.log({
-    rowClues,
-    columnClues
-  });
   const fontSize = Math.min(cellSize / 2, 20);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Stage, {
     width: width,
@@ -380,14 +376,17 @@ function CellsView({
   onMouseDown: onParentMouseDown,
   setBoardData
 }) {
-  const decideNextStatus = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)(prevStatus => {
-    return enableSpaceStatus ? decideNextStatusWithSpaceStatus(prevStatus) : decideNextStatusWithoutSpaceStatus(prevStatus);
+  const decideNextStatus = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)((event, prevStatus) => {
+    return enableSpaceStatus ? decideNextStatusWithSpaceStatusAndRightClick(event, prevStatus) : decideNextStatusWithoutSpaceStatus(prevStatus);
   }, [enableSpaceStatus]);
   const onMouseDown = event => {
     const cell = cells.find(cell => cell.id === event.target.attrs.id);
     if (cell) {
+      console.info({
+        onMouseDown: cell.id
+      });
       const prevStatus = cell.status;
-      const nextStatus = decideNextStatus(prevStatus);
+      const nextStatus = decideNextStatus(event, prevStatus);
       board.changeStatus(cell.x, cell.y, nextStatus);
       onParentMouseDown(nextStatus);
       setBoardData(board.serialize());
@@ -397,6 +396,9 @@ function CellsView({
     if (!isDragging || nextStatus == null) return;
     const cell = cells.find(cell => cell.id === event.target.attrs.id);
     if (cell) {
+      console.info({
+        onMouseOver: cell.id
+      });
       board.changeStatus(cell.x, cell.y, nextStatus);
       setBoardData(board.serialize());
     }
@@ -419,6 +421,20 @@ function CellsView({
   })));
 }
 function decideNextStatusWithSpaceStatus(prevStatus) {
+  switch (true) {
+    case prevStatus === "filled":
+      return "space";
+    case prevStatus === "space":
+      return "unknown";
+    case prevStatus === "unknown":
+      return "filled";
+    default:
+      throw new Error("Invalid status");
+  }
+}
+function decideNextStatusWithSpaceStatusAndRightClick(event, prevStatus) {
+  // console.info({ event: event, evt: event.evt, button: event.evt.button });
+
   switch (true) {
     case prevStatus === "filled":
       return "space";
@@ -967,8 +983,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   useBoardStore: () => (/* binding */ useBoardStore)
 /* harmony export */ });
-/* harmony import */ var _cluesDigest__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./cluesDigest */ "./src/lib/cluesDigest.js");
-/* harmony import */ var _useLocalStorage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./useLocalStorage */ "./src/lib/useLocalStorage.js");
+/* harmony import */ var _src_Board__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../src/Board */ "../src/Board.js");
+/* harmony import */ var _cluesDigest__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./cluesDigest */ "./src/lib/cluesDigest.js");
+/* harmony import */ var _useLocalStorage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./useLocalStorage */ "./src/lib/useLocalStorage.js");
+
 
 
 
@@ -978,10 +996,10 @@ __webpack_require__.r(__webpack_exports__);
  * @returns {[string | null, (newBoardData: string) => void]}
  */
 function useBoardStore(rowClues, columnClues) {
-  const cluesDigest = (0,_cluesDigest__WEBPACK_IMPORTED_MODULE_0__.useCluesDigest)(rowClues, columnClues);
+  const cluesDigest = (0,_cluesDigest__WEBPACK_IMPORTED_MODULE_1__.useCluesDigest)(rowClues, columnClues);
   const levelKey = cluesDigest && `nonogram-level-${cluesDigest}`;
-  return (0,_useLocalStorage__WEBPACK_IMPORTED_MODULE_1__.useLocalStorage)(levelKey, () => {
-    const board = new Board(columnClues.length, rowClues.length);
+  return (0,_useLocalStorage__WEBPACK_IMPORTED_MODULE_2__.useLocalStorage)(levelKey, () => {
+    const board = new _src_Board__WEBPACK_IMPORTED_MODULE_0__.Board(columnClues.length, rowClues.length);
     return board.serialize();
   });
 }
@@ -1204,6 +1222,10 @@ class Board {
     if (numColumns < 0 || numRows < 0) {
       throw new Error("Out of bounds");
     }
+    console.log({
+      numColumns,
+      numRows
+    });
     this._numColumns = numColumns;
     this._numRows = numRows;
     this._grid.resize(numColumns, numRows);
@@ -1350,7 +1372,7 @@ class Grid {
       case 2:
         return "filled";
       default:
-        throw new Error("Invalid serial");
+        throw new Error(`Invalid serial: ${serial}`);
     }
   }
 
@@ -1367,7 +1389,7 @@ class Grid {
       case "filled":
         return 2;
       default:
-        throw new Error("Invalid status");
+        throw new Error(`Invalid status: ${status}`);
     }
   }
 
@@ -1382,6 +1404,10 @@ class Grid {
     if (y < 0 || y >= this._numRows) {
       throw new Error("Out of bounds");
     }
+    console.log('getRow', {
+      y,
+      subarray: Array.from(this._cells.subarray(y * this._numColumns, (y + 1) * this._numColumns))
+    });
     return Array.from(this._cells.subarray(y * this._numColumns, (y + 1) * this._numColumns)).map(Grid.serialToStatus);
   }
 
@@ -1466,7 +1492,7 @@ class Grid {
    */
   _shrinkHorizontally(numColumns) {
     const nonSpaceIndexes = [...this.rows()].flatMap(row => {
-      return row.map((serial, index) => Grid.serialToStatus(serial) !== "space" ? index : null).filter(index => index != null);
+      return row.map((status, index) => status !== "space" ? index : null).filter(index => index != null);
     });
     const maxNonSpaceIndex = Math.max(...nonSpaceIndexes);
     const newNumColumns = Math.max(numColumns, maxNonSpaceIndex + 1);
@@ -1497,7 +1523,7 @@ class Grid {
    * @returns {this}
    */
   _shrinkVertically(numRows) {
-    const maxNonSpaceIndex = [...this.rows()].findLastIndex(row => row.some(serial => Grid.serialToStatus(serial) !== "space"));
+    const maxNonSpaceIndex = [...this.rows()].findLastIndex(row => row.some(status => status !== "space"));
     const newNumRows = Math.max(numRows, maxNonSpaceIndex + 1);
     if (newNumRows === this._numRows) return this;
     this._numRows = newNumRows;

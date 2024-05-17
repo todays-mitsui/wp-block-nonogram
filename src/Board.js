@@ -182,6 +182,8 @@ class Board {
       throw new Error("Out of bounds");
     }
 
+    console.log({ numColumns, numRows })
+
     this._numColumns = numColumns;
     this._numRows = numRows;
     this._grid.resize(numColumns, numRows);

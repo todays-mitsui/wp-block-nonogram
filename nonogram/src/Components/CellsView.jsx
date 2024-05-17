@@ -28,17 +28,18 @@ export function CellsView({
   onMouseDown: onParentMouseDown,
   setBoardData,
 }) {
-  const decideNextStatus = useCallback((prevStatus) => {
+  const decideNextStatus = useCallback((event, prevStatus) => {
     return enableSpaceStatus
-      ? decideNextStatusWithSpaceStatus(prevStatus)
+      ? decideNextStatusWithSpaceStatusAndRightClick(event, prevStatus)
       : decideNextStatusWithoutSpaceStatus(prevStatus);
   }, [enableSpaceStatus]);
 
   const onMouseDown = (event) => {
     const cell = cells.find((cell) => cell.id === event.target.attrs.id);
     if (cell) {
+      console.info({ onMouseDown: cell.id });
       const prevStatus = cell.status;
-      const nextStatus = decideNextStatus(prevStatus);
+      const nextStatus = decideNextStatus(event, prevStatus);
       board.changeStatus(cell.x, cell.y, nextStatus);
       onParentMouseDown(nextStatus);
       setBoardData(board.serialize());
@@ -50,6 +51,7 @@ export function CellsView({
 
     const cell = cells.find((cell) => cell.id === event.target.attrs.id);
     if (cell) {
+      console.info({ onMouseOver: cell.id });
       board.changeStatus(cell.x, cell.y, nextStatus);
       setBoardData(board.serialize());
     }
@@ -75,6 +77,21 @@ export function CellsView({
 }
 
 function decideNextStatusWithSpaceStatus(prevStatus) {
+  switch (true) {
+    case prevStatus === "filled":
+      return "space";
+    case prevStatus === "space":
+      return "unknown";
+    case prevStatus === "unknown":
+      return "filled";
+    default:
+      throw new Error("Invalid status");
+  }
+}
+
+function decideNextStatusWithSpaceStatusAndRightClick(event, prevStatus) {
+  // console.info({ event: event, evt: event.evt, button: event.evt.button });
+
   switch (true) {
     case prevStatus === "filled":
       return "space";

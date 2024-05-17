@@ -70,7 +70,7 @@ class Grid {
       case 2:
         return "filled";
       default:
-        throw new Error("Invalid serial");
+        throw new Error(`Invalid serial: ${serial}`);
     }
   }
 
@@ -87,7 +87,7 @@ class Grid {
       case "filled":
         return 2;
       default:
-        throw new Error("Invalid status");
+        throw new Error(`Invalid status: ${status}`);
     }
   }
 
@@ -103,6 +103,12 @@ class Grid {
     if (y < 0 || y >= this._numRows) {
       throw new Error("Out of bounds");
     }
+
+    console.log('getRow', {
+      y, subarray: Array.from(
+        this._cells.subarray(y * this._numColumns, (y + 1) * this._numColumns),
+      )
+    })
 
     return Array.from(
       this._cells.subarray(y * this._numColumns, (y + 1) * this._numColumns),
@@ -207,8 +213,8 @@ class Grid {
     const nonSpaceIndexes = [...this.rows()]
       .flatMap((row) => {
         return row
-          .map((serial, index) =>
-            Grid.serialToStatus(serial) !== "space" ? index : null
+          .map((status, index) =>
+            status !== "space" ? index : null
           )
           .filter((index) => index != null);
       });
@@ -256,7 +262,7 @@ class Grid {
    */
   _shrinkVertically(numRows) {
     const maxNonSpaceIndex = [...this.rows()].findLastIndex((row) =>
-      row.some((serial) => Grid.serialToStatus(serial) !== "space")
+      row.some((status) => status !== "space")
     );
 
     const newNumRows = Math.max(numRows, maxNonSpaceIndex + 1);

@@ -51,8 +51,6 @@ export function BoardView({
 
   const cells = [...board.cells()];
 
-  console.log({ rowClues, columnClues });
-
   const fontSize = Math.min(cellSize / 2, 20);
 
   return (
