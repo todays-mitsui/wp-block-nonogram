@@ -37,31 +37,20 @@ export function BoardView({
   setBoardData,
   enableSpaceStatus,
 }) {
+  // <canvas> 要素を取得し、コンテキストメニューを無効にする
   const stageRef = useDisableContextMenu();
 
-  const [isDragging, setIsDragging] = useState(false);
+  // マウスドラッグによる状態変更のために変更すべきステータスを保持しておく
   const [nextStatus, setNextStatus] = useState(null);
 
-  // 各セルでマウスが押されたときに呼ばれる想定のハンドラ
-  const onMouseDown = (nextStatus) => {
-    setIsDragging(true);
-    setNextStatus(nextStatus);
-  };
-
-  const onMouseUp = (event) => {
-    setIsDragging(false);
-    setNextStatus(null);
-  };
-
   const cells = [...board.cells()];
-
   const fontSize = Math.min(cellSize / 2, 20);
 
   return (
     <Stage
       width={width}
       height={height}
-      onMouseUp={onMouseUp}
+      onMouseUp={() => setNextStatus(null)}
       ref={stageRef}
     >
       <Layer>
@@ -71,10 +60,9 @@ export function BoardView({
           top={top + cluesHeight}
           left={left + cluesWidth}
           cellSize={cellSize}
-          isDragging={isDragging}
           nextStatus={nextStatus}
           enableSpaceStatus={enableSpaceStatus}
-          onMouseDown={onMouseDown}
+          setNextStatus={setNextStatus}
           setBoardData={setBoardData}
         />
         <GridView

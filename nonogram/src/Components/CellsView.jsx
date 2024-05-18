@@ -9,10 +9,9 @@ import { Cell } from "./Cell";
  *  top: number;
  *  left: number;
  *  cellSize: number;
- *  isDragging: boolean;
  *  nextStatus: 'unknown' | 'space' | 'filled' | null;
  *  enableSpaceStatus: boolean;
- *  onMouseDown: (event: KonvaEventObject<MouseEvent>) => void;
+ *  setNextStatus: (nextStatus: string | null) => void;
  *  setBoardData: (boardData: string) => void;
  * }} param
  */
@@ -22,10 +21,9 @@ export function CellsView({
   top,
   left,
   cellSize,
-  isDragging,
   nextStatus,
   enableSpaceStatus,
-  onMouseDown: onParentMouseDown,
+  setNextStatus,
   setBoardData,
 }) {
   const decideNextStatus = useCallback((event, prevStatus) => {
@@ -41,12 +39,17 @@ export function CellsView({
       const nextStatus = decideNextStatus(event, prevStatus);
       board.changeStatus(cell.x, cell.y, nextStatus);
       setBoardData(board.serialize());
-      onParentMouseDown(nextStatus);
+      setNextStatus(nextStatus);
     }
   };
 
   const onMouseOver = (event) => {
-    if (!isDragging || nextStatus == null) return;
+    if (event.evt.buttons === 0) {
+      setNextStatus(null);
+      return;
+    }
+
+    if (nextStatus == null) return;
 
     const cell = cells.find((cell) => cell.id === event.target.attrs.id);
     if (cell) {
@@ -88,7 +91,10 @@ function decideNextStatusWithSpaceStatus(prevStatus) {
 }
 
 function decideNextStatusWithSpaceStatusAndRightClick(event, prevStatus) {
-  const isRightClick = event.evt.button === 2;
+  const isRightClick = event.evt.button === 2
+    || event.evt.altKey
+    || event.evt.ctrlKey
+    || event.evt.shiftKey;
 
   switch (true) {
     case prevStatus === "filled" && !isRightClick:

@@ -62,25 +62,17 @@ function BoardView({
   setBoardData,
   enableSpaceStatus
 }) {
+  // <canvas> 要素を取得し、コンテキストメニューを無効にする
   const stageRef = useDisableContextMenu();
-  const [isDragging, setIsDragging] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
-  const [nextStatus, setNextStatus] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
 
-  // 各セルでマウスが押されたときに呼ばれる想定のハンドラ
-  const onMouseDown = nextStatus => {
-    setIsDragging(true);
-    setNextStatus(nextStatus);
-  };
-  const onMouseUp = event => {
-    setIsDragging(false);
-    setNextStatus(null);
-  };
+  // マウスドラッグによる状態変更のために変更すべきステータスを保持しておく
+  const [nextStatus, setNextStatus] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
   const cells = [...board.cells()];
   const fontSize = Math.min(cellSize / 2, 20);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Stage, {
     width: width,
     height: height,
-    onMouseUp: onMouseUp,
+    onMouseUp: () => setNextStatus(null),
     ref: stageRef
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Layer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_CellsView__WEBPACK_IMPORTED_MODULE_4__.CellsView, {
     board: board,
@@ -88,10 +80,9 @@ function BoardView({
     top: top + cluesHeight,
     left: left + cluesWidth,
     cellSize: cellSize,
-    isDragging: isDragging,
     nextStatus: nextStatus,
     enableSpaceStatus: enableSpaceStatus,
-    onMouseDown: onMouseDown,
+    setNextStatus: setNextStatus,
     setBoardData: setBoardData
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_GridView__WEBPACK_IMPORTED_MODULE_5__.GridView, {
     top: top,
@@ -237,10 +228,9 @@ __webpack_require__.r(__webpack_exports__);
  *  top: number;
  *  left: number;
  *  cellSize: number;
- *  isDragging: boolean;
  *  nextStatus: 'unknown' | 'space' | 'filled' | null;
  *  enableSpaceStatus: boolean;
- *  onMouseDown: (event: KonvaEventObject<MouseEvent>) => void;
+ *  setNextStatus: (nextStatus: string | null) => void;
  *  setBoardData: (boardData: string) => void;
  * }} param
  */
@@ -250,10 +240,9 @@ function CellsView({
   top,
   left,
   cellSize,
-  isDragging,
   nextStatus,
   enableSpaceStatus,
-  onMouseDown: onParentMouseDown,
+  setNextStatus,
   setBoardData
 }) {
   const decideNextStatus = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)((event, prevStatus) => {
@@ -266,11 +255,15 @@ function CellsView({
       const nextStatus = decideNextStatus(event, prevStatus);
       board.changeStatus(cell.x, cell.y, nextStatus);
       setBoardData(board.serialize());
-      onParentMouseDown(nextStatus);
+      setNextStatus(nextStatus);
     }
   };
   const onMouseOver = event => {
-    if (!isDragging || nextStatus == null) return;
+    if (event.evt.buttons === 0) {
+      setNextStatus(null);
+      return;
+    }
+    if (nextStatus == null) return;
     const cell = cells.find(cell => cell.id === event.target.attrs.id);
     if (cell) {
       board.changeStatus(cell.x, cell.y, nextStatus);
@@ -307,7 +300,7 @@ function decideNextStatusWithSpaceStatus(prevStatus) {
   }
 }
 function decideNextStatusWithSpaceStatusAndRightClick(event, prevStatus) {
-  const isRightClick = event.evt.button === 2;
+  const isRightClick = event.evt.button === 2 || event.evt.altKey || event.evt.ctrlKey || event.evt.shiftKey;
   switch (true) {
     case prevStatus === "filled" && !isRightClick:
       return "unknown";
