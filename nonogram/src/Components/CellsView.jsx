@@ -28,7 +28,10 @@ export function CellsView({
 }) {
   const decideNextStatus = useCallback((event, prevStatus) => {
     return enableSpaceStatus
-      ? decideNextStatusWithSpaceStatusAndRightClick(event, prevStatus)
+      ? ('ontouchstart' in document
+        ? decideNextStatusWithSpaceStatus(prevStatus)
+        : decideNextStatusWithSpaceStatusAndRightClick(event, prevStatus)
+      )
       : decideNextStatusWithoutSpaceStatus(prevStatus);
   }, [enableSpaceStatus]);
 
@@ -44,12 +47,12 @@ export function CellsView({
   };
 
   const onMouseOver = (event) => {
+    if (nextStatus == null) return;
+
     if (event.evt.buttons === 0) {
       setNextStatus(null);
       return;
     }
-
-    if (nextStatus == null) return;
 
     const cell = cells.find((cell) => cell.id === event.target.attrs.id);
     if (cell) {
@@ -71,6 +74,8 @@ export function CellsView({
           enableSpaceStatus={enableSpaceStatus}
           onMouseDown={onMouseDown}
           onMouseOver={onMouseOver}
+          onTouchStart={onMouseDown}
+          onTouchMove={onMouseOver}
         />
       ))}
     </>

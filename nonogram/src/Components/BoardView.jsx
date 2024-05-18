@@ -51,6 +51,7 @@ export function BoardView({
       width={width}
       height={height}
       onMouseUp={() => setNextStatus(null)}
+      onTouchEnd={() => setNextStatus(null)}
       ref={stageRef}
     >
       <Layer>

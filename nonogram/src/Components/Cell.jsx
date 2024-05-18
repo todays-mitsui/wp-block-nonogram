@@ -17,6 +17,8 @@ const STROKE_WIDTH = 1;
  *  enableSpaceStatus: boolean;
  *  onMouseDown: (event: KonvaEventObject<MouseEvent>) => void;
  *  onMouseOver: (event: KonvaEventObject<MouseEvent>) => void;
+ *  onTouchStart: (event: KonvaEventObject<MouseEvent>) => void;
+ *  onTouchMove: (event: KonvaEventObject<MouseEvent>) => void;
  * }} param
  * @returns {JSX.Element}
  */
@@ -30,6 +32,8 @@ export function Cell(
     enableSpaceStatus,
     onMouseDown,
     onMouseOver,
+    onTouchStart,
+    onTouchMove,
   },
 ) {
   if (!enableSpaceStatus && status === "space") {
@@ -49,7 +53,9 @@ export function Cell(
         fill={status === "filled" ? COLOR_FILLED : COLOR_EMPTY}
         strokeEnabled={false}
         onMouseDown={onMouseDown}
+        onTouchStart={onTouchStart}
         onMouseOver={onMouseOver}
+        onTouchMove={onTouchMove}
       />
       {status === "space" &&
         (

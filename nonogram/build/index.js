@@ -73,6 +73,7 @@ function BoardView({
     width: width,
     height: height,
     onMouseUp: () => setNextStatus(null),
+    onTouchEnd: () => setNextStatus(null),
     ref: stageRef
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Layer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_CellsView__WEBPACK_IMPORTED_MODULE_4__.CellsView, {
     board: board,
@@ -159,6 +160,8 @@ const STROKE_WIDTH = 1;
  *  enableSpaceStatus: boolean;
  *  onMouseDown: (event: KonvaEventObject<MouseEvent>) => void;
  *  onMouseOver: (event: KonvaEventObject<MouseEvent>) => void;
+ *  onTouchStart: (event: KonvaEventObject<MouseEvent>) => void;
+ *  onTouchMove: (event: KonvaEventObject<MouseEvent>) => void;
  * }} param
  * @returns {JSX.Element}
  */
@@ -170,7 +173,9 @@ function Cell({
   status,
   enableSpaceStatus,
   onMouseDown,
-  onMouseOver
+  onMouseOver,
+  onTouchStart,
+  onTouchMove
 }) {
   if (!enableSpaceStatus && status === "space") {
     status = "unknown";
@@ -185,7 +190,9 @@ function Cell({
     fill: status === "filled" ? COLOR_FILLED : COLOR_EMPTY,
     strokeEnabled: false,
     onMouseDown: onMouseDown,
-    onMouseOver: onMouseOver
+    onTouchStart: onTouchStart,
+    onMouseOver: onMouseOver,
+    onTouchMove: onTouchMove
   }), status === "space" && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Line, {
     points: [left + crossPadding, top + crossPadding, left + cellSize - crossPadding, top + cellSize - crossPadding],
     stroke: STROKE_COLOR_LIGHT,
@@ -246,7 +253,7 @@ function CellsView({
   setBoardData
 }) {
   const decideNextStatus = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)((event, prevStatus) => {
-    return enableSpaceStatus ? decideNextStatusWithSpaceStatusAndRightClick(event, prevStatus) : decideNextStatusWithoutSpaceStatus(prevStatus);
+    return enableSpaceStatus ? 'ontouchstart' in document ? decideNextStatusWithSpaceStatus(prevStatus) : decideNextStatusWithSpaceStatusAndRightClick(event, prevStatus) : decideNextStatusWithoutSpaceStatus(prevStatus);
   }, [enableSpaceStatus]);
   const onMouseDown = event => {
     const cell = cells.find(cell => cell.id === event.target.attrs.id);
@@ -259,11 +266,11 @@ function CellsView({
     }
   };
   const onMouseOver = event => {
+    if (nextStatus == null) return;
     if (event.evt.buttons === 0) {
       setNextStatus(null);
       return;
     }
-    if (nextStatus == null) return;
     const cell = cells.find(cell => cell.id === event.target.attrs.id);
     if (cell) {
       board.changeStatus(cell.x, cell.y, nextStatus);
@@ -284,7 +291,9 @@ function CellsView({
     status: status,
     enableSpaceStatus: enableSpaceStatus,
     onMouseDown: onMouseDown,
-    onMouseOver: onMouseOver
+    onMouseOver: onMouseOver,
+    onTouchStart: onMouseDown,
+    onTouchMove: onMouseOver
   })));
 }
 function decideNextStatusWithSpaceStatus(prevStatus) {
@@ -689,40 +698,40 @@ function BoardSize({
     }
   };
   const aspectRatioOptions = [{
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Square - 1:1', 'nonogram'),
-    value: [1, 1].join(':')
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Square - 1:1", "nonogram"),
+    value: [1, 1].join(":")
   }, {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Wide - 3:2', 'nonogram'),
-    value: [3, 2].join(':')
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Wide - 3:2", "nonogram"),
+    value: [3, 2].join(":")
   }, {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Tall - 2:3', 'nonogram'),
-    value: [2, 3].join(':')
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Tall - 2:3", "nonogram"),
+    value: [2, 3].join(":")
   }];
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
-    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Settings', 'nonogram'),
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Settings", "nonogram"),
     initialOpen: "true"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "nonogram-controls"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.__experimentalNumberControl, {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Columns', 'nonogram'),
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Columns", "nonogram"),
     isShiftStepEnabled: true,
     onChange: setNumColumns,
     shiftStep: 5,
     value: board.numColumns,
     min: 1
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.__experimentalNumberControl, {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Rows', 'nonogram'),
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Rows", "nonogram"),
     isShiftStepEnabled: true,
     onChange: setNumRows,
     shiftStep: 5,
     value: board.numRows,
     min: 1
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.SelectControl, {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Aspect Ratio', 'nonogram'),
-    value: aspectRatio.join(':'),
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Aspect Ratio", "nonogram"),
+    value: aspectRatio.join(":"),
     options: aspectRatioOptions,
     onChange: value => {
-      const aspectRatio = value.split(':').map(str => parseInt(str, 10));
+      const aspectRatio = value.split(":").map(str => parseInt(str, 10));
       setAttributes({
         aspectRatio
       });
