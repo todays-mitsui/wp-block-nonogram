@@ -91,10 +91,10 @@ function decideNextStatusWithSpaceStatus(prevStatus) {
 }
 
 function decideNextStatusWithSpaceStatusAndRightClick(event, prevStatus) {
-  const isRightClick = event.evt.button === 2
-    || event.evt.altKey
-    || event.evt.ctrlKey
-    || event.evt.shiftKey;
+  const isRightClick = event.evt.button === 2 ||
+    event.evt.altKey ||
+    event.evt.ctrlKey ||
+    event.evt.shiftKey;
 
   switch (true) {
     case prevStatus === "filled" && !isRightClick:

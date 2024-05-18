@@ -4,27 +4,27 @@
   "name": "todays-mitsui/nonogram",
   "version": "0.1.0",
   "title": "Nonogram Puzzle",
-	"category": "widgets",
-	"icon": "grid-view",
-	"description": "Create and solve Nonogram puzzles in the WordPress editor.",
-	"keywords": ["nonogram", "picross", "puzzle", "game"],
+  "category": "widgets",
+  "icon": "grid-view",
+  "description": "Create and solve Nonogram puzzles in the WordPress editor.",
+  "keywords": ["nonogram", "picross", "puzzle", "game"],
   "example": {
-		"attributes": {
-			"aspectRatio": [1, 1],
-			"boardData": "v1;5x5;5x5;hKIoiIgiQ"
-		}
-	},
+    "attributes": {
+      "aspectRatio": [1, 1],
+      "boardData": "v1;5x5;5x5;hKIoiIgiQ"
+    }
+  },
   "supports": {
-		"html": false,
-		"align": true,
-		"customClassName": true,
-		"reusable": true
-	},
+    "html": false,
+    "align": true,
+    "customClassName": true,
+    "reusable": true
+  },
   "attributes": {
-		"aspectRatio": {
-			"type": "array",
-			"default": [1, 1]
-		},
+    "aspectRatio": {
+      "type": "array",
+      "default": [1, 1]
+    },
     "boardData": {
       "type": "string",
       "default": null

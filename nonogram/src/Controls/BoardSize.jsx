@@ -1,8 +1,8 @@
-import { __ } from '@wordpress/i18n';
+import { __ } from "@wordpress/i18n";
 import {
   __experimentalNumberControl as NumberControl,
   PanelBody,
-  SelectControl
+  SelectControl,
 } from "@wordpress/components";
 import { Board } from "../../../src/Board";
 
@@ -31,16 +31,16 @@ export function BoardSize({ board, aspectRatio, setAttributes }) {
   };
 
   const aspectRatioOptions = [
-    { label: __('Square - 1:1', 'nonogram'), value: [1, 1].join(':') },
-    { label: __('Wide - 3:2', 'nonogram'), value: [3, 2].join(':') },
-    { label: __('Tall - 2:3', 'nonogram'), value: [2, 3].join(':') }
+    { label: __("Square - 1:1", "nonogram"), value: [1, 1].join(":") },
+    { label: __("Wide - 3:2", "nonogram"), value: [3, 2].join(":") },
+    { label: __("Tall - 2:3", "nonogram"), value: [2, 3].join(":") },
   ];
 
   return (
-    <PanelBody title={__('Settings', 'nonogram')} initialOpen="true">
+    <PanelBody title={__("Settings", "nonogram")} initialOpen="true">
       <div className="nonogram-controls">
         <NumberControl
-          label={__('Columns', 'nonogram')}
+          label={__("Columns", "nonogram")}
           isShiftStepEnabled={true}
           onChange={setNumColumns}
           shiftStep={5}
@@ -48,7 +48,7 @@ export function BoardSize({ board, aspectRatio, setAttributes }) {
           min={1}
         />
         <NumberControl
-          label={__('Rows', 'nonogram')}
+          label={__("Rows", "nonogram")}
           isShiftStepEnabled={true}
           onChange={setNumRows}
           shiftStep={5}
@@ -57,13 +57,13 @@ export function BoardSize({ board, aspectRatio, setAttributes }) {
         />
       </div>
       <SelectControl
-          label={__('Aspect Ratio', 'nonogram')}
-          value={aspectRatio.join(':')}
-          options={aspectRatioOptions}
-          onChange={(value) => {
-            const aspectRatio = value.split(':').map((str) => parseInt(str, 10));
-            setAttributes({ aspectRatio });
-          }}
+        label={__("Aspect Ratio", "nonogram")}
+        value={aspectRatio.join(":")}
+        options={aspectRatioOptions}
+        onChange={(value) => {
+          const aspectRatio = value.split(":").map((str) => parseInt(str, 10));
+          setAttributes({ aspectRatio });
+        }}
       />
     </PanelBody>
   );
