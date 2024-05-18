@@ -181,8 +181,8 @@ function Cell({
   onMouseDown,
   onMouseOver
 }) {
-  if (!enableSpaceStatus && status === 'space') {
-    status = 'unknown';
+  if (!enableSpaceStatus && status === "space") {
+    status = "unknown";
   }
   const crossPadding = cellSize * 0.25;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Rect, {
@@ -191,15 +191,15 @@ function Cell({
     y: top + PADDING,
     width: cellSize - 2 * PADDING,
     height: cellSize - 2 * PADDING,
-    fill: status === 'filled' ? COLOR_FILLED : COLOR_EMPTY,
+    fill: status === "filled" ? COLOR_FILLED : COLOR_EMPTY,
     strokeEnabled: false,
     onMouseDown: onMouseDown,
     onMouseOver: onMouseOver
-  }), status === 'space' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Line, {
+  }), status === "space" && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Line, {
     points: [left + crossPadding, top + crossPadding, left + cellSize - crossPadding, top + cellSize - crossPadding],
     stroke: STROKE_COLOR_LIGHT,
     strokeWidth: STROKE_WIDTH
-  }), status === 'space' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Line, {
+  }), status === "space" && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Line, {
     points: [left + crossPadding, top + cellSize - crossPadding, left + cellSize - crossPadding, top + crossPadding],
     stroke: STROKE_COLOR_LIGHT,
     strokeWidth: STROKE_WIDTH
@@ -995,7 +995,7 @@ class Board {
     if (x < 0 || x >= this._numColumns || y < 0 || y >= this._numRows) {
       throw new Error("Out of bounds");
     }
-    this._grid.set(x, y, 'filled');
+    this._grid.set(x, y, "filled");
     return this;
   }
 
@@ -1011,7 +1011,7 @@ class Board {
     if (x < 0 || x >= this._numColumns || y < 0 || y >= this._numRows) {
       throw new Error("Out of bounds");
     }
-    this._grid.set(x, y, 'unknown');
+    this._grid.set(x, y, "unknown");
     return this;
   }
 
@@ -1077,7 +1077,7 @@ class Board {
     const clue = [];
     let count = 0;
     for (const status of cells) {
-      if (status === 'filled') {
+      if (status === "filled") {
         count++;
       } else if (count > 0) {
         clue.push(count);
@@ -1112,7 +1112,7 @@ class Board {
    * @returns {string}
    */
   serialize() {
-    return `${this._numColumns}x${this._numRows};${this._grid.serialize()}`;
+    return `v1;${this._numColumns}x${this._numRows};${this._grid.serialize()}`;
   }
 
   /**
@@ -1120,7 +1120,7 @@ class Board {
    * @returns {Board}
    */
   static deserialize(str) {
-    const matches = str.match(/^(\d+x\d+);(.+)$/);
+    const matches = str.match(/^v1;(\d+x\d+);(.+)$/);
     if (matches == null) {
       throw new Error("Invalid format");
     }
@@ -1364,7 +1364,7 @@ class Grid {
    */
   _shrinkHorizontally(numColumns) {
     const nonSpaceIndexes = [...this.rows()].flatMap(row => {
-      return row.map((status, index) => status !== "space" ? index : null).filter(index => index != null);
+      return row.map((status, index) => status !== "unknown" ? index : null).filter(index => index != null);
     });
     const maxNonSpaceIndex = Math.max(...nonSpaceIndexes);
     const newNumColumns = Math.max(numColumns, maxNonSpaceIndex + 1);
@@ -1395,7 +1395,7 @@ class Grid {
    * @returns {this}
    */
   _shrinkVertically(numRows) {
-    const maxNonSpaceIndex = [...this.rows()].findLastIndex(row => row.some(status => status !== "space"));
+    const maxNonSpaceIndex = [...this.rows()].findLastIndex(row => row.some(status => status !== "unknown"));
     const newNumRows = Math.max(numRows, maxNonSpaceIndex + 1);
     if (newNumRows === this._numRows) return this;
     this._numRows = newNumRows;

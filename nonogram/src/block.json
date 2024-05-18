@@ -3,23 +3,28 @@
   "apiVersion": 3,
   "name": "todays-mitsui/nonogram",
   "version": "0.1.0",
-  "title": "Nonogram",
-  "category": "widgets",
-  "icon": "smiley",
-  "description": "Example block scaffolded with Create Block tool.",
-  "example": {},
+  "title": "Nonogram Puzzle",
+	"category": "widgets",
+	"icon": "grid-view",
+	"description": "Create and solve Nonogram puzzles in the WordPress editor.",
+	"keywords": ["nonogram", "picross", "puzzle", "game"],
+  "example": {
+		"attributes": {
+			"aspectRatio": [1, 1],
+			"boardData": "v1;5x5;5x5;hKIoiIgiQ"
+		}
+	},
   "supports": {
-    "html": false
-  },
+		"html": false,
+		"align": true,
+		"customClassName": true,
+		"reusable": true
+	},
   "attributes": {
-    "numRows": {
-      "type": "number",
-      "default": 15
-    },
-    "numColumns": {
-      "type": "number",
-      "default": 15
-    },
+		"aspectRatio": {
+			"type": "array",
+			"default": [1, 1]
+		},
     "boardData": {
       "type": "string",
       "default": null

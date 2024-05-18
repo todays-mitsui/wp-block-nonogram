@@ -1,4 +1,8 @@
 .wp-block-todays-mitsui-nonogram {
 	line-height: 0;
-	border: 1px dotted #f00;
+}
+
+.nonogram-controls {
+	display: flex;
+	gap: 10px;
 }

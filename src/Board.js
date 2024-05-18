@@ -193,7 +193,7 @@ class Board {
    * @returns {string}
    */
   serialize() {
-    return `${this._numColumns}x${this._numRows};${this._grid.serialize()}`;
+    return `v1;${this._numColumns}x${this._numRows};${this._grid.serialize()}`;
   }
 
   /**
@@ -201,7 +201,7 @@ class Board {
    * @returns {Board}
    */
   static deserialize(str) {
-    const matches = str.match(/^(\d+x\d+);(.+)$/);
+    const matches = str.match(/^v1;(\d+x\d+);(.+)$/);
 
     if (matches == null) {
       throw new Error("Invalid format");

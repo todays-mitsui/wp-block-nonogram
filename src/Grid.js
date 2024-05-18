@@ -207,7 +207,7 @@ class Grid {
     const nonSpaceIndexes = [...this.rows()]
       .flatMap((row) => {
         return row
-          .map((status, index) => status !== "space" ? index : null)
+          .map((status, index) => status !== "unknown" ? index : null)
           .filter((index) => index != null);
       });
     const maxNonSpaceIndex = Math.max(...nonSpaceIndexes);
@@ -254,7 +254,7 @@ class Grid {
    */
   _shrinkVertically(numRows) {
     const maxNonSpaceIndex = [...this.rows()].findLastIndex((row) =>
-      row.some((status) => status !== "space")
+      row.some((status) => status !== "unknown")
     );
 
     const newNumRows = Math.max(numRows, maxNonSpaceIndex + 1);

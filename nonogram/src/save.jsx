@@ -5,8 +5,8 @@ import { Board } from "../../src/Board";
  * @return {Element} Element to render.
  */
 export function save({ attributes }) {
-  /** @type {{ boardData: string }} */
-  const { boardData } = attributes;
+  /** @type {{ aspectRatio: [number, number]; boardData: string; }} */
+  const { aspectRatio, boardData } = attributes;
 
   const board = boardData == null
     ? new Board(15, 15)
@@ -22,7 +22,7 @@ export function save({ attributes }) {
     <div
       {...useBlockProps.save()}
       style={{
-        "aspect-ratio": "3 / 2",
+        "aspect-ratio": aspectRatio.join(" / "),
       }}
       data-row-clues={rowCluesStr}
       data-column-clues={columnCluesStr}

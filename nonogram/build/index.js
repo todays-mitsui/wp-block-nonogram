@@ -181,8 +181,8 @@ function Cell({
   onMouseDown,
   onMouseOver
 }) {
-  if (!enableSpaceStatus && status === 'space') {
-    status = 'unknown';
+  if (!enableSpaceStatus && status === "space") {
+    status = "unknown";
   }
   const crossPadding = cellSize * 0.25;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Rect, {
@@ -191,15 +191,15 @@ function Cell({
     y: top + PADDING,
     width: cellSize - 2 * PADDING,
     height: cellSize - 2 * PADDING,
-    fill: status === 'filled' ? COLOR_FILLED : COLOR_EMPTY,
+    fill: status === "filled" ? COLOR_FILLED : COLOR_EMPTY,
     strokeEnabled: false,
     onMouseDown: onMouseDown,
     onMouseOver: onMouseOver
-  }), status === 'space' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Line, {
+  }), status === "space" && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Line, {
     points: [left + crossPadding, top + crossPadding, left + cellSize - crossPadding, top + cellSize - crossPadding],
     stroke: STROKE_COLOR_LIGHT,
     strokeWidth: STROKE_WIDTH
-  }), status === 'space' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Line, {
+  }), status === "space" && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Line, {
     points: [left + crossPadding, top + cellSize - crossPadding, left + cellSize - crossPadding, top + crossPadding],
     stroke: STROKE_COLOR_LIGHT,
     strokeWidth: STROKE_WIDTH
@@ -654,22 +654,27 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _src_Board__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../src/Board */ "../src/Board.js");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _src_Board__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../src/Board */ "../src/Board.js");
+
 
 
 
 
 /**
  * @param {{
- * 		board: Board;
- * 		setAttributes: (newParam: { boardData: string }) => void;
+ *  board: Board;
+ *  aspectRatio: [number, number];
+ *  setAttributes: (newParam: { boardData: string }) => void;
  * }} param
  * @returns
  */
 function BoardSize({
   board,
+  aspectRatio,
   setAttributes
 }) {
   const setNumRows = numRowsStr => {
@@ -690,22 +695,46 @@ function BoardSize({
       });
     }
   };
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.PanelBody, {
-    title: "\u76E4\u9762\u306E\u30B5\u30A4\u30BA",
+  const aspectRatioOptions = [{
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Square - 1:1', 'nonogram'),
+    value: [1, 1].join(':')
+  }, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Wide - 4:3', 'nonogram'),
+    value: [4, 3].join(':')
+  }, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Tall - 3:4', 'nonogram'),
+    value: [3, 4].join(':')
+  }];
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Settings', 'nonogram'),
     initialOpen: "true"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("fieldset", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("legend", null, "\u884C\u6570"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.__experimentalNumberControl, {
-    isShiftStepEnabled: true,
-    onChange: setNumRows,
-    shiftStep: 5,
-    value: board.numRows,
-    min: 1
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("fieldset", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("legend", null, "\u5217\u6570"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.__experimentalNumberControl, {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "nonogram-controls"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.__experimentalNumberControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Columns', 'nonogram'),
     isShiftStepEnabled: true,
     onChange: setNumColumns,
     shiftStep: 5,
     value: board.numColumns,
     min: 1
-  })));
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.__experimentalNumberControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Rows', 'nonogram'),
+    isShiftStepEnabled: true,
+    onChange: setNumRows,
+    shiftStep: 5,
+    value: board.numRows,
+    min: 1
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.SelectControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Aspect Ratio', 'nonogram'),
+    value: aspectRatio.join(':'),
+    options: aspectRatioOptions,
+    onChange: value => {
+      const aspectRatio = value.split(':').map(Number);
+      setAttributes({
+        aspectRatio
+      });
+    }
+  }));
 }
 
 /***/ }),
@@ -752,10 +781,15 @@ function Edit({
   attributes,
   setAttributes
 }) {
-  /** @type {{ boardData: string }} */
+  /** @type {{ aspectRatio: [number, number]; boardData: string; }} */
   const {
+    aspectRatio,
     boardData
   } = attributes;
+  console.log({
+    aspectRatio,
+    boardData
+  });
   const board = boardData == null ? new _src_Board__WEBPACK_IMPORTED_MODULE_3__.Board(15, 15) : _src_Board__WEBPACK_IMPORTED_MODULE_3__.Board.deserialize(boardData);
   const [wrapperRef, width] = (0,_lib_useBlockWidth__WEBPACK_IMPORTED_MODULE_7__.useBlockWidth)();
   const height = width && width * ASPECT_RATIO;
@@ -773,6 +807,7 @@ function Edit({
     key: "settings"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Controls_BoardSize__WEBPACK_IMPORTED_MODULE_4__.BoardSize, {
     board: board,
+    aspectRatio: aspectRatio,
     setAttributes: setAttributes
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Components_BoardView__WEBPACK_IMPORTED_MODULE_5__.BoardView, {
     width: width,
@@ -966,8 +1001,9 @@ __webpack_require__.r(__webpack_exports__);
 function save({
   attributes
 }) {
-  /** @type {{ boardData: string }} */
+  /** @type {{ aspectRatio: [number, number]; boardData: string; }} */
   const {
+    aspectRatio,
     boardData
   } = attributes;
   const board = boardData == null ? new _src_Board__WEBPACK_IMPORTED_MODULE_2__.Board(15, 15) : _src_Board__WEBPACK_IMPORTED_MODULE_2__.Board.deserialize(boardData);
@@ -976,7 +1012,7 @@ function save({
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ..._wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps.save(),
     style: {
-      "aspect-ratio": "3 / 2"
+      "aspect-ratio": aspectRatio.join(" / ")
     },
     "data-row-clues": rowCluesStr,
     "data-column-clues": columnCluesStr
@@ -1056,7 +1092,7 @@ class Board {
     if (x < 0 || x >= this._numColumns || y < 0 || y >= this._numRows) {
       throw new Error("Out of bounds");
     }
-    this._grid.set(x, y, 'filled');
+    this._grid.set(x, y, "filled");
     return this;
   }
 
@@ -1072,7 +1108,7 @@ class Board {
     if (x < 0 || x >= this._numColumns || y < 0 || y >= this._numRows) {
       throw new Error("Out of bounds");
     }
-    this._grid.set(x, y, 'unknown');
+    this._grid.set(x, y, "unknown");
     return this;
   }
 
@@ -1138,7 +1174,7 @@ class Board {
     const clue = [];
     let count = 0;
     for (const status of cells) {
-      if (status === 'filled') {
+      if (status === "filled") {
         count++;
       } else if (count > 0) {
         clue.push(count);
@@ -1173,7 +1209,7 @@ class Board {
    * @returns {string}
    */
   serialize() {
-    return `${this._numColumns}x${this._numRows};${this._grid.serialize()}`;
+    return `v1;${this._numColumns}x${this._numRows};${this._grid.serialize()}`;
   }
 
   /**
@@ -1181,7 +1217,7 @@ class Board {
    * @returns {Board}
    */
   static deserialize(str) {
-    const matches = str.match(/^(\d+x\d+);(.+)$/);
+    const matches = str.match(/^v1;(\d+x\d+);(.+)$/);
     if (matches == null) {
       throw new Error("Invalid format");
     }
@@ -1391,7 +1427,7 @@ class Grid {
    */
   _shrinkHorizontally(numColumns) {
     const nonSpaceIndexes = [...this.rows()].flatMap(row => {
-      return row.map((status, index) => status !== "space" ? index : null).filter(index => index != null);
+      return row.map((status, index) => status !== "unknown" ? index : null).filter(index => index != null);
     });
     const maxNonSpaceIndex = Math.max(...nonSpaceIndexes);
     const newNumColumns = Math.max(numColumns, maxNonSpaceIndex + 1);
@@ -1422,7 +1458,7 @@ class Grid {
    * @returns {this}
    */
   _shrinkVertically(numRows) {
-    const maxNonSpaceIndex = [...this.rows()].findLastIndex(row => row.some(status => status !== "space"));
+    const maxNonSpaceIndex = [...this.rows()].findLastIndex(row => row.some(status => status !== "unknown"));
     const newNumRows = Math.max(numRows, maxNonSpaceIndex + 1);
     if (newNumRows === this._numRows) return this;
     this._numRows = newNumRows;
@@ -36615,7 +36651,7 @@ function useContextBridge() {
 /***/ ((module) => {
 
 "use strict";
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"todays-mitsui/nonogram","version":"0.1.0","title":"Nonogram","category":"widgets","icon":"smiley","description":"Example block scaffolded with Create Block tool.","example":{},"supports":{"html":false},"attributes":{"numRows":{"type":"number","default":15},"numColumns":{"type":"number","default":15},"boardData":{"type":"string","default":null}},"textdomain":"nonogram","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"todays-mitsui/nonogram","version":"0.1.0","title":"Nonogram Puzzle","category":"widgets","icon":"grid-view","description":"Create and solve Nonogram puzzles in the WordPress editor.","keywords":["nonogram","picross","puzzle","game"],"example":{"attributes":{"aspectRatio":[1,1],"boardData":"v1;5x5;5x5;hKIoiIgiQ"}},"supports":{"html":false,"align":true,"customClassName":true,"reusable":true},"attributes":{"aspectRatio":{"type":"array","default":[1,1]},"boardData":{"type":"string","default":null}},"textdomain":"nonogram","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js"}');
 
 /***/ })
 

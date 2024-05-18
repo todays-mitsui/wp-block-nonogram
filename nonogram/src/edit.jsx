@@ -14,8 +14,10 @@ const ASPECT_RATIO = 2 / 3;
  * @return {JSX.Element}
  */
 export function Edit({ attributes, setAttributes }) {
-  /** @type {{ boardData: string }} */
-  const { boardData } = attributes;
+  /** @type {{ aspectRatio: [number, number]; boardData: string; }} */
+  const { aspectRatio, boardData } = attributes;
+
+  console.log({ aspectRatio, boardData });
 
   const board = boardData == null
     ? new Board(15, 15)
@@ -40,6 +42,7 @@ export function Edit({ attributes, setAttributes }) {
         <InspectorControls key="settings">
           <BoardSize
             board={board}
+            aspectRatio={aspectRatio}
             setAttributes={setAttributes}
           />
         </InspectorControls>
