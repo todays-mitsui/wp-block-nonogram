@@ -9,24 +9,16 @@ import { createRoot } from "react-dom/client";
  * @returns {void}
  */
 function init(container) {
+  const aspectRatio = container.dataset.aspectRatio.split(":").map((str) => parseInt(str, 10));
   const rowClues = decodeClues(container.dataset.rowClues);
   const columnClues = decodeClues(container.dataset.columnClues);
-
-  const layout = calcLayout(
-    container.clientWidth,
-    container.clientHeight,
-    100,
-    100,
-    rowClues.length,
-    columnClues.length,
-  );
 
   createRoot(container)
     .render(
       <GameView
+        aspectRatio={aspectRatio}
         rowClues={rowClues}
         columnClues={columnClues}
-        layout={layout}
       />,
     );
 }

@@ -24,6 +24,7 @@ export function save({ attributes }) {
       style={{
         "aspect-ratio": aspectRatio.join(" / "),
       }}
+      data-aspect-ratio={aspectRatio.join(":")}
       data-row-clues={rowCluesStr}
       data-column-clues={columnCluesStr}
     />

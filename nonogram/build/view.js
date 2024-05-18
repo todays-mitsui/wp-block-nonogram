@@ -461,53 +461,47 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _BoardView__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./BoardView */ "./src/Components/BoardView.jsx");
 /* harmony import */ var _lib_useBlockWidth__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../lib/useBlockWidth */ "./src/lib/useBlockWidth.js");
 /* harmony import */ var _lib_useBoardStore__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../lib/useBoardStore */ "./src/lib/useBoardStore.js");
+/* harmony import */ var _lib_calcLayout__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../lib/calcLayout */ "./src/lib/calcLayout.js");
 
 
 
 
 
 
-const ASPECT_RATIO = 2 / 3;
+
 
 /**
  * @param {{
+ *  aspectRatio: [number, number];
  *  rowClues: number[][];
  *  columnClues: number[][];
- *  layout: {
- *    offsetLeft: number;
- *    offsetTop: number;
- *    cellSize: number;
- *  };
  * }} param
  * @returns {JSX.Element}
  */
 function GameView({
+  aspectRatio,
   rowClues,
-  columnClues,
-  layout: {
-    offsetLeft,
-    offsetTop,
-    cellSize
-  }
+  columnClues
 }) {
-  const [wrapperRef, width] = (0,_lib_useBlockWidth__WEBPACK_IMPORTED_MODULE_4__.useBlockWidth)();
-  const height = width && width * ASPECT_RATIO;
   const [boardData, setBoardData] = (0,_lib_useBoardStore__WEBPACK_IMPORTED_MODULE_5__.useBoardStore)(rowClues, columnClues);
   const board = boardData && _src_Board__WEBPACK_IMPORTED_MODULE_2__.Board.deserialize(boardData);
+  const [wrapperRef, width] = (0,_lib_useBlockWidth__WEBPACK_IMPORTED_MODULE_4__.useBlockWidth)();
+  const height = width && width * aspectRatio[1] / aspectRatio[0];
+  const layout = width && (0,_lib_calcLayout__WEBPACK_IMPORTED_MODULE_6__.calcLayout)(width, height, 100, 100, rowClues.length, columnClues.length);
   const [cluesWidth, cluesHeight] = [100, 100];
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ref: wrapperRef
-  }, board && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_BoardView__WEBPACK_IMPORTED_MODULE_3__.BoardView, {
+  }, board && width && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_BoardView__WEBPACK_IMPORTED_MODULE_3__.BoardView, {
     width: width,
     height: height,
     board: board,
-    left: offsetLeft,
-    top: offsetTop,
+    left: layout?.offsetLeft,
+    top: layout?.offsetTop,
     rowClues: rowClues,
     columnClues: columnClues,
     cluesWidth: cluesWidth,
     cluesHeight: cluesHeight,
-    cellSize: cellSize,
+    cellSize: layout?.cellSize,
     setBoardData: setBoardData,
     enableSpaceStatus: true
   }));
@@ -36663,13 +36657,13 @@ __webpack_require__.r(__webpack_exports__);
  * @returns {void}
  */
 function init(container) {
+  const aspectRatio = container.dataset.aspectRatio.split(":").map(str => parseInt(str, 10));
   const rowClues = decodeClues(container.dataset.rowClues);
   const columnClues = decodeClues(container.dataset.columnClues);
-  const layout = (0,_lib_calcLayout__WEBPACK_IMPORTED_MODULE_2__.calcLayout)(container.clientWidth, container.clientHeight, 100, 100, rowClues.length, columnClues.length);
   (0,react_dom_client__WEBPACK_IMPORTED_MODULE_5__.createRoot)(container).render((0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Components_GameView__WEBPACK_IMPORTED_MODULE_4__.GameView, {
+    aspectRatio: aspectRatio,
     rowClues: rowClues,
-    columnClues: columnClues,
-    layout: layout
+    columnClues: columnClues
   }));
 }
 

@@ -699,11 +699,11 @@ function BoardSize({
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Square - 1:1', 'nonogram'),
     value: [1, 1].join(':')
   }, {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Wide - 4:3', 'nonogram'),
-    value: [4, 3].join(':')
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Wide - 3:2', 'nonogram'),
+    value: [3, 2].join(':')
   }, {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Tall - 3:4', 'nonogram'),
-    value: [3, 4].join(':')
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Tall - 2:3', 'nonogram'),
+    value: [2, 3].join(':')
   }];
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
     title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Settings', 'nonogram'),
@@ -729,7 +729,7 @@ function BoardSize({
     value: aspectRatio.join(':'),
     options: aspectRatioOptions,
     onChange: value => {
-      const aspectRatio = value.split(':').map(Number);
+      const aspectRatio = value.split(':').map(str => parseInt(str, 10));
       setAttributes({
         aspectRatio
       });
@@ -792,7 +792,7 @@ function Edit({
   });
   const board = boardData == null ? new _src_Board__WEBPACK_IMPORTED_MODULE_3__.Board(15, 15) : _src_Board__WEBPACK_IMPORTED_MODULE_3__.Board.deserialize(boardData);
   const [wrapperRef, width] = (0,_lib_useBlockWidth__WEBPACK_IMPORTED_MODULE_7__.useBlockWidth)();
-  const height = width && width * ASPECT_RATIO;
+  const height = width && width * aspectRatio[1] / aspectRatio[0];
   const [cluesWidth, cluesHeight] = [100, 100];
   const {
     offsetLeft,
@@ -1014,6 +1014,7 @@ function save({
     style: {
       "aspect-ratio": aspectRatio.join(" / ")
     },
+    "data-aspect-ratio": aspectRatio.join(":"),
     "data-row-clues": rowCluesStr,
     "data-column-clues": columnCluesStr
   });

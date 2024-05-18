@@ -32,8 +32,8 @@ export function BoardSize({ board, aspectRatio, setAttributes }) {
 
   const aspectRatioOptions = [
     { label: __('Square - 1:1', 'nonogram'), value: [1, 1].join(':') },
-    { label: __('Wide - 4:3', 'nonogram'), value: [4, 3].join(':') },
-    { label: __('Tall - 3:4', 'nonogram'), value: [3, 4].join(':') }
+    { label: __('Wide - 3:2', 'nonogram'), value: [3, 2].join(':') },
+    { label: __('Tall - 2:3', 'nonogram'), value: [2, 3].join(':') }
   ];
 
   return (
@@ -61,7 +61,7 @@ export function BoardSize({ board, aspectRatio, setAttributes }) {
           value={aspectRatio.join(':')}
           options={aspectRatioOptions}
           onChange={(value) => {
-            const aspectRatio = value.split(':').map(Number);
+            const aspectRatio = value.split(':').map((str) => parseInt(str, 10));
             setAttributes({ aspectRatio });
           }}
       />

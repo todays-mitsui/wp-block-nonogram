@@ -3,49 +3,52 @@ import { Board } from "../../../src/Board";
 import { BoardView } from "./BoardView";
 import { useBlockWidth } from "../lib/useBlockWidth";
 import { useBoardStore } from "../lib/useBoardStore";
-
-const ASPECT_RATIO = 2 / 3;
+import { calcLayout } from "../lib/calcLayout";
 
 /**
  * @param {{
+ *  aspectRatio: [number, number];
  *  rowClues: number[][];
  *  columnClues: number[][];
- *  layout: {
- *    offsetLeft: number;
- *    offsetTop: number;
- *    cellSize: number;
- *  };
  * }} param
  * @returns {JSX.Element}
  */
 export function GameView({
+  aspectRatio,
   rowClues,
   columnClues,
-  layout: { offsetLeft, offsetTop, cellSize },
 }) {
-  const [wrapperRef, width] = useBlockWidth();
-  const height = width && width * ASPECT_RATIO;
-
   const [boardData, setBoardData] = useBoardStore(rowClues, columnClues);
   const board = boardData && Board.deserialize(boardData);
+
+  const [wrapperRef, width] = useBlockWidth();
+  const height = width && width * aspectRatio[1] / aspectRatio[0];
+  const layout = width && calcLayout(
+    width,
+    height,
+    100,
+    100,
+    rowClues.length,
+    columnClues.length,
+  );
 
   const [cluesWidth, cluesHeight] = [100, 100];
 
   return (
     <div ref={wrapperRef}>
-      {board &&
+      {board && width &&
         (
           <BoardView
             width={width}
             height={height}
             board={board}
-            left={offsetLeft}
-            top={offsetTop}
+            left={layout?.offsetLeft}
+            top={layout?.offsetTop}
             rowClues={rowClues}
             columnClues={columnClues}
             cluesWidth={cluesWidth}
             cluesHeight={cluesHeight}
-            cellSize={cellSize}
+            cellSize={layout?.cellSize}
             setBoardData={setBoardData}
             enableSpaceStatus={true}
           />

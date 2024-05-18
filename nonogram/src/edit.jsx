@@ -24,7 +24,7 @@ export function Edit({ attributes, setAttributes }) {
     : Board.deserialize(boardData);
 
   const [wrapperRef, width] = useBlockWidth();
-  const height = width && width * ASPECT_RATIO;
+  const height = width && width * aspectRatio[1] / aspectRatio[0];
 
   const [cluesWidth, cluesHeight] = [100, 100];
   const { offsetLeft, offsetTop, cellSize } = calcLayout(
