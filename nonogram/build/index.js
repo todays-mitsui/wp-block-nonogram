@@ -583,7 +583,8 @@ function RowClueView({
     width: width - fontSize * 0.5,
     height: height,
     align: "right",
-    verticalAlign: "middle"
+    verticalAlign: "middle",
+    wrap: "none"
   });
 }
 
@@ -670,6 +671,8 @@ __webpack_require__.r(__webpack_exports__);
  * @param {{
  *  board: Board;
  *  aspectRatio: [number, number];
+ *  rowCluesSize: number;
+ *  columnCluesSize: number;
  *  setAttributes: (newParam: { boardData: string }) => void;
  * }} param
  * @returns
@@ -677,6 +680,8 @@ __webpack_require__.r(__webpack_exports__);
 function BoardSize({
   board,
   aspectRatio,
+  rowCluesSize,
+  columnCluesSize,
   setAttributes
 }) {
   const setNumRows = numRowsStr => {
@@ -694,6 +699,22 @@ function BoardSize({
       board.resize(numColumns, board.numRows);
       setAttributes({
         boardData: board.serialize()
+      });
+    }
+  };
+  const setRowCluesSize = rowCluesSizeStr => {
+    const rowCluesSize = parseInt(rowCluesSizeStr, 10);
+    if (rowCluesSize > 20) {
+      setAttributes({
+        rowCluesSize
+      });
+    }
+  };
+  const setColumnCluesSize = columnCluesSizeStr => {
+    const columnCluesSize = parseInt(columnCluesSizeStr, 10);
+    if (columnCluesSize > 20) {
+      setAttributes({
+        columnCluesSize
       });
     }
   };
@@ -736,7 +757,23 @@ function BoardSize({
         aspectRatio
       });
     }
-  }));
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "nonogram-controls"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.__experimentalNumberControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Clues Width", "nonogram"),
+    isShiftStepEnabled: true,
+    onChange: setRowCluesSize,
+    shiftStep: 20,
+    value: rowCluesSize,
+    min: 20
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.__experimentalNumberControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Clues Height", "nonogram"),
+    isShiftStepEnabled: true,
+    onChange: setColumnCluesSize,
+    shiftStep: 20,
+    value: columnCluesSize,
+    min: 20
+  })));
 }
 
 /***/ }),
@@ -783,24 +820,34 @@ function Edit({
   attributes,
   setAttributes
 }) {
-  /** @type {{ aspectRatio: [number, number]; boardData: string; }} */
+  /**
+   * @type {{
+   *  aspectRatio: [number, number];
+   *  boardData: string;
+   *  rowCluesSize: number;
+   *  columnCluesSize: number;
+   * }}
+   */
   const {
     aspectRatio,
-    boardData
+    boardData,
+    rowCluesSize,
+    columnCluesSize
   } = attributes;
   console.log({
     aspectRatio,
-    boardData
+    boardData,
+    rowCluesSize,
+    columnCluesSize
   });
   const board = boardData == null ? new _src_Board__WEBPACK_IMPORTED_MODULE_3__.Board(15, 15) : _src_Board__WEBPACK_IMPORTED_MODULE_3__.Board.deserialize(boardData);
   const [wrapperRef, width] = (0,_lib_useBlockWidth__WEBPACK_IMPORTED_MODULE_7__.useBlockWidth)();
   const height = width && width * aspectRatio[1] / aspectRatio[0];
-  const [cluesWidth, cluesHeight] = [100, 100];
   const {
     offsetLeft,
     offsetTop,
     cellSize
-  } = (0,_lib_calcLayout__WEBPACK_IMPORTED_MODULE_6__.calcLayout)(width, height, cluesWidth, cluesHeight, board.numRows, board.numColumns);
+  } = (0,_lib_calcLayout__WEBPACK_IMPORTED_MODULE_6__.calcLayout)(width, height, rowCluesSize, columnCluesSize, board.numRows, board.numColumns);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)()
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -810,6 +857,8 @@ function Edit({
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Controls_BoardSize__WEBPACK_IMPORTED_MODULE_4__.BoardSize, {
     board: board,
     aspectRatio: aspectRatio,
+    rowCluesSize: rowCluesSize,
+    columnCluesSize: columnCluesSize,
     setAttributes: setAttributes
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Components_BoardView__WEBPACK_IMPORTED_MODULE_5__.BoardView, {
     width: width,
@@ -819,8 +868,8 @@ function Edit({
     top: offsetTop,
     rowClues: [...board.rowClues()],
     columnClues: [...board.columnClues()],
-    cluesWidth: cluesWidth,
-    cluesHeight: cluesHeight,
+    cluesWidth: rowCluesSize,
+    cluesHeight: columnCluesSize,
     cellSize: cellSize,
     setBoardData: boardData => setAttributes({
       boardData
@@ -1003,10 +1052,19 @@ __webpack_require__.r(__webpack_exports__);
 function save({
   attributes
 }) {
-  /** @type {{ aspectRatio: [number, number]; boardData: string; }} */
+  /**
+   * @type {{
+  *  aspectRatio: [number, number];
+  *  boardData: string;
+  *  rowCluesSize: number;
+  *  columnCluesSize: number;
+  * }}
+  */
   const {
     aspectRatio,
-    boardData
+    boardData,
+    rowCluesSize,
+    columnCluesSize
   } = attributes;
   const board = boardData == null ? new _src_Board__WEBPACK_IMPORTED_MODULE_2__.Board(15, 15) : _src_Board__WEBPACK_IMPORTED_MODULE_2__.Board.deserialize(boardData);
   const rowCluesStr = [...board.rowClues()].map(clues => clues.join(",")).join(";");
@@ -1018,7 +1076,9 @@ function save({
     },
     "data-aspect-ratio": aspectRatio.join(":"),
     "data-row-clues": rowCluesStr,
-    "data-column-clues": columnCluesStr
+    "data-row-clues-size": rowCluesSize,
+    "data-column-clues": columnCluesStr,
+    "data-column-clues-size": columnCluesSize
   });
 }
 
@@ -36654,7 +36714,7 @@ function useContextBridge() {
 /***/ ((module) => {
 
 "use strict";
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"todays-mitsui/nonogram","version":"0.1.0","title":"Nonogram Puzzle","category":"widgets","icon":"grid-view","description":"Create and solve Nonogram puzzles in the WordPress editor.","keywords":["nonogram","picross","puzzle","game"],"example":{"attributes":{"aspectRatio":[1,1],"boardData":"v1;5x5;5x5;hKIoiIgiQ"}},"supports":{"html":false,"align":true,"customClassName":true,"reusable":true},"attributes":{"aspectRatio":{"type":"array","default":[1,1]},"boardData":{"type":"string","default":null}},"textdomain":"nonogram","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"todays-mitsui/nonogram","version":"0.1.0","title":"Nonogram Puzzle","category":"widgets","icon":"grid-view","description":"Create and solve Nonogram puzzles in the WordPress editor.","keywords":["nonogram","picross","puzzle","game"],"example":{"attributes":{"aspectRatio":[1,1],"boardData":"v1;5x5;5x5;hKIoiIgiQ"}},"supports":{"html":false,"align":true,"customClassName":true,"reusable":true},"attributes":{"aspectRatio":{"type":"array","default":[1,1]},"boardData":{"type":"string","default":null},"rowCluesSize":{"type":"number","default":100},"columnCluesSize":{"type":"number","default":100}},"textdomain":"nonogram","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js"}');
 
 /***/ })
 

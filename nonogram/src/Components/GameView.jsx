@@ -10,6 +10,8 @@ import { calcLayout } from "../lib/calcLayout";
  *  aspectRatio: [number, number];
  *  rowClues: number[][];
  *  columnClues: number[][];
+ *  rowCluesSize: number;
+ *  columnCluesSize: number;
  * }} param
  * @returns {JSX.Element}
  */
@@ -17,6 +19,8 @@ export function GameView({
   aspectRatio,
   rowClues,
   columnClues,
+  rowCluesSize,
+  columnCluesSize,
 }) {
   const [boardData, setBoardData] = useBoardStore(rowClues, columnClues);
   const board = boardData && Board.deserialize(boardData);
@@ -26,13 +30,11 @@ export function GameView({
   const layout = width && calcLayout(
     width,
     height,
-    100,
-    100,
+    rowCluesSize,
+    columnCluesSize,
     rowClues.length,
     columnClues.length,
   );
-
-  const [cluesWidth, cluesHeight] = [100, 100];
 
   return (
     <div ref={wrapperRef}>
@@ -46,8 +48,8 @@ export function GameView({
             top={layout?.offsetTop}
             rowClues={rowClues}
             columnClues={columnClues}
-            cluesWidth={cluesWidth}
-            cluesHeight={cluesHeight}
+            cluesWidth={rowCluesSize}
+            cluesHeight={columnCluesSize}
             cellSize={layout?.cellSize}
             setBoardData={setBoardData}
             enableSpaceStatus={true}

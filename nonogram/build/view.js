@@ -477,20 +477,23 @@ __webpack_require__.r(__webpack_exports__);
  *  aspectRatio: [number, number];
  *  rowClues: number[][];
  *  columnClues: number[][];
+ *  rowCluesSize: number;
+ *  columnCluesSize: number;
  * }} param
  * @returns {JSX.Element}
  */
 function GameView({
   aspectRatio,
   rowClues,
-  columnClues
+  columnClues,
+  rowCluesSize,
+  columnCluesSize
 }) {
   const [boardData, setBoardData] = (0,_lib_useBoardStore__WEBPACK_IMPORTED_MODULE_5__.useBoardStore)(rowClues, columnClues);
   const board = boardData && _src_Board__WEBPACK_IMPORTED_MODULE_2__.Board.deserialize(boardData);
   const [wrapperRef, width] = (0,_lib_useBlockWidth__WEBPACK_IMPORTED_MODULE_4__.useBlockWidth)();
   const height = width && width * aspectRatio[1] / aspectRatio[0];
-  const layout = width && (0,_lib_calcLayout__WEBPACK_IMPORTED_MODULE_6__.calcLayout)(width, height, 100, 100, rowClues.length, columnClues.length);
-  const [cluesWidth, cluesHeight] = [100, 100];
+  const layout = width && (0,_lib_calcLayout__WEBPACK_IMPORTED_MODULE_6__.calcLayout)(width, height, rowCluesSize, columnCluesSize, rowClues.length, columnClues.length);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ref: wrapperRef
   }, board && width && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_BoardView__WEBPACK_IMPORTED_MODULE_3__.BoardView, {
@@ -501,8 +504,8 @@ function GameView({
     top: layout?.offsetTop,
     rowClues: rowClues,
     columnClues: columnClues,
-    cluesWidth: cluesWidth,
-    cluesHeight: cluesHeight,
+    cluesWidth: rowCluesSize,
+    cluesHeight: columnCluesSize,
     cellSize: layout?.cellSize,
     setBoardData: setBoardData,
     enableSpaceStatus: true
@@ -650,7 +653,8 @@ function RowClueView({
     width: width - fontSize * 0.5,
     height: height,
     align: "right",
-    verticalAlign: "middle"
+    verticalAlign: "middle",
+    wrap: "none"
   });
 }
 
@@ -36662,10 +36666,14 @@ function init(container) {
   const aspectRatio = container.dataset.aspectRatio.split(":").map(str => parseInt(str, 10));
   const rowClues = decodeClues(container.dataset.rowClues);
   const columnClues = decodeClues(container.dataset.columnClues);
+  const rowCluesSize = parseInt(container.dataset.rowCluesSize, 10);
+  const columnCluesSize = parseInt(container.dataset.columnCluesSize, 10);
   (0,react_dom_client__WEBPACK_IMPORTED_MODULE_5__.createRoot)(container).render((0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Components_GameView__WEBPACK_IMPORTED_MODULE_4__.GameView, {
     aspectRatio: aspectRatio,
     rowClues: rowClues,
-    columnClues: columnClues
+    columnClues: columnClues,
+    rowCluesSize: rowCluesSize,
+    columnCluesSize: columnCluesSize
   }));
 }
 

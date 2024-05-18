@@ -5,8 +5,15 @@ import { Board } from "../../src/Board";
  * @return {Element} Element to render.
  */
 export function save({ attributes }) {
-  /** @type {{ aspectRatio: [number, number]; boardData: string; }} */
-  const { aspectRatio, boardData } = attributes;
+  /**
+   * @type {{
+  *  aspectRatio: [number, number];
+  *  boardData: string;
+  *  rowCluesSize: number;
+  *  columnCluesSize: number;
+  * }}
+  */
+ const { aspectRatio, boardData, rowCluesSize, columnCluesSize } = attributes;
 
   const board = boardData == null
     ? new Board(15, 15)
@@ -26,7 +33,9 @@ export function save({ attributes }) {
       }}
       data-aspect-ratio={aspectRatio.join(":")}
       data-row-clues={rowCluesStr}
+      data-row-clues-size={rowCluesSize}
       data-column-clues={columnCluesStr}
+      data-column-clues-size={columnCluesSize}
     />
   );
 }

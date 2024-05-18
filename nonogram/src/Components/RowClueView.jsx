@@ -34,6 +34,7 @@ export function RowClueView({
       height={height}
       align="right"
       verticalAlign="middle"
+      wrap="none"
     />
   );
 }

@@ -14,10 +14,17 @@ const ASPECT_RATIO = 2 / 3;
  * @return {JSX.Element}
  */
 export function Edit({ attributes, setAttributes }) {
-  /** @type {{ aspectRatio: [number, number]; boardData: string; }} */
-  const { aspectRatio, boardData } = attributes;
+  /**
+   * @type {{
+   *  aspectRatio: [number, number];
+   *  boardData: string;
+   *  rowCluesSize: number;
+   *  columnCluesSize: number;
+   * }}
+   */
+  const { aspectRatio, boardData, rowCluesSize, columnCluesSize } = attributes;
 
-  console.log({ aspectRatio, boardData });
+  console.log({ aspectRatio, boardData, rowCluesSize, columnCluesSize });
 
   const board = boardData == null
     ? new Board(15, 15)
@@ -26,12 +33,11 @@ export function Edit({ attributes, setAttributes }) {
   const [wrapperRef, width] = useBlockWidth();
   const height = width && width * aspectRatio[1] / aspectRatio[0];
 
-  const [cluesWidth, cluesHeight] = [100, 100];
   const { offsetLeft, offsetTop, cellSize } = calcLayout(
     width,
     height,
-    cluesWidth,
-    cluesHeight,
+    rowCluesSize,
+    columnCluesSize,
     board.numRows,
     board.numColumns,
   );
@@ -43,6 +49,8 @@ export function Edit({ attributes, setAttributes }) {
           <BoardSize
             board={board}
             aspectRatio={aspectRatio}
+            rowCluesSize={rowCluesSize}
+            columnCluesSize={columnCluesSize}
             setAttributes={setAttributes}
           />
         </InspectorControls>
@@ -55,8 +63,8 @@ export function Edit({ attributes, setAttributes }) {
           top={offsetTop}
           rowClues={[...board.rowClues()]}
           columnClues={[...board.columnClues()]}
-          cluesWidth={cluesWidth}
-          cluesHeight={cluesHeight}
+          cluesWidth={rowCluesSize}
+          cluesHeight={columnCluesSize}
           cellSize={cellSize}
           setBoardData={(boardData) => setAttributes({ boardData })}
           enableSpaceStatus={false}
