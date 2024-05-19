@@ -252,20 +252,27 @@ function CellsView({
   setNextStatus,
   setBoardData
 }) {
-  const decideNextStatus = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)((event, prevStatus) => {
-    return enableSpaceStatus ? 'ontouchstart' in document ? decideNextStatusWithSpaceStatus(prevStatus) : decideNextStatusWithSpaceStatusAndRightClick(event, prevStatus) : decideNextStatusWithoutSpaceStatus(prevStatus);
-  }, [enableSpaceStatus]);
-  const onMouseDown = event => {
+  const onMouseDown = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)(event => {
     const cell = cells.find(cell => cell.id === event.target.attrs.id);
     if (cell) {
       const prevStatus = cell.status;
-      const nextStatus = decideNextStatus(event, prevStatus);
+      const nextStatus = enableSpaceStatus ? decideNextStatusWithSpaceStatusAndRightClick(event, prevStatus) : decideNextStatusWithoutSpaceStatus(prevStatus);
       board.changeStatus(cell.x, cell.y, nextStatus);
       setBoardData(board.serialize());
       setNextStatus(nextStatus);
     }
-  };
-  const onMouseOver = event => {
+  }, [cells, board, setBoardData, setNextStatus]);
+  const onTouchStart = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)(event => {
+    const cell = cells.find(cell => cell.id === event.target.attrs.id);
+    if (cell) {
+      const prevStatus = cell.status;
+      const nextStatus = enableSpaceStatus ? decideNextStatusWithSpaceStatus(prevStatus) : decideNextStatusWithoutSpaceStatus(prevStatus);
+      board.changeStatus(cell.x, cell.y, nextStatus);
+      setBoardData(board.serialize());
+      setNextStatus(nextStatus);
+    }
+  }, [cells, board, setBoardData, setNextStatus]);
+  const onMouseOver = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)(event => {
     if (nextStatus == null) return;
     if (event.evt.buttons === 0) {
       setNextStatus(null);
@@ -276,7 +283,7 @@ function CellsView({
       board.changeStatus(cell.x, cell.y, nextStatus);
       setBoardData(board.serialize());
     }
-  };
+  }, [nextStatus, cells, board, setBoardData]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, cells.map(({
     id,
     x,
@@ -292,7 +299,7 @@ function CellsView({
     enableSpaceStatus: enableSpaceStatus,
     onMouseDown: onMouseDown,
     onMouseOver: onMouseOver,
-    onTouchStart: onMouseDown,
+    onTouchStart: onTouchStart,
     onTouchMove: onMouseOver
   })));
 }

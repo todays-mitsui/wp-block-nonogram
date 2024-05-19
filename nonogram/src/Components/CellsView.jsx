@@ -26,27 +26,33 @@ export function CellsView({
   setNextStatus,
   setBoardData,
 }) {
-  const decideNextStatus = useCallback((event, prevStatus) => {
-    return enableSpaceStatus
-      ? ('ontouchstart' in document
-        ? decideNextStatusWithSpaceStatus(prevStatus)
-        : decideNextStatusWithSpaceStatusAndRightClick(event, prevStatus)
-      )
-      : decideNextStatusWithoutSpaceStatus(prevStatus);
-  }, [enableSpaceStatus]);
-
-  const onMouseDown = (event) => {
+  const onMouseDown = useCallback((event) => {
     const cell = cells.find((cell) => cell.id === event.target.attrs.id);
     if (cell) {
       const prevStatus = cell.status;
-      const nextStatus = decideNextStatus(event, prevStatus);
+      const nextStatus = enableSpaceStatus
+        ? decideNextStatusWithSpaceStatusAndRightClick(event, prevStatus)
+        : decideNextStatusWithoutSpaceStatus(prevStatus);
       board.changeStatus(cell.x, cell.y, nextStatus);
       setBoardData(board.serialize());
       setNextStatus(nextStatus);
     }
-  };
+  }, [cells, board, setBoardData, setNextStatus]);
 
-  const onMouseOver = (event) => {
+  const onTouchStart = useCallback((event) => {
+    const cell = cells.find((cell) => cell.id === event.target.attrs.id);
+    if (cell) {
+      const prevStatus = cell.status;
+      const nextStatus = enableSpaceStatus
+        ? decideNextStatusWithSpaceStatus(prevStatus)
+        : decideNextStatusWithoutSpaceStatus(prevStatus);
+      board.changeStatus(cell.x, cell.y, nextStatus);
+      setBoardData(board.serialize());
+      setNextStatus(nextStatus);
+    }
+  }, [cells, board, setBoardData, setNextStatus]);
+
+  const onMouseOver = useCallback((event) => {
     if (nextStatus == null) return;
 
     if (event.evt.buttons === 0) {
@@ -59,7 +65,7 @@ export function CellsView({
       board.changeStatus(cell.x, cell.y, nextStatus);
       setBoardData(board.serialize());
     }
-  };
+  }, [nextStatus, cells, board, setBoardData]);
 
   return (
     <>
@@ -74,7 +80,7 @@ export function CellsView({
           enableSpaceStatus={enableSpaceStatus}
           onMouseDown={onMouseDown}
           onMouseOver={onMouseOver}
-          onTouchStart={onMouseDown}
+          onTouchStart={onTouchStart}
           onTouchMove={onMouseOver}
         />
       ))}
