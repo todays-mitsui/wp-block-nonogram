@@ -8,8 +8,6 @@ import { calcLayout } from "./lib/calcLayout";
 import { useBlockWidth } from "./lib/useBlockWidth";
 import "./editor.scss";
 
-const ASPECT_RATIO = 2 / 3;
-
 /**
  * @return {JSX.Element}
  */
@@ -18,13 +16,9 @@ export function Edit({ attributes, setAttributes }) {
    * @type {{
    *  aspectRatio: [number, number];
    *  boardData: string;
-   *  rowCluesSize: number;
-   *  columnCluesSize: number;
    * }}
    */
-  const { aspectRatio, boardData, rowCluesSize, columnCluesSize } = attributes;
-
-  console.log({ aspectRatio, boardData, rowCluesSize, columnCluesSize });
+  const { aspectRatio, boardData } = attributes;
 
   const board = boardData == null
     ? new Board(15, 15)
@@ -33,14 +27,25 @@ export function Edit({ attributes, setAttributes }) {
   const [wrapperRef, width] = useBlockWidth();
   const height = width && width * aspectRatio[1] / aspectRatio[0];
 
-  const { offsetLeft, offsetTop, cellSize } = calcLayout(
+  const maxNumRowClues = Math.max(
+    Math.ceil(board.numColumns / 2),
+    ...[...board.rowClues()].map(clues => clues.length)
+  );
+  const maxNumColumnClues = Math.max(
+    Math.ceil(board.numRows / 2),
+    ...[...board.columnClues()].map(clues => clues.length)
+  );
+
+  const { offsetLeft, offsetTop, cluesWidth, cluesHeight, cellSize } = calcLayout(
     width,
     height,
-    rowCluesSize,
-    columnCluesSize,
+    maxNumRowClues,
+    maxNumColumnClues,
     board.numRows,
     board.numColumns,
   );
+
+  console.log({ cluesWidth, cluesHeight, cellSize });
 
   return (
     <div {...useBlockProps()}>
@@ -49,8 +54,6 @@ export function Edit({ attributes, setAttributes }) {
           <BoardSize
             board={board}
             aspectRatio={aspectRatio}
-            rowCluesSize={rowCluesSize}
-            columnCluesSize={columnCluesSize}
             setAttributes={setAttributes}
           />
         </InspectorControls>
@@ -63,8 +66,8 @@ export function Edit({ attributes, setAttributes }) {
           top={offsetTop}
           rowClues={[...board.rowClues()]}
           columnClues={[...board.columnClues()]}
-          cluesWidth={rowCluesSize}
-          cluesHeight={columnCluesSize}
+          cluesWidth={cluesWidth}
+          cluesHeight={cluesHeight}
           cellSize={cellSize}
           setBoardData={(boardData) => setAttributes({ boardData })}
           enableSpaceStatus={false}

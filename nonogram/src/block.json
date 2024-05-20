@@ -28,15 +28,7 @@
     "boardData": {
       "type": "string",
       "default": null
-    },
-		"rowCluesSize": {
-			"type": "number",
-			"default": 100
-		},
-		"columnCluesSize": {
-			"type": "number",
-			"default": 100
-		}
+    }
   },
   "textdomain": "nonogram",
   "editorScript": "file:./index.js",

@@ -10,13 +10,11 @@ import { Board } from "../../../src/Board";
  * @param {{
  *  board: Board;
  *  aspectRatio: [number, number];
- *  rowCluesSize: number;
- *  columnCluesSize: number;
  *  setAttributes: (newParam: { boardData: string }) => void;
  * }} param
  * @returns
  */
-export function BoardSize({ board, aspectRatio, rowCluesSize, columnCluesSize, setAttributes }) {
+export function BoardSize({ board, aspectRatio, setAttributes }) {
   const setNumRows = (numRowsStr) => {
     const numRows = parseInt(numRowsStr, 10);
     if (numRows > 0) {
@@ -31,18 +29,6 @@ export function BoardSize({ board, aspectRatio, rowCluesSize, columnCluesSize, s
       setAttributes({ boardData: board.serialize() });
     }
   };
-  const setRowCluesSize = (rowCluesSizeStr) => {
-    const rowCluesSize = parseInt(rowCluesSizeStr, 10);
-    if (rowCluesSize > 20) {
-      setAttributes({ rowCluesSize });
-    }
-  }
-  const setColumnCluesSize = (columnCluesSizeStr) => {
-    const columnCluesSize = parseInt(columnCluesSizeStr, 10);
-    if (columnCluesSize > 20) {
-      setAttributes({ columnCluesSize });
-    }
-  }
 
   const aspectRatioOptions = [
     { label: __("Square - 1:1", "nonogram"), value: [1, 1].join(":") },
@@ -79,24 +65,6 @@ export function BoardSize({ board, aspectRatio, rowCluesSize, columnCluesSize, s
           setAttributes({ aspectRatio });
         }}
       />
-      <div className="nonogram-controls">
-        <NumberControl
-          label={__("Clues Width", "nonogram")}
-          isShiftStepEnabled={true}
-          onChange={setRowCluesSize}
-          shiftStep={20}
-          value={rowCluesSize}
-          min={20}
-        />
-        <NumberControl
-          label={__("Clues Height", "nonogram")}
-          isShiftStepEnabled={true}
-          onChange={setColumnCluesSize}
-          shiftStep={20}
-          value={columnCluesSize}
-          min={20}
-        />
-      </div>
     </PanelBody>
   );
 }

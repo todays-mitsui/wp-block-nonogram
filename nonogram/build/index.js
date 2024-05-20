@@ -678,8 +678,6 @@ __webpack_require__.r(__webpack_exports__);
  * @param {{
  *  board: Board;
  *  aspectRatio: [number, number];
- *  rowCluesSize: number;
- *  columnCluesSize: number;
  *  setAttributes: (newParam: { boardData: string }) => void;
  * }} param
  * @returns
@@ -687,8 +685,6 @@ __webpack_require__.r(__webpack_exports__);
 function BoardSize({
   board,
   aspectRatio,
-  rowCluesSize,
-  columnCluesSize,
   setAttributes
 }) {
   const setNumRows = numRowsStr => {
@@ -706,22 +702,6 @@ function BoardSize({
       board.resize(numColumns, board.numRows);
       setAttributes({
         boardData: board.serialize()
-      });
-    }
-  };
-  const setRowCluesSize = rowCluesSizeStr => {
-    const rowCluesSize = parseInt(rowCluesSizeStr, 10);
-    if (rowCluesSize > 20) {
-      setAttributes({
-        rowCluesSize
-      });
-    }
-  };
-  const setColumnCluesSize = columnCluesSizeStr => {
-    const columnCluesSize = parseInt(columnCluesSizeStr, 10);
-    if (columnCluesSize > 20) {
-      setAttributes({
-        columnCluesSize
       });
     }
   };
@@ -764,23 +744,7 @@ function BoardSize({
         aspectRatio
       });
     }
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "nonogram-controls"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.__experimentalNumberControl, {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Clues Width", "nonogram"),
-    isShiftStepEnabled: true,
-    onChange: setRowCluesSize,
-    shiftStep: 20,
-    value: rowCluesSize,
-    min: 20
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.__experimentalNumberControl, {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Clues Height", "nonogram"),
-    isShiftStepEnabled: true,
-    onChange: setColumnCluesSize,
-    shiftStep: 20,
-    value: columnCluesSize,
-    min: 20
-  })));
+  }));
 }
 
 /***/ }),
@@ -818,7 +782,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const ASPECT_RATIO = 2 / 3;
 
 /**
  * @return {JSX.Element}
@@ -831,30 +794,29 @@ function Edit({
    * @type {{
    *  aspectRatio: [number, number];
    *  boardData: string;
-   *  rowCluesSize: number;
-   *  columnCluesSize: number;
    * }}
    */
   const {
     aspectRatio,
-    boardData,
-    rowCluesSize,
-    columnCluesSize
+    boardData
   } = attributes;
-  console.log({
-    aspectRatio,
-    boardData,
-    rowCluesSize,
-    columnCluesSize
-  });
   const board = boardData == null ? new _src_Board__WEBPACK_IMPORTED_MODULE_3__.Board(15, 15) : _src_Board__WEBPACK_IMPORTED_MODULE_3__.Board.deserialize(boardData);
   const [wrapperRef, width] = (0,_lib_useBlockWidth__WEBPACK_IMPORTED_MODULE_7__.useBlockWidth)();
   const height = width && width * aspectRatio[1] / aspectRatio[0];
+  const maxNumRowClues = Math.max(Math.ceil(board.numColumns / 2), ...[...board.rowClues()].map(clues => clues.length));
+  const maxNumColumnClues = Math.max(Math.ceil(board.numRows / 2), ...[...board.columnClues()].map(clues => clues.length));
   const {
     offsetLeft,
     offsetTop,
+    cluesWidth,
+    cluesHeight,
     cellSize
-  } = (0,_lib_calcLayout__WEBPACK_IMPORTED_MODULE_6__.calcLayout)(width, height, rowCluesSize, columnCluesSize, board.numRows, board.numColumns);
+  } = (0,_lib_calcLayout__WEBPACK_IMPORTED_MODULE_6__.calcLayout)(width, height, maxNumRowClues, maxNumColumnClues, board.numRows, board.numColumns);
+  console.log({
+    cluesWidth,
+    cluesHeight,
+    cellSize
+  });
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)()
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -864,8 +826,6 @@ function Edit({
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Controls_BoardSize__WEBPACK_IMPORTED_MODULE_4__.BoardSize, {
     board: board,
     aspectRatio: aspectRatio,
-    rowCluesSize: rowCluesSize,
-    columnCluesSize: columnCluesSize,
     setAttributes: setAttributes
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Components_BoardView__WEBPACK_IMPORTED_MODULE_5__.BoardView, {
     width: width,
@@ -875,8 +835,8 @@ function Edit({
     top: offsetTop,
     rowClues: [...board.rowClues()],
     columnClues: [...board.columnClues()],
-    cluesWidth: rowCluesSize,
-    cluesHeight: columnCluesSize,
+    cluesWidth: cluesWidth,
+    cluesHeight: cluesHeight,
     cellSize: cellSize,
     setBoardData: boardData => setAttributes({
       boardData
@@ -954,43 +914,88 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   calcLayout: () => (/* binding */ calcLayout)
 /* harmony export */ });
 const MIN_PADDING = 8;
+const MAX_FONT_SIZE = 20;
 
 /**
  * @param {number} canvasWidth
  * @param {number} canvasHeight
- * @param {number} cluesWidth
- * @param {number} cluesHeight
+ * @param {number} maxNumRowClues
+ * @param {number} maxNumColumnClues
  * @param {number} numRows
  * @param {number} numColumns
- * @returns {{ offsetLeft: number; offsetTop: number; cellSize: number; }}
+ * @returns {{
+ *  offsetLeft: number;
+ *  offsetTop: number;
+ *  cluesWidth: number;
+ *  cluesHeight: number;
+ *  cellSize: number;
+ * }}
  */
-function calcLayout(canvasWidth, canvasHeight, cluesWidth, cluesHeight, numRows, numColumns) {
-  const cellSize = calcCellSize(canvasWidth, canvasHeight, cluesWidth, cluesHeight, numRows, numColumns);
+function calcLayout(canvasWidth, canvasHeight,
+// cluesWidth,
+// cluesHeight,
+maxNumRowClues, maxNumColumnClues, numRows, numColumns) {
+  // const cellSize = calcCellSize(
+  //   canvasWidth,
+  //   canvasHeight,
+  //   cluesWidth,
+  //   cluesHeight,
+  //   numRows,
+  //   numColumns,
+  // );
+
+  const cellSize = calcCellSize(canvasWidth, canvasHeight, maxNumRowClues, maxNumColumnClues, numRows, numColumns);
   const gridWidth = cellSize * numColumns + 1;
+  const cluesWidth = Math.min(cellSize, 2 * MAX_FONT_SIZE) * maxNumRowClues;
   const boardWidth = cluesWidth + gridWidth;
   const offsetLeft = (canvasWidth - boardWidth) / 2;
   const gridHeight = cellSize * numRows + 1;
+  const cluesHeight = Math.min(cellSize, 2 * MAX_FONT_SIZE) * maxNumColumnClues;
   const boardHeight = cluesHeight + gridHeight;
   const offsetTop = (canvasHeight - boardHeight) / 2;
   return {
     offsetLeft,
     offsetTop,
+    cluesWidth,
+    cluesHeight,
     cellSize
   };
 }
 
-/**
- * @param {number} canvasWidth
- * @param {number} canvasHeight
- * @param {number} numRows
- * @param {number} numColumns
- * @returns {{ cellSize: number; gridWidth: number; gridHeight: number; }}
- */
-function calcCellSize(canvasWidth, canvasHeight, cluesWidth, cluesHeight, numRows, numColumns) {
-  const gridWidth = canvasWidth - cluesWidth - 2 * MIN_PADDING;
-  const gridHeight = canvasHeight - cluesHeight - 2 * MIN_PADDING;
-  const cellSize = Math.min((gridWidth - 1) / numColumns, (gridHeight - 1) / numRows);
-  return cellSize;
+// /**
+//  * @param {number} canvasWidth
+//  * @param {number} canvasHeight
+//  * @param {number} numRows
+//  * @param {number} numColumns
+//  * @returns {{ cellSize: number; gridWidth: number; gridHeight: number; }}
+//  */
+// function calcCellSize(
+//   canvasWidth,
+//   canvasHeight,
+//   cluesWidth,
+//   cluesHeight,
+//   numRows,
+//   numColumns,
+// ) {
+//   const gridWidth = canvasWidth - cluesWidth - 2 * MIN_PADDING;
+//   const gridHeight = canvasHeight - cluesHeight - 2 * MIN_PADDING;
+
+//   const cellSize = Math.min(
+//     (gridWidth - 1) / numColumns,
+//     (gridHeight - 1) / numRows,
+//   );
+
+//   return cellSize;
+// }
+
+function calcCellSize(canvasWidth, canvasHeight, maxNumRowClues, maxNumColumnClues, numRows, numColumns) {
+  const cellSize = Math.min((canvasWidth - 2 * MIN_PADDING - 1) / (maxNumRowClues + numColumns), (canvasHeight - 2 * MIN_PADDING - 1) / (maxNumColumnClues + numRows));
+  if (cellSize <= 2 * MAX_FONT_SIZE) {
+    return cellSize;
+  }
+  const gridWidth = canvasWidth - 2 * MAX_FONT_SIZE * maxNumRowClues - 2 * MIN_PADDING;
+  const gridHeight = canvasHeight - 2 * MAX_FONT_SIZE * maxNumColumnClues - 2 * MIN_PADDING;
+  return Math.min((gridWidth - 1) / numColumns, (gridHeight - 1) / numRows);
 }
 
 /***/ }),
@@ -36721,7 +36726,7 @@ function useContextBridge() {
 /***/ ((module) => {
 
 "use strict";
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"todays-mitsui/nonogram","version":"0.1.0","title":"Nonogram Puzzle","category":"widgets","icon":"grid-view","description":"Create and solve Nonogram puzzles in the WordPress editor.","keywords":["nonogram","picross","puzzle","game"],"example":{"attributes":{"aspectRatio":[1,1],"boardData":"v1;5x5;5x5;hKIoiIgiQ"}},"supports":{"html":false,"align":true,"customClassName":true,"reusable":true},"attributes":{"aspectRatio":{"type":"array","default":[1,1]},"boardData":{"type":"string","default":null},"rowCluesSize":{"type":"number","default":100},"columnCluesSize":{"type":"number","default":100}},"textdomain":"nonogram","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"todays-mitsui/nonogram","version":"0.1.0","title":"Nonogram Puzzle","category":"widgets","icon":"grid-view","description":"Create and solve Nonogram puzzles in the WordPress editor.","keywords":["nonogram","picross","puzzle","game"],"example":{"attributes":{"aspectRatio":[1,1],"boardData":"v1;5x5;5x5;hKIoiIgiQ"}},"supports":{"html":false,"align":true,"customClassName":true,"reusable":true},"attributes":{"aspectRatio":{"type":"array","default":[1,1]},"boardData":{"type":"string","default":null}},"textdomain":"nonogram","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js"}');
 
 /***/ })
 
