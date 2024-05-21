@@ -1359,16 +1359,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-/**
- * Every block starts by registering a new block type definition.
- *
- * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
- */
 (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__.registerBlockType)(_block_json__WEBPACK_IMPORTED_MODULE_5__.name, {
   icon: {
     src:
-    // deno-fmt-ignore
+    // prettier-ignore
     (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
       width: "150",
       height: "148",
