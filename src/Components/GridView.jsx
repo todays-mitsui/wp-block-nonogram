@@ -41,9 +41,12 @@ export function GridView( {
 		y: top + cluesHeight + i * cellSize,
 	} ) );
 
-	const showLine = useCallback((index, lastIndex) => {
-		return index === 0 || index === lastIndex || showGrid;
-	}, [showGrid]);
+	const showLine = useCallback(
+		( index, lastIndex ) => {
+			return index === 0 || index === lastIndex || showGrid;
+		},
+		[ showGrid ]
+	);
 
 	return (
 		<>
@@ -67,32 +70,38 @@ export function GridView( {
 				strokeEnabled={ false }
 			/>
 
-			{ verticalLines.map( ( { x, yStart, yEnd }, i ) => (
-				showLine(i, numColumns) && <Line
-					key={ i }
-					id={ `vertical-${ i }` }
-					points={ [ x, yStart, x, yEnd ] }
-					stroke={
-						i % 5 === 0 || i === numColumns
-							? STROKE_COLOR_DARK
-							: STROKE_COLOR_LIGHT
-					}
-					strokeWidth={ 1 }
-				/>
-			) ) }
-			{ horizontalLines.map( ( { xStart, xEnd, y }, i ) => (
-				showLine(i, numRows) && <Line
-					key={ i }
-					id={ `horizontal-${ i }` }
-					points={ [ xStart, y, xEnd, y ] }
-					stroke={
-						i % 5 === 0 || i === numRows
-							? STROKE_COLOR_DARK
-							: STROKE_COLOR_LIGHT
-					}
-					strokeWidth={ 1 }
-				/>
-			) ) }
+			{ verticalLines.map(
+				( { x, yStart, yEnd }, i ) =>
+					showLine( i, numColumns ) && (
+						<Line
+							key={ i }
+							id={ `vertical-${ i }` }
+							points={ [ x, yStart, x, yEnd ] }
+							stroke={
+								i % 5 === 0 || i === numColumns
+									? STROKE_COLOR_DARK
+									: STROKE_COLOR_LIGHT
+							}
+							strokeWidth={ 1 }
+						/>
+					)
+			) }
+			{ horizontalLines.map(
+				( { xStart, xEnd, y }, i ) =>
+					showLine( i, numRows ) && (
+						<Line
+							key={ i }
+							id={ `horizontal-${ i }` }
+							points={ [ xStart, y, xEnd, y ] }
+							stroke={
+								i % 5 === 0 || i === numRows
+									? STROKE_COLOR_DARK
+									: STROKE_COLOR_LIGHT
+							}
+							strokeWidth={ 1 }
+						/>
+					)
+			) }
 		</>
 	);
 }

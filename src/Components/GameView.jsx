@@ -41,10 +41,10 @@ export function GameView( { aspectRatio, rowClues, columnClues } ) {
 			columnClues.length
 		);
 
-	const [showGrid, setShowGrid] = useState(true);
+	const [ showGrid, setShowGrid ] = useState( true );
 	const clearAll = () => {
-		const board = new Board(columnClues.length, rowClues.length )
-		setBoardData(board.serialize());
+		const board = new Board( columnClues.length, rowClues.length );
+		setBoardData( board.serialize() );
 	};
 
 	return (
@@ -65,12 +65,16 @@ export function GameView( { aspectRatio, rowClues, columnClues } ) {
 					setBoardData={ setBoardData }
 					enableSpaceStatus={ true }
 					enableCluesCompletion={ true }
-					showGrid={showGrid}
+					showGrid={ showGrid }
 				/>
 			) }
 			<nav>
-				<button onClick={() => setShowGrid((showGrid) => !showGrid)}>{ showGrid ? 'Hide Grid' : 'Show Grid' }</button>
-				<button onClick={clearAll}>Clear All</button>
+				<button
+					onClick={ () => setShowGrid( ( showGrid ) => ! showGrid ) }
+				>
+					{ showGrid ? 'Hide Grid' : 'Show Grid' }
+				</button>
+				<button onClick={ clearAll }>Clear All</button>
 			</nav>
 		</div>
 	);
