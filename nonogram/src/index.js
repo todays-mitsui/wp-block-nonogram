@@ -11,7 +11,8 @@ import metadata from "./block.json";
  */
 registerBlockType(metadata.name, {
   icon: {
-    src:
+    src: (
+      // deno-fmt-ignore
       <svg width="150" height="148" viewBox="0 0 150 148" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect x="40" y="8" width="96" height="36" fill="#E7E7E7" />
         <rect x="8" y="44" width="32" height="96" fill="#E7E7E7" />
@@ -25,6 +26,7 @@ registerBlockType(metadata.name, {
         <line x1="8" y1="41" x2="136" y2="41" stroke="black" stroke-width="6" />
         <line x1="8" y1="137" x2="136" y2="137" stroke="black" stroke-width="6" />
       </svg>
+    ),
   },
   edit: Edit,
   save,
