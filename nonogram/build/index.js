@@ -22,6 +22,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _GridView__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./GridView */ "./src/Components/GridView.jsx");
 /* harmony import */ var _ColumnCluesView__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./ColumnCluesView */ "./src/Components/ColumnCluesView.jsx");
 /* harmony import */ var _RowCluesView__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./RowCluesView */ "./src/Components/RowCluesView.jsx");
+/* harmony import */ var _lib_useDisableContextMenu__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../lib/useDisableContextMenu */ "./src/lib/useDisableContextMenu.js");
+
 
 
 
@@ -66,9 +68,6 @@ function BoardView({
   enableSpaceStatus,
   enableCluesCompletion
 }) {
-  // <canvas> 要素を取得し、コンテキストメニューを無効にする
-  const stageRef = useDisableContextMenu();
-
   // マウスドラッグによる状態変更のために変更すべきステータスを保持しておく
   const [nextStatus, setNextStatus] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
   const cells = [...board.cells()];
@@ -79,7 +78,7 @@ function BoardView({
     height: height,
     onMouseUp: () => setNextStatus(null),
     onTouchEnd: () => setNextStatus(null),
-    ref: stageRef
+    ref: (0,_lib_useDisableContextMenu__WEBPACK_IMPORTED_MODULE_8__.useDisableContextMenu)() // コンテキストメニューを無効にする
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Layer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_CellsView__WEBPACK_IMPORTED_MODULE_4__.CellsView, {
     board: board,
     cells: cells,
@@ -115,20 +114,6 @@ function BoardView({
     cellSize: cellSize,
     cluesWidth: cluesWidth
   })));
-}
-function useDisableContextMenu() {
-  const stageRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
-  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
-    /** @type HTMLCanvasElement */
-    const canvas = stageRef.current;
-    if (canvas) {
-      // 右クリック時のコンテキストメニューを無効化
-      canvas.addEventListener("contextmenu", event => {
-        event.preventDefault();
-      });
-    }
-  });
-  return stageRef;
 }
 
 /**
@@ -895,31 +880,17 @@ function Edit({
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
-/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./style.scss */ "./src/style.scss");
-/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./edit */ "./src/edit.jsx");
-/* harmony import */ var _save__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./save */ "./src/save.jsx");
-/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./block.json */ "./src/block.json");
-/**
- * Registers a new block provided a unique name and an object defining its behavior.
- *
- * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
- */
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./style.scss */ "./src/style.scss");
+/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./edit */ "./src/edit.jsx");
+/* harmony import */ var _save__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./save */ "./src/save.jsx");
+/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./block.json */ "./src/block.json");
 
 
-/**
- * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
- * All files containing `style` keyword are bundled together. The code used
- * gets applied both to the front of your site and to the editor.
- *
- * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
- */
 
-
-/**
- * Internal dependencies
- */
 
 
 
@@ -929,15 +900,92 @@ __webpack_require__.r(__webpack_exports__);
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
  */
-(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__.registerBlockType)(_block_json__WEBPACK_IMPORTED_MODULE_4__.name, {
-  /**
-   * @see ./edit.js
-   */
-  edit: _edit__WEBPACK_IMPORTED_MODULE_2__.Edit,
-  /**
-   * @see ./save.js
-   */
-  save: _save__WEBPACK_IMPORTED_MODULE_3__.save
+(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__.registerBlockType)(_block_json__WEBPACK_IMPORTED_MODULE_5__.name, {
+  icon: {
+    src: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+      width: "150",
+      height: "148",
+      viewBox: "0 0 150 148",
+      fill: "none",
+      xmlns: "http://www.w3.org/2000/svg"
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("rect", {
+      x: "40",
+      y: "8",
+      width: "96",
+      height: "36",
+      fill: "#E7E7E7"
+    }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("rect", {
+      x: "8",
+      y: "44",
+      width: "32",
+      height: "96",
+      fill: "#E7E7E7"
+    }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("rect", {
+      x: "40",
+      y: "44",
+      width: "96",
+      height: "96",
+      fill: "white"
+    }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("line", {
+      x1: "8",
+      y1: "73",
+      x2: "136",
+      y2: "73",
+      stroke: "#A5A5A5",
+      "stroke-width": "6"
+    }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("line", {
+      x1: "8",
+      y1: "105",
+      x2: "136",
+      y2: "105",
+      stroke: "#A5A5A5",
+      "stroke-width": "6"
+    }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("line", {
+      x1: "43",
+      y1: "8",
+      x2: "43",
+      y2: "140",
+      stroke: "black",
+      "stroke-width": "6"
+    }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("line", {
+      x1: "75",
+      y1: "8",
+      x2: "75",
+      y2: "140",
+      stroke: "#A5A5A5",
+      "stroke-width": "6"
+    }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("line", {
+      x1: "107",
+      y1: "8",
+      x2: "107",
+      y2: "140",
+      stroke: "#A5A5A5",
+      "stroke-width": "6"
+    }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("line", {
+      x1: "139",
+      y1: "8",
+      x2: "139",
+      y2: "140",
+      stroke: "black",
+      "stroke-width": "6"
+    }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("line", {
+      x1: "8",
+      y1: "41",
+      x2: "136",
+      y2: "41",
+      stroke: "black",
+      "stroke-width": "6"
+    }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("line", {
+      x1: "8",
+      y1: "137",
+      x2: "136",
+      y2: "137",
+      stroke: "black",
+      "stroke-width": "6"
+    }))
+  },
+  edit: _edit__WEBPACK_IMPORTED_MODULE_3__.Edit,
+  save: _save__WEBPACK_IMPORTED_MODULE_4__.save
 });
 
 /***/ }),
@@ -1080,6 +1128,41 @@ function useBlockWidth() {
     };
   }, [wrapperRef.current]);
   return [wrapperRef, width];
+}
+
+/***/ }),
+
+/***/ "./src/lib/useDisableContextMenu.js":
+/*!******************************************!*\
+  !*** ./src/lib/useDisableContextMenu.js ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   useDisableContextMenu: () => (/* binding */ useDisableContextMenu)
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+
+
+/**
+ * @returns {React.MutableRefObject<HTMLCanvasElement | null>}
+ */
+function useDisableContextMenu() {
+  const stageRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    /** @type HTMLCanvasElement */
+    const canvas = stageRef.current;
+    if (canvas) {
+      // 右クリック時のコンテキストメニューを無効化
+      canvas.addEventListener("contextmenu", event => {
+        event.preventDefault();
+      });
+    }
+  });
+  return stageRef;
 }
 
 /***/ }),
