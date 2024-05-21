@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from "@wordpress/element";
+import { useState } from "@wordpress/element";
 import { Layer, Stage } from "react-konva";
 import { Board } from "../../../src/Board";
 import { CellsView } from "./CellsView";
 import { GridView } from "./GridView";
 import { ColumnCluesView } from "./ColumnCluesView";
 import { RowCluesView } from "./RowCluesView";
+import { useDisableContextMenu } from "../lib/useDisableContextMenu";
 
 /**
  * @param {{
@@ -41,15 +42,14 @@ export function BoardView({
   enableSpaceStatus,
   enableCluesCompletion,
 }) {
-  // <canvas> 要素を取得し、コンテキストメニューを無効にする
-  const stageRef = useDisableContextMenu();
-
   // マウスドラッグによる状態変更のために変更すべきステータスを保持しておく
   const [nextStatus, setNextStatus] = useState(null);
 
   const cells = [...board.cells()];
-  const rowCluesCompletions = enableCluesCompletion && calcRowCluesCompletions(board, rowClues);
-  const columnCluesCompletions = enableCluesCompletion && calcColumnCluesCompletions(board, columnClues);
+  const rowCluesCompletions = enableCluesCompletion &&
+    calcRowCluesCompletions(board, rowClues);
+  const columnCluesCompletions = enableCluesCompletion &&
+    calcColumnCluesCompletions(board, columnClues);
 
   return (
     <Stage
@@ -57,7 +57,7 @@ export function BoardView({
       height={height}
       onMouseUp={() => setNextStatus(null)}
       onTouchEnd={() => setNextStatus(null)}
-      ref={stageRef}
+      ref={useDisableContextMenu()} // コンテキストメニューを無効にする
     >
       <Layer>
         <CellsView
@@ -101,21 +101,6 @@ export function BoardView({
       </Layer>
     </Stage>
   );
-}
-
-function useDisableContextMenu() {
-  const stageRef = useRef(null);
-  useEffect(() => {
-    /** @type HTMLCanvasElement */
-    const canvas = stageRef.current;
-    if (canvas) {
-      // 右クリック時のコンテキストメニューを無効化
-      canvas.addEventListener("contextmenu", (event) => {
-        event.preventDefault();
-      });
-    }
-  });
-  return stageRef;
 }
 
 /**
