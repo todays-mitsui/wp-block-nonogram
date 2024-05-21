@@ -1,6 +1,6 @@
 import { useState } from "@wordpress/element";
 import { Layer, Stage } from "react-konva";
-import { Board } from "../../../src/Board";
+import { Board } from "../Model/Board";
 import { CellsView } from "./CellsView";
 import { GridView } from "./GridView";
 import { ColumnCluesView } from "./ColumnCluesView";

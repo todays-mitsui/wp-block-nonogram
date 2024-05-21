@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "@wordpress/element";
-import { Board } from "../../../src/Board";
+import { Board } from "../Model/Board";
 import { BoardView } from "./BoardView";
 import { useBlockWidth } from "../lib/useBlockWidth";
 import { useBoardStore } from "../lib/useBoardStore";

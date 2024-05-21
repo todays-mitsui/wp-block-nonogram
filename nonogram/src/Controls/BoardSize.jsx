@@ -4,7 +4,7 @@ import {
   PanelBody,
   SelectControl,
 } from "@wordpress/components";
-import { Board } from "../../../src/Board";
+import { Board } from "../Model/Board";
 
 /**
  * @param {{

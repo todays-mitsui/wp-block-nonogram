@@ -1,5 +1,5 @@
 import { useCallback } from "@wordpress/element";
-import { Board } from "../../../src/Board";
+import { Board } from "../Model/Board";
 import { Cell } from "./Cell";
 
 /**

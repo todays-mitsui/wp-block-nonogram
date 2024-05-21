@@ -1,6 +1,6 @@
-const { Board } = require("./Board");
+import { Board } from "./Board";
 
-class Game {
+export class Game {
   /**
    * @param {number[][]} rowClues
    * @param {number[][]} columnClues
@@ -22,4 +22,3 @@ class Game {
     throw new Error("Cannot set board");
   }
 }
-module.exports.Game = Game;

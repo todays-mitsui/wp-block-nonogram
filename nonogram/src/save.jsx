@@ -1,5 +1,5 @@
 import { useBlockProps } from "@wordpress/block-editor";
-import { Board } from "../../src/Board";
+import { Board } from "./Model/Board";
 
 /**
  * @return {Element} Element to render.

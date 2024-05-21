@@ -1,6 +1,6 @@
-const { encode, decode } = require("./util.js");
+import { encode, decode } from '../lib/encode';
 
-class Grid {
+export class Grid {
   /**
    * @param {number} numColumns
    * @param {number} numRows
@@ -294,4 +294,3 @@ class Grid {
     return grid;
   }
 }
-exports.Grid = Grid;

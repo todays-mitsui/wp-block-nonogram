@@ -1,4 +1,4 @@
-import { Board } from "../../../src/Board";
+import { Board } from "../Model/Board";
 import { useCluesDigest } from "./cluesDigest";
 import { useLocalStorage } from "./useLocalStorage";
 

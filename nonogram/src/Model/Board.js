@@ -1,6 +1,6 @@
-const { Grid } = require("./Grid.js");
+import { Grid } from "./Grid.js";
 
-class Board {
+export class Board {
   constructor(numColumns, numRows) {
     if (!Number.isInteger(numColumns) || !Number.isInteger(numRows)) {
       throw new Error("numColumns and numRows must be integers");
@@ -223,4 +223,3 @@ class Board {
     return board;
   }
 }
-exports.Board = Board;

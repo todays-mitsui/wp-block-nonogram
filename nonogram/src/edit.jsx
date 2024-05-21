@@ -1,7 +1,7 @@
 import { __ } from "@wordpress/i18n";
 import { InspectorControls, useBlockProps } from "@wordpress/block-editor";
 import React from "react";
-import { Board } from "../../src/Board";
+import { Board } from "./Model/Board";
 import { BoardSize } from "./Controls/BoardSize";
 import { BoardView } from "./Components/BoardView";
 import { calcLayout } from "./lib/calcLayout";

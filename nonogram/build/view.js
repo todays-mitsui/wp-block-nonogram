@@ -1,4 +1,5 @@
 /******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
 /***/ "./src/Components/BoardView.jsx":
@@ -7,7 +8,6 @@
   \**************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   BoardView: () => (/* binding */ BoardView)
@@ -17,11 +17,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var react_konva__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-konva */ "./node_modules/react-konva/es/ReactKonva.js");
-/* harmony import */ var _src_Board__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../src/Board */ "../src/Board.js");
+/* harmony import */ var _Model_Board__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Model/Board */ "./src/Model/Board.js");
 /* harmony import */ var _CellsView__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./CellsView */ "./src/Components/CellsView.jsx");
 /* harmony import */ var _GridView__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./GridView */ "./src/Components/GridView.jsx");
 /* harmony import */ var _ColumnCluesView__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./ColumnCluesView */ "./src/Components/ColumnCluesView.jsx");
 /* harmony import */ var _RowCluesView__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./RowCluesView */ "./src/Components/RowCluesView.jsx");
+/* harmony import */ var _lib_useDisableContextMenu__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../lib/useDisableContextMenu */ "./src/lib/useDisableContextMenu.js");
+
 
 
 
@@ -66,9 +68,6 @@ function BoardView({
   enableSpaceStatus,
   enableCluesCompletion
 }) {
-  // <canvas> 要素を取得し、コンテキストメニューを無効にする
-  const stageRef = useDisableContextMenu();
-
   // マウスドラッグによる状態変更のために変更すべきステータスを保持しておく
   const [nextStatus, setNextStatus] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
   const cells = [...board.cells()];
@@ -79,7 +78,7 @@ function BoardView({
     height: height,
     onMouseUp: () => setNextStatus(null),
     onTouchEnd: () => setNextStatus(null),
-    ref: stageRef
+    ref: (0,_lib_useDisableContextMenu__WEBPACK_IMPORTED_MODULE_8__.useDisableContextMenu)() // コンテキストメニューを無効にする
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Layer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_CellsView__WEBPACK_IMPORTED_MODULE_4__.CellsView, {
     board: board,
     cells: cells,
@@ -116,20 +115,6 @@ function BoardView({
     cluesWidth: cluesWidth
   })));
 }
-function useDisableContextMenu() {
-  const stageRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
-  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
-    /** @type HTMLCanvasElement */
-    const canvas = stageRef.current;
-    if (canvas) {
-      // 右クリック時のコンテキストメニューを無効化
-      canvas.addEventListener("contextmenu", event => {
-        event.preventDefault();
-      });
-    }
-  });
-  return stageRef;
-}
 
 /**
  * @param {Board} board
@@ -163,7 +148,6 @@ function calcColumnCluesCompletions(board, clues) {
   \*********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   Cell: () => (/* binding */ Cell)
@@ -241,7 +225,6 @@ function Cell({
   \**************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   CellsView: () => (/* binding */ CellsView)
@@ -250,7 +233,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _src_Board__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../src/Board */ "../src/Board.js");
+/* harmony import */ var _Model_Board__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Model/Board */ "./src/Model/Board.js");
 /* harmony import */ var _Cell__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Cell */ "./src/Components/Cell.jsx");
 
 
@@ -382,7 +365,6 @@ function decideNextStatusWithoutSpaceStatus(prevStatus) {
   \*******************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   ColumnClueView: () => (/* binding */ ColumnClueView)
@@ -439,7 +421,6 @@ function ColumnClueView({
   \********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   ColumnCluesView: () => (/* binding */ ColumnCluesView)
@@ -492,7 +473,6 @@ function ColumnCluesView({
   \*************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   GameView: () => (/* binding */ GameView)
@@ -501,7 +481,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _src_Board__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../src/Board */ "../src/Board.js");
+/* harmony import */ var _Model_Board__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Model/Board */ "./src/Model/Board.js");
 /* harmony import */ var _BoardView__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./BoardView */ "./src/Components/BoardView.jsx");
 /* harmony import */ var _lib_useBlockWidth__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../lib/useBlockWidth */ "./src/lib/useBlockWidth.js");
 /* harmony import */ var _lib_useBoardStore__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../lib/useBoardStore */ "./src/lib/useBoardStore.js");
@@ -530,7 +510,7 @@ function GameView({
   columnClues
 }) {
   const [boardData, setBoardData] = (0,_lib_useBoardStore__WEBPACK_IMPORTED_MODULE_5__.useBoardStore)(rowClues, columnClues);
-  const board = boardData && _src_Board__WEBPACK_IMPORTED_MODULE_2__.Board.deserialize(boardData);
+  const board = boardData && _Model_Board__WEBPACK_IMPORTED_MODULE_2__.Board.deserialize(boardData);
   const maxNumRowClues = Math.max(1, ...rowClues.map(clues => clues.length));
   const maxNumColumnClues = Math.max(1, ...columnClues.map(clues => clues.length));
   const [wrapperRef, width] = (0,_lib_useBlockWidth__WEBPACK_IMPORTED_MODULE_4__.useBlockWidth)();
@@ -564,7 +544,6 @@ function GameView({
   \*************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   GridView: () => (/* binding */ GridView)
@@ -655,7 +634,6 @@ function GridView({
   \****************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   RowClueView: () => (/* binding */ RowClueView)
@@ -712,7 +690,6 @@ function RowClueView({
   \*****************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   RowCluesView: () => (/* binding */ RowCluesView)
@@ -760,276 +737,18 @@ function RowCluesView({
 
 /***/ }),
 
-/***/ "./src/lib/calcLayout.js":
-/*!*******************************!*\
-  !*** ./src/lib/calcLayout.js ***!
-  \*******************************/
+/***/ "./src/Model/Board.js":
+/*!****************************!*\
+  !*** ./src/Model/Board.js ***!
+  \****************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   HORIZONTAL_PADDING_RATIO: () => (/* binding */ HORIZONTAL_PADDING_RATIO),
-/* harmony export */   VERTICAL_PADDING_RATIO: () => (/* binding */ VERTICAL_PADDING_RATIO),
-/* harmony export */   calcLayout: () => (/* binding */ calcLayout)
+/* harmony export */   Board: () => (/* binding */ Board)
 /* harmony export */ });
-const MIN_PADDING = 8;
-const MAX_FONT_SIZE = 20;
+/* harmony import */ var _Grid_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Grid.js */ "./src/Model/Grid.js");
 
-/**
- * @param {number} canvasWidth
- * @param {number} canvasHeight
- * @param {number} maxNumRowClues
- * @param {number} maxNumColumnClues
- * @param {number} numRows
- * @param {number} numColumns
- * @returns {{
- *  offsetLeft: number;
- *  offsetTop: number;
- *  cluesFontSize: number;
- *  cluesWidth: number;
- *  cluesHeight: number;
- *  cellSize: number;
- * }}
- */
-function calcLayout(canvasWidth, canvasHeight, maxNumRowClues, maxNumColumnClues, numRows, numColumns) {
-  const {
-    cluesFontSize,
-    cluesWidth,
-    cluesHeight,
-    cellSize
-  } = calcCellSize(canvasWidth, canvasHeight, [maxNumRowClues, numColumns], [maxNumColumnClues, numRows]);
-  const boardWidth = cluesWidth + numColumns * cellSize;
-  const offsetLeft = (canvasWidth - boardWidth) / 2;
-  const boardHeight = cluesHeight + numRows * cellSize;
-  const offsetTop = (canvasHeight - boardHeight) / 2;
-  return {
-    offsetLeft,
-    offsetTop,
-    cluesFontSize,
-    cluesWidth,
-    cluesHeight,
-    cellSize
-  };
-}
-const FONT_SIZE_RATIO = 0.45; // fontSize / cellSize
-const HORIZONTAL_PADDING_RATIO = 0.15; // padding / fontSize
-const VERTICAL_PADDING_RATIO = 0.25; // padding / fontSize
-
-const ROW_CLUE_CELL_ASPECT_RATIO = (1 + 2 * HORIZONTAL_PADDING_RATIO) * FONT_SIZE_RATIO;
-const COLUMN_CLUE_CELL_ASPECT_RATIO = (1 + 2 * VERTICAL_PADDING_RATIO) * FONT_SIZE_RATIO;
-const MAX_CLUE_CELL_WIDTH = (1 + 2 * HORIZONTAL_PADDING_RATIO) * MAX_FONT_SIZE;
-const MAX_CLUE_CELL_HEIGHT = (1 + 2 * VERTICAL_PADDING_RATIO) * MAX_FONT_SIZE;
-
-/**
- * @param {number} canvasWidth
- * @param {number} canvasHeight
- * @param {[number, number]} numHorizontalCells
- * @param {[number, number]} numVerticalCells
- */
-function calcCellSize(canvasWidth, canvasHeight, numHorizontalCells, numVerticalCells) {
-  {
-    // まず ROW_CLUE_CELL_ASPECT_RATIO, COLUMN_CLUE_CELL_ASPECT_RATIO を用いて cellSize を計算する
-    // このロジックだと fontSize = cellSize * FONT_SIZE_RATIO が MAX_FONT_SIZE を超えることがある
-    // MAX_FONT_SIZE を超えるとは、fontSize が大きすぎるということであり cluesWidth, cluesHeight が大きすぎるということ
-    // 逆に、cluesWidth, cluesHeight をもっと小さくできる余地がある
-    const boardWidth = canvasWidth - 2 * MIN_PADDING;
-    const boardHeight = canvasHeight - 2 * MIN_PADDING;
-    const cellSize = Math.min(boardWidth / (numHorizontalCells[0] * ROW_CLUE_CELL_ASPECT_RATIO + numHorizontalCells[1]), boardHeight / (numVerticalCells[0] * COLUMN_CLUE_CELL_ASPECT_RATIO + numVerticalCells[1]));
-    const fontSize = cellSize * FONT_SIZE_RATIO;
-    if (fontSize <= MAX_FONT_SIZE) {
-      return {
-        cluesFontSize: fontSize,
-        cluesWidth: ROW_CLUE_CELL_ASPECT_RATIO * cellSize * numHorizontalCells[0],
-        cluesHeight: COLUMN_CLUE_CELL_ASPECT_RATIO * cellSize * numVerticalCells[0],
-        cellSize
-      };
-    }
-  }
-  {
-    // というわけで前段のロジックで算出した fontSize が大きすぎる場合には、ここから先のロジックで計算し直す
-    // fontSize は MAX_FONT_SIZE で確定できる
-    // FONT_SIZE_RATIO, HORIZONTAL_PADDING_RATIO, VERTICAL_PADDING_RATIO から cellSize を逆算する
-    const gridWidth = canvasWidth - MAX_CLUE_CELL_WIDTH * numHorizontalCells[0] - 2 * MIN_PADDING;
-    const gridHeight = canvasHeight - MAX_CLUE_CELL_HEIGHT * numVerticalCells[0] - 2 * MIN_PADDING;
-    const cellSize = Math.min(gridWidth / numHorizontalCells[1], gridHeight / numVerticalCells[1]);
-    return {
-      cluesFontSize: MAX_FONT_SIZE,
-      cluesWidth: MAX_CLUE_CELL_WIDTH * numHorizontalCells[0],
-      cluesHeight: MAX_CLUE_CELL_HEIGHT * numVerticalCells[0],
-      cellSize
-    };
-  }
-}
-
-/***/ }),
-
-/***/ "./src/lib/cluesDigest.js":
-/*!********************************!*\
-  !*** ./src/lib/cluesDigest.js ***!
-  \********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   genCluesDigest: () => (/* binding */ genCluesDigest),
-/* harmony export */   useCluesDigest: () => (/* binding */ useCluesDigest)
-/* harmony export */ });
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-
-
-/**
- * @param {number[][]} rowClues
- * @param {number[][]} columnClues
- * @returns {Promise<string>}
- */
-async function genCluesDigest(rowClues, columnClues) {
-  const rowCluesStr = rowClues.map(clues => clues.join(",")).join(";");
-  const columnCluesStr = columnClues.map(clues => clues.join(",")).join(";");
-  const cluesStr = `${rowCluesStr}:${columnCluesStr}`;
-  const encoder = new TextEncoder();
-  const data = encoder.encode(cluesStr);
-  const digestBuffer = await crypto.subtle.digest("SHA-256", data);
-  const digestArray = Array.from(new Uint8Array(digestBuffer));
-  return digestArray.map(byte => byte.toString(16).padStart(2, "0")).join("");
-}
-
-/**
- * @param {number[][]} rowClues
- * @param {number[][]} columnClues
- * @returns {string | null}
- */
-function useCluesDigest(rowClues, columnClues) {
-  const [digest, setDigest] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
-  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    genCluesDigest(rowClues, columnClues).then(setDigest);
-  }, [rowClues, columnClues]);
-  return digest;
-}
-
-/***/ }),
-
-/***/ "./src/lib/useBlockWidth.js":
-/*!**********************************!*\
-  !*** ./src/lib/useBlockWidth.js ***!
-  \**********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   useBlockWidth: () => (/* binding */ useBlockWidth)
-/* harmony export */ });
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-
-
-/**
- * @returns {[React.MutableRefObject<HTMLDivElement | null>, number | null]}
- */
-function useBlockWidth() {
-  const wrapperRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  const [width, setWidth] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
-  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (wrapperRef.current == null) return;
-    const observer = new ResizeObserver(entries => {
-      const newWidth = entries[0]?.contentRect?.width;
-      if (newWidth == null) return;
-      setWidth(newWidth);
-    });
-    observer.observe(wrapperRef.current);
-    return () => {
-      wrapperRef.current && observer.unobserve(wrapperRef.current);
-    };
-  }, [wrapperRef.current]);
-  return [wrapperRef, width];
-}
-
-/***/ }),
-
-/***/ "./src/lib/useBoardStore.js":
-/*!**********************************!*\
-  !*** ./src/lib/useBoardStore.js ***!
-  \**********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   useBoardStore: () => (/* binding */ useBoardStore)
-/* harmony export */ });
-/* harmony import */ var _src_Board__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../src/Board */ "../src/Board.js");
-/* harmony import */ var _cluesDigest__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./cluesDigest */ "./src/lib/cluesDigest.js");
-/* harmony import */ var _useLocalStorage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./useLocalStorage */ "./src/lib/useLocalStorage.js");
-
-
-
-
-/**
- * @param {number[][]} rowClues
- * @param {number[][]} columnClues
- * @returns {[string | null, (newBoardData: string) => void]}
- */
-function useBoardStore(rowClues, columnClues) {
-  const cluesDigest = (0,_cluesDigest__WEBPACK_IMPORTED_MODULE_1__.useCluesDigest)(rowClues, columnClues);
-  const levelKey = cluesDigest && `nonogram-level-${cluesDigest}`;
-  return (0,_useLocalStorage__WEBPACK_IMPORTED_MODULE_2__.useLocalStorage)(levelKey, () => {
-    const board = new _src_Board__WEBPACK_IMPORTED_MODULE_0__.Board(columnClues.length, rowClues.length);
-    return board.serialize();
-  });
-}
-
-/***/ }),
-
-/***/ "./src/lib/useLocalStorage.js":
-/*!************************************!*\
-  !*** ./src/lib/useLocalStorage.js ***!
-  \************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   useLocalStorage: () => (/* binding */ useLocalStorage)
-/* harmony export */ });
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-
-
-/**
- * @param {string | null} key
- * @param {() => string} genInitialValue
- * @returns {[string | null, (newValue: string) => void]}
- */
-function useLocalStorage(key, genInitialValue) {
-  const [value, setValue] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
-  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (key != null) {
-      const storedValue = localStorage.getItem(key);
-      setValue(storedValue == null ? genInitialValue() : storedValue);
-    }
-  }, [key]);
-  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (key != null && value != null) {
-      localStorage.setItem(key, value);
-    }
-  }, [value]);
-  return [value, setValue];
-}
-
-/***/ }),
-
-/***/ "../src/Board.js":
-/*!***********************!*\
-  !*** ../src/Board.js ***!
-  \***********************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-const {
-  Grid
-} = __webpack_require__(/*! ./Grid.js */ "../src/Grid.js");
 class Board {
   constructor(numColumns, numRows) {
     if (!Number.isInteger(numColumns) || !Number.isInteger(numRows)) {
@@ -1040,7 +759,7 @@ class Board {
     }
     this._numColumns = numColumns;
     this._numRows = numRows;
-    this._grid = new Grid(numColumns, numRows);
+    this._grid = new _Grid_js__WEBPACK_IMPORTED_MODULE_0__.Grid(numColumns, numRows);
   }
 
   /**
@@ -1228,59 +947,26 @@ class Board {
       throw new Error("Out of bounds");
     }
     const board = new Board(numColumns, numRows);
-    const grid = Grid.deserialize(data);
+    const grid = _Grid_js__WEBPACK_IMPORTED_MODULE_0__.Grid.deserialize(data);
     board._grid = grid;
     return board;
   }
 }
-exports.Board = Board;
 
 /***/ }),
 
-/***/ "../src/Game.js":
-/*!**********************!*\
-  !*** ../src/Game.js ***!
-  \**********************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ "./src/Model/Grid.js":
+/*!***************************!*\
+  !*** ./src/Model/Grid.js ***!
+  \***************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-const {
-  Board
-} = __webpack_require__(/*! ./Board */ "../src/Board.js");
-class Game {
-  /**
-   * @param {number[][]} rowClues
-   * @param {number[][]} columnClues
-   */
-  constructor(rowClues, columnClues) {
-    this._rowClues = rowClues;
-    this._columnClues = columnClues;
-    this._board = new Board(columnClues.length, rowClues.length);
-  }
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Grid: () => (/* binding */ Grid)
+/* harmony export */ });
+/* harmony import */ var _lib_encode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../lib/encode */ "./src/lib/encode.js");
 
-  /**
-   * @returns {Board}
-   */
-  get board() {
-    return this._board;
-  }
-  set board(_value) {
-    throw new Error("Cannot set board");
-  }
-}
-module.exports.Game = Game;
-
-/***/ }),
-
-/***/ "../src/Grid.js":
-/*!**********************!*\
-  !*** ../src/Grid.js ***!
-  \**********************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-const {
-  encode,
-  decode
-} = __webpack_require__(/*! ./util.js */ "../src/util.js");
 class Grid {
   /**
    * @param {number} numColumns
@@ -1504,7 +1190,7 @@ class Grid {
    * @returns {string}
    */
   serialize() {
-    return `${this._numColumns}x${this._numRows};${encode(this._cells)}`;
+    return `${this._numColumns}x${this._numRows};${(0,_lib_encode__WEBPACK_IMPORTED_MODULE_0__.encode)(this._cells)}`;
   }
 
   /**
@@ -1518,66 +1204,175 @@ class Grid {
       throw new Error("Out of bounds");
     }
     const grid = new Grid(numColumns, numRows);
-    const cells = decode(data).slice(0, numColumns * numRows);
+    const cells = (0,_lib_encode__WEBPACK_IMPORTED_MODULE_0__.decode)(data).slice(0, numColumns * numRows);
     grid._cells = new Uint8ClampedArray(cells);
     return grid;
   }
 }
-exports.Grid = Grid;
 
 /***/ }),
 
-/***/ "../src/util.js":
-/*!**********************!*\
-  !*** ../src/util.js ***!
-  \**********************/
-/***/ ((__unused_webpack_module, exports) => {
+/***/ "./src/lib/calcLayout.js":
+/*!*******************************!*\
+  !*** ./src/lib/calcLayout.js ***!
+  \*******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-const BASE64_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   HORIZONTAL_PADDING_RATIO: () => (/* binding */ HORIZONTAL_PADDING_RATIO),
+/* harmony export */   VERTICAL_PADDING_RATIO: () => (/* binding */ VERTICAL_PADDING_RATIO),
+/* harmony export */   calcLayout: () => (/* binding */ calcLayout)
+/* harmony export */ });
+const MIN_PADDING = 8;
+const MAX_FONT_SIZE = 20;
 
 /**
- * @param {boolean[]} bits
- * @returns {string}
+ * @param {number} canvasWidth
+ * @param {number} canvasHeight
+ * @param {number} maxNumRowClues
+ * @param {number} maxNumColumnClues
+ * @param {number} numRows
+ * @param {number} numColumns
+ * @returns {{
+ *  offsetLeft: number;
+ *  offsetTop: number;
+ *  cluesFontSize: number;
+ *  cluesWidth: number;
+ *  cluesHeight: number;
+ *  cellSize: number;
+ * }}
  */
-function bitsToString(bits) {
-  let str = "";
-  for (const b6 of chunks(bits, 6)) {
-    const index = (b6[0] ? 0b100000 : 0b000000) + (b6[1] ? 0b010000 : 0b000000) + (b6[2] ? 0b001000 : 0b000000) + (b6[3] ? 0b000100 : 0b000000) + (b6[4] ? 0b000010 : 0b000000) + (b6[5] ? 0b000001 : 0b000000);
-    str += BASE64_CHARACTERS.charAt(index);
-  }
-  return str;
+function calcLayout(canvasWidth, canvasHeight, maxNumRowClues, maxNumColumnClues, numRows, numColumns) {
+  const {
+    cluesFontSize,
+    cluesWidth,
+    cluesHeight,
+    cellSize
+  } = calcCellSize(canvasWidth, canvasHeight, [maxNumRowClues, numColumns], [maxNumColumnClues, numRows]);
+  const boardWidth = cluesWidth + numColumns * cellSize;
+  const offsetLeft = (canvasWidth - boardWidth) / 2;
+  const boardHeight = cluesHeight + numRows * cellSize;
+  const offsetTop = (canvasHeight - boardHeight) / 2;
+  return {
+    offsetLeft,
+    offsetTop,
+    cluesFontSize,
+    cluesWidth,
+    cluesHeight,
+    cellSize
+  };
 }
-exports.bitsToString = bitsToString;
+const FONT_SIZE_RATIO = 0.45; // fontSize / cellSize
+const HORIZONTAL_PADDING_RATIO = 0.15; // padding / fontSize
+const VERTICAL_PADDING_RATIO = 0.25; // padding / fontSize
+
+const ROW_CLUE_CELL_ASPECT_RATIO = (1 + 2 * HORIZONTAL_PADDING_RATIO) * FONT_SIZE_RATIO;
+const COLUMN_CLUE_CELL_ASPECT_RATIO = (1 + 2 * VERTICAL_PADDING_RATIO) * FONT_SIZE_RATIO;
+const MAX_CLUE_CELL_WIDTH = (1 + 2 * HORIZONTAL_PADDING_RATIO) * MAX_FONT_SIZE;
+const MAX_CLUE_CELL_HEIGHT = (1 + 2 * VERTICAL_PADDING_RATIO) * MAX_FONT_SIZE;
 
 /**
- * @param {string} str
- * @returns {boolean[]}
+ * @param {number} canvasWidth
+ * @param {number} canvasHeight
+ * @param {[number, number]} numHorizontalCells
+ * @param {[number, number]} numVerticalCells
  */
-function stringToBits(str) {
-  const charToIndex = new Map();
-  BASE64_CHARACTERS.split("").forEach((c, i) => charToIndex.set(c, i));
-  const bits = str.split("").flatMap(c => {
-    const index = charToIndex.get(c);
-    if (index == null) {
-      throw new Error("Invalid character");
+function calcCellSize(canvasWidth, canvasHeight, numHorizontalCells, numVerticalCells) {
+  {
+    // まず ROW_CLUE_CELL_ASPECT_RATIO, COLUMN_CLUE_CELL_ASPECT_RATIO を用いて cellSize を計算する
+    // このロジックだと fontSize = cellSize * FONT_SIZE_RATIO が MAX_FONT_SIZE を超えることがある
+    // MAX_FONT_SIZE を超えるとは、fontSize が大きすぎるということであり cluesWidth, cluesHeight が大きすぎるということ
+    // 逆に、cluesWidth, cluesHeight をもっと小さくできる余地がある
+    const boardWidth = canvasWidth - 2 * MIN_PADDING;
+    const boardHeight = canvasHeight - 2 * MIN_PADDING;
+    const cellSize = Math.min(boardWidth / (numHorizontalCells[0] * ROW_CLUE_CELL_ASPECT_RATIO + numHorizontalCells[1]), boardHeight / (numVerticalCells[0] * COLUMN_CLUE_CELL_ASPECT_RATIO + numVerticalCells[1]));
+    const fontSize = cellSize * FONT_SIZE_RATIO;
+    if (fontSize <= MAX_FONT_SIZE) {
+      return {
+        cluesFontSize: fontSize,
+        cluesWidth: ROW_CLUE_CELL_ASPECT_RATIO * cellSize * numHorizontalCells[0],
+        cluesHeight: COLUMN_CLUE_CELL_ASPECT_RATIO * cellSize * numVerticalCells[0],
+        cellSize
+      };
     }
-    return [!!(index & 0b100000), !!(index & 0b010000), !!(index & 0b001000), !!(index & 0b000100), !!(index & 0b000010), !!(index & 0b000001)];
-  });
-  return bits;
-}
-exports.stringToBits = stringToBits;
-
-/**
- * @template T
- * @param {T[]} array
- * @param {number} size
- * @returns {Generator<T[]>}
- */
-function* chunks(array, size) {
-  for (let i = 0; i < array.length; i += size) {
-    yield array.slice(i, i + size);
+  }
+  {
+    // というわけで前段のロジックで算出した fontSize が大きすぎる場合には、ここから先のロジックで計算し直す
+    // fontSize は MAX_FONT_SIZE で確定できる
+    // FONT_SIZE_RATIO, HORIZONTAL_PADDING_RATIO, VERTICAL_PADDING_RATIO から cellSize を逆算する
+    const gridWidth = canvasWidth - MAX_CLUE_CELL_WIDTH * numHorizontalCells[0] - 2 * MIN_PADDING;
+    const gridHeight = canvasHeight - MAX_CLUE_CELL_HEIGHT * numVerticalCells[0] - 2 * MIN_PADDING;
+    const cellSize = Math.min(gridWidth / numHorizontalCells[1], gridHeight / numVerticalCells[1]);
+    return {
+      cluesFontSize: MAX_FONT_SIZE,
+      cluesWidth: MAX_CLUE_CELL_WIDTH * numHorizontalCells[0],
+      cluesHeight: MAX_CLUE_CELL_HEIGHT * numVerticalCells[0],
+      cellSize
+    };
   }
 }
+
+/***/ }),
+
+/***/ "./src/lib/cluesDigest.js":
+/*!********************************!*\
+  !*** ./src/lib/cluesDigest.js ***!
+  \********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   genCluesDigest: () => (/* binding */ genCluesDigest),
+/* harmony export */   useCluesDigest: () => (/* binding */ useCluesDigest)
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+
+
+/**
+ * @param {number[][]} rowClues
+ * @param {number[][]} columnClues
+ * @returns {Promise<string>}
+ */
+async function genCluesDigest(rowClues, columnClues) {
+  const rowCluesStr = rowClues.map(clues => clues.join(",")).join(";");
+  const columnCluesStr = columnClues.map(clues => clues.join(",")).join(";");
+  const cluesStr = `${rowCluesStr}:${columnCluesStr}`;
+  const encoder = new TextEncoder();
+  const data = encoder.encode(cluesStr);
+  const digestBuffer = await crypto.subtle.digest("SHA-256", data);
+  const digestArray = Array.from(new Uint8Array(digestBuffer));
+  return digestArray.map(byte => byte.toString(16).padStart(2, "0")).join("");
+}
+
+/**
+ * @param {number[][]} rowClues
+ * @param {number[][]} columnClues
+ * @returns {string | null}
+ */
+function useCluesDigest(rowClues, columnClues) {
+  const [digest, setDigest] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    genCluesDigest(rowClues, columnClues).then(setDigest);
+  }, [rowClues, columnClues]);
+  return digest;
+}
+
+/***/ }),
+
+/***/ "./src/lib/encode.js":
+/*!***************************!*\
+  !*** ./src/lib/encode.js ***!
+  \***************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   decode: () => (/* binding */ decode),
+/* harmony export */   encode: () => (/* binding */ encode)
+/* harmony export */ });
+const BASE64_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 /**
  * @param {number[]} serials
@@ -1591,7 +1386,6 @@ function encode(serials) {
   }
   return code;
 }
-exports.encode = encode;
 
 /**
  * @param {string} code
@@ -1609,7 +1403,159 @@ function decode(code) {
   });
   return serials;
 }
-exports.decode = decode;
+
+/**
+ * @template T
+ * @param {T[]} array
+ * @param {number} size
+ * @returns {Generator<T[]>}
+ */
+function* chunks(array, size) {
+  for (let i = 0; i < array.length; i += size) {
+    yield array.slice(i, i + size);
+  }
+}
+
+/***/ }),
+
+/***/ "./src/lib/useBlockWidth.js":
+/*!**********************************!*\
+  !*** ./src/lib/useBlockWidth.js ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   useBlockWidth: () => (/* binding */ useBlockWidth)
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+
+
+/**
+ * @returns {[React.MutableRefObject<HTMLDivElement | null>, number | null]}
+ */
+function useBlockWidth() {
+  const wrapperRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const [width, setWidth] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (wrapperRef.current == null) return;
+    const observer = new ResizeObserver(entries => {
+      const newWidth = entries[0]?.contentRect?.width;
+      if (newWidth == null) return;
+      setWidth(newWidth);
+    });
+    observer.observe(wrapperRef.current);
+    return () => {
+      wrapperRef.current && observer.unobserve(wrapperRef.current);
+    };
+  }, [wrapperRef.current]);
+  return [wrapperRef, width];
+}
+
+/***/ }),
+
+/***/ "./src/lib/useBoardStore.js":
+/*!**********************************!*\
+  !*** ./src/lib/useBoardStore.js ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   useBoardStore: () => (/* binding */ useBoardStore)
+/* harmony export */ });
+/* harmony import */ var _Model_Board__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Model/Board */ "./src/Model/Board.js");
+/* harmony import */ var _cluesDigest__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./cluesDigest */ "./src/lib/cluesDigest.js");
+/* harmony import */ var _useLocalStorage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./useLocalStorage */ "./src/lib/useLocalStorage.js");
+
+
+
+
+/**
+ * @param {number[][]} rowClues
+ * @param {number[][]} columnClues
+ * @returns {[string | null, (newBoardData: string) => void]}
+ */
+function useBoardStore(rowClues, columnClues) {
+  const cluesDigest = (0,_cluesDigest__WEBPACK_IMPORTED_MODULE_1__.useCluesDigest)(rowClues, columnClues);
+  const levelKey = cluesDigest && `nonogram-level-${cluesDigest}`;
+  return (0,_useLocalStorage__WEBPACK_IMPORTED_MODULE_2__.useLocalStorage)(levelKey, () => {
+    const board = new _Model_Board__WEBPACK_IMPORTED_MODULE_0__.Board(columnClues.length, rowClues.length);
+    return board.serialize();
+  });
+}
+
+/***/ }),
+
+/***/ "./src/lib/useDisableContextMenu.js":
+/*!******************************************!*\
+  !*** ./src/lib/useDisableContextMenu.js ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   useDisableContextMenu: () => (/* binding */ useDisableContextMenu)
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+
+
+/**
+ * @returns {React.MutableRefObject<HTMLCanvasElement | null>}
+ */
+function useDisableContextMenu() {
+  const stageRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    /** @type HTMLCanvasElement */
+    const canvas = stageRef.current;
+    if (canvas) {
+      // 右クリック時のコンテキストメニューを無効化
+      canvas.addEventListener("contextmenu", event => {
+        event.preventDefault();
+      });
+    }
+  });
+  return stageRef;
+}
+
+/***/ }),
+
+/***/ "./src/lib/useLocalStorage.js":
+/*!************************************!*\
+  !*** ./src/lib/useLocalStorage.js ***!
+  \************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   useLocalStorage: () => (/* binding */ useLocalStorage)
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+
+
+/**
+ * @param {string | null} key
+ * @param {() => string} genInitialValue
+ * @returns {[string | null, (newValue: string) => void]}
+ */
+function useLocalStorage(key, genInitialValue) {
+  const [value, setValue] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (key != null) {
+      const storedValue = localStorage.getItem(key);
+      setValue(storedValue == null ? genInitialValue() : storedValue);
+    }
+  }, [key]);
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (key != null && value != null) {
+      localStorage.setItem(key, value);
+    }
+  }, [value]);
+  return [value, setValue];
+}
 
 /***/ }),
 
@@ -1619,7 +1565,6 @@ exports.decode = decode;
   \*********************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Animation = void 0;
@@ -1776,7 +1721,6 @@ Animation.animRunning = false;
   \***************************************************/
 /***/ ((__unused_webpack_module, exports) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.t2length = exports.getQuadraticArcLength = exports.getCubicArcLength = exports.binomialCoefficients = exports.cValues = exports.tValues = void 0;
@@ -2578,7 +2522,6 @@ exports.t2length = t2length;
   \******************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.HitCanvas = exports.SceneCanvas = exports.Canvas = void 0;
@@ -2705,7 +2648,6 @@ exports.HitCanvas = HitCanvas;
   \*********************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Container = void 0;
@@ -3042,7 +2984,6 @@ Factory_1.Factory.addGetterSetter(Container, 'clipFunc');
   \*******************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.HitContext = exports.SceneContext = exports.Context = void 0;
@@ -3594,7 +3535,6 @@ exports.HitContext = HitContext;
   \****************************************/
 /***/ ((module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Konva = void 0;
@@ -3612,7 +3552,6 @@ module.exports = _CoreInternals_2.Konva;
   \***********************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DD = void 0;
@@ -3734,7 +3673,6 @@ if (Global_1.Konva.isBrowser) {
   \*******************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Factory = void 0;
@@ -3870,7 +3808,6 @@ exports.Factory = {
   \*********************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.FastLayer = void 0;
@@ -3897,7 +3834,6 @@ FastLayer.prototype.nodeType = 'FastLayer';
   \******************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports._registerNode = exports.Konva = exports.glob = void 0;
@@ -3973,7 +3909,6 @@ exports.Konva._injectGlobal(exports.Konva);
   \*****************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Group = void 0;
@@ -4001,7 +3936,6 @@ Group.prototype.nodeType = 'Group';
   \*****************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Layer = void 0;
@@ -4321,7 +4255,6 @@ Factory_1.Factory.addGetterSetter(Layer, 'hitGraphEnabled', true, (0, Validators
   \****************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Node = void 0;
@@ -5763,7 +5696,6 @@ Factory_1.Factory.backCompat(Node, {
   \*************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.releaseCapture = exports.setPointerCapture = exports.hasPointerCapture = exports.createEvent = exports.getCapturedShape = void 0;
@@ -5819,7 +5751,6 @@ exports.releaseCapture = releaseCapture;
   \*****************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Shape = exports.shapes = void 0;
@@ -6360,7 +6291,6 @@ Factory_1.Factory.backCompat(Shape, {
   \*****************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Stage = exports.stages = void 0;
@@ -7066,7 +6996,6 @@ Factory_1.Factory.addGetterSetter(Stage, 'container');
   \*****************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Easings = exports.Tween = void 0;
@@ -7597,7 +7526,6 @@ exports.Easings = {
   \****************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Util = exports.Transform = void 0;
@@ -8413,7 +8341,6 @@ exports.Util = {
   \**********************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getComponentValidator = exports.getBooleanValidator = exports.getNumberArrayValidator = exports.getFunctionValidator = exports.getStringOrGradientValidator = exports.getStringValidator = exports.getNumberOrAutoValidator = exports.getNumberOrArrayOfNumbersValidator = exports.getNumberValidator = exports.alphaComponent = exports.RGBComponent = void 0;
@@ -8616,7 +8543,6 @@ exports.getComponentValidator = getComponentValidator;
   \**************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Konva = void 0;
@@ -8664,7 +8590,6 @@ exports["default"] = exports.Konva;
   \**************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Konva = void 0;
@@ -8756,7 +8681,6 @@ exports.Konva = _CoreInternals_1.Konva.Util._assign(_CoreInternals_1.Konva, {
   \************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Blur = void 0;
@@ -9005,7 +8929,6 @@ Factory_1.Factory.addGetterSetter(Node_1.Node, 'blurRadius', 0, (0, Validators_1
   \****************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Brighten = void 0;
@@ -9032,7 +8955,6 @@ Factory_1.Factory.addGetterSetter(Node_1.Node, 'brightness', 0, (0, Validators_1
   \****************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Contrast = void 0;
@@ -9081,7 +9003,6 @@ Factory_1.Factory.addGetterSetter(Node_1.Node, 'contrast', 0, (0, Validators_1.g
   \**************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Emboss = void 0;
@@ -9198,7 +9119,6 @@ Factory_1.Factory.addGetterSetter(Node_1.Node, 'embossBlend', false, null, Facto
   \***************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Enhance = void 0;
@@ -9296,7 +9216,6 @@ Factory_1.Factory.addGetterSetter(Node_1.Node, 'enhance', 0, (0, Validators_1.ge
   \*****************************************************/
 /***/ ((__unused_webpack_module, exports) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Grayscale = void 0;
@@ -9320,7 +9239,6 @@ exports.Grayscale = Grayscale;
   \***********************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.HSL = void 0;
@@ -9359,7 +9277,6 @@ exports.HSL = HSL;
   \***********************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.HSV = void 0;
@@ -9398,7 +9315,6 @@ Factory_1.Factory.addGetterSetter(Node_1.Node, 'value', 0, (0, Validators_1.getN
   \**************************************************/
 /***/ ((__unused_webpack_module, exports) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Invert = void 0;
@@ -9421,7 +9337,6 @@ exports.Invert = Invert;
   \********************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Kaleidoscope = void 0;
@@ -9569,7 +9484,6 @@ Factory_1.Factory.addGetterSetter(Node_1.Node, 'kaleidoscopeAngle', 0, (0, Valid
   \************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Mask = void 0;
@@ -9724,7 +9638,6 @@ Factory_1.Factory.addGetterSetter(Node_1.Node, 'threshold', 0, (0, Validators_1.
   \*************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Noise = void 0;
@@ -9751,7 +9664,6 @@ Factory_1.Factory.addGetterSetter(Node_1.Node, 'noise', 0.2, (0, Validators_1.ge
   \****************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Pixelate = void 0;
@@ -9826,7 +9738,6 @@ Factory_1.Factory.addGetterSetter(Node_1.Node, 'pixelSize', 8, (0, Validators_1.
   \*****************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Posterize = void 0;
@@ -9851,7 +9762,6 @@ Factory_1.Factory.addGetterSetter(Node_1.Node, 'levels', 0.5, (0, Validators_1.g
   \***********************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RGB = void 0;
@@ -9905,7 +9815,6 @@ Factory_1.Factory.addGetterSetter(Node_1.Node, 'blue', 0, Validators_1.RGBCompon
   \************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RGBA = void 0;
@@ -9969,7 +9878,6 @@ Factory_1.Factory.addGetterSetter(Node_1.Node, 'alpha', 1, function (val) {
   \*************************************************/
 /***/ ((__unused_webpack_module, exports) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Sepia = void 0;
@@ -9995,7 +9903,6 @@ exports.Sepia = Sepia;
   \****************************************************/
 /***/ ((__unused_webpack_module, exports) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Solarize = void 0;
@@ -10035,7 +9942,6 @@ exports.Solarize = Solarize;
   \*****************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Threshold = void 0;
@@ -10060,7 +9966,6 @@ Factory_1.Factory.addGetterSetter(Node_1.Node, 'threshold', 0.5, (0, Validators_
   \*****************************************/
 /***/ ((module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const _FullInternals_1 = __webpack_require__(/*! ./_FullInternals */ "./node_modules/konva/lib/_FullInternals.js");
@@ -10075,7 +9980,6 @@ module.exports = _FullInternals_1.Konva;
   \**********************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Arc = void 0;
@@ -10145,7 +10049,6 @@ Factory_1.Factory.addGetterSetter(Arc, 'clockwise', false, (0, Validators_1.getB
   \************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Arrow = void 0;
@@ -10259,7 +10162,6 @@ Factory_1.Factory.addGetterSetter(Arrow, 'pointerAtEnding', true);
   \*************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Circle = void 0;
@@ -10307,7 +10209,6 @@ Factory_1.Factory.addGetterSetter(Circle, 'radius', 0, (0, Validators_1.getNumbe
   \**************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Ellipse = void 0;
@@ -10359,7 +10260,6 @@ Factory_1.Factory.addGetterSetter(Ellipse, 'radiusY', 0, (0, Validators_1.getNum
   \************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Image = void 0;
@@ -10487,7 +10387,6 @@ Factory_1.Factory.addGetterSetter(Image, 'cropHeight', 0, (0, Validators_1.getNu
   \************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Tag = exports.Label = void 0;
@@ -10676,7 +10575,6 @@ Factory_1.Factory.addGetterSetter(Tag, 'cornerRadius', 0, (0, Validators_1.getNu
   \***********************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Line = void 0;
@@ -10846,7 +10744,6 @@ Factory_1.Factory.addGetterSetter(Line, 'points', [], (0, Validators_1.getNumber
   \***********************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Path = void 0;
@@ -11485,7 +11382,6 @@ Factory_1.Factory.addGetterSetter(Path, 'data');
   \***********************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Rect = void 0;
@@ -11522,7 +11418,6 @@ Factory_1.Factory.addGetterSetter(Rect, 'cornerRadius', 0, (0, Validators_1.getN
   \*********************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RegularPolygon = void 0;
@@ -11602,7 +11497,6 @@ Factory_1.Factory.addGetterSetter(RegularPolygon, 'sides', 0, (0, Validators_1.g
   \***********************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Ring = void 0;
@@ -11650,7 +11544,6 @@ Factory_1.Factory.addGetterSetter(Ring, 'outerRadius', 0, (0, Validators_1.getNu
   \*************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Sprite = void 0;
@@ -11773,7 +11666,6 @@ Factory_1.Factory.backCompat(Sprite, {
   \***********************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Star = void 0;
@@ -11826,7 +11718,6 @@ Factory_1.Factory.addGetterSetter(Star, 'outerRadius', 0, (0, Validators_1.getNu
   \***********************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Text = exports.stringToArray = void 0;
@@ -12229,7 +12120,6 @@ Factory_1.Factory.addGetterSetter(Text, 'textDecoration', '');
   \***************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TextPath = void 0;
@@ -12481,7 +12371,6 @@ Factory_1.Factory.addGetterSetter(TextPath, 'kerningFunc', null);
   \******************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Transformer = void 0;
@@ -13496,7 +13385,6 @@ Factory_1.Factory.backCompat(Transformer, {
   \************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Wedge = void 0;
@@ -13549,7 +13437,6 @@ Factory_1.Factory.backCompat(Wedge, {
   \******************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
 
 var m = __webpack_require__(/*! react-dom */ "react-dom");
@@ -13582,7 +13469,6 @@ if (false) {} else {
   \***************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   Arc: () => (/* reexport safe */ _ReactKonvaCore_js__WEBPACK_IMPORTED_MODULE_1__.Arc),
@@ -13634,7 +13520,6 @@ __webpack_require__.r(__webpack_exports__);
   \*******************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   Arc: () => (/* binding */ Arc),
@@ -13802,7 +13687,6 @@ const useStrictMode = _makeUpdates_js__WEBPACK_IMPORTED_MODULE_5__.toggleStrictM
   \*************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   appendChild: () => (/* binding */ appendChild),
@@ -14018,7 +13902,6 @@ const getCurrentEventPriority = () => react_reconciler_constants_js__WEBPACK_IMP
   \****************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   EVENTS_NAMESPACE: () => (/* binding */ EVENTS_NAMESPACE),
@@ -14151,7 +14034,6 @@ function updatePicture(node) {
   \*************************************************************************************/
 /***/ ((__unused_webpack_module, exports) => {
 
-"use strict";
 /**
  * @license React
  * react-reconciler-constants.development.js
@@ -14207,7 +14089,6 @@ exports.LegacyRoot = LegacyRoot;
   \***************************************************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-"use strict";
 /**
  * @license React
  * react-reconciler.development.js
@@ -35744,7 +35625,6 @@ exports.updateContainer = updateContainer;
   \****************************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-"use strict";
 
 
 if (false) {} else {
@@ -35760,7 +35640,6 @@ if (false) {} else {
   \************************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-"use strict";
 
 
 if (false) {} else {
@@ -35776,7 +35655,6 @@ if (false) {} else {
   \*************************************************************/
 /***/ ((__unused_webpack_module, exports) => {
 
-"use strict";
 /**
  * @license React
  * scheduler.development.js
@@ -36421,7 +36299,6 @@ if (
   \*****************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-"use strict";
 
 
 if (false) {} else {
@@ -36437,7 +36314,6 @@ if (false) {} else {
   \************************/
 /***/ ((module) => {
 
-"use strict";
 module.exports = window["React"];
 
 /***/ }),
@@ -36448,7 +36324,6 @@ module.exports = window["React"];
   \***************************/
 /***/ ((module) => {
 
-"use strict";
 module.exports = window["ReactDOM"];
 
 /***/ }),
@@ -36459,7 +36334,6 @@ module.exports = window["ReactDOM"];
   \*********************************/
 /***/ ((module) => {
 
-"use strict";
 module.exports = window["wp"]["element"];
 
 /***/ }),
@@ -36470,7 +36344,6 @@ module.exports = window["wp"]["element"];
   \*********************************************/
 /***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   FiberProvider: () => (/* binding */ FiberProvider),
@@ -36733,24 +36606,16 @@ function useContextBridge() {
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
-"use strict";
 /*!*********************!*\
   !*** ./src/view.js ***!
   \*********************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var konva__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! konva */ "./node_modules/konva/lib/index.js");
-/* harmony import */ var konva__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(konva__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _lib_calcLayout__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./lib/calcLayout */ "./src/lib/calcLayout.js");
-/* harmony import */ var _src_Game__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../src/Game */ "../src/Game.js");
-/* harmony import */ var _Components_GameView__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Components/GameView */ "./src/Components/GameView.jsx");
-/* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-dom/client */ "./node_modules/react-dom/client.js");
-
-
-
+/* harmony import */ var _Components_GameView__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Components/GameView */ "./src/Components/GameView.jsx");
+/* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-dom/client */ "./node_modules/react-dom/client.js");
 
 
 
@@ -36763,7 +36628,7 @@ function init(container) {
   const aspectRatio = container.dataset.aspectRatio.split(":").map(str => parseInt(str, 10));
   const rowClues = decodeClues(container.dataset.rowClues);
   const columnClues = decodeClues(container.dataset.columnClues);
-  (0,react_dom_client__WEBPACK_IMPORTED_MODULE_5__.createRoot)(container).render((0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Components_GameView__WEBPACK_IMPORTED_MODULE_4__.GameView, {
+  (0,react_dom_client__WEBPACK_IMPORTED_MODULE_2__.createRoot)(container).render((0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Components_GameView__WEBPACK_IMPORTED_MODULE_1__.GameView, {
     aspectRatio: aspectRatio,
     rowClues: rowClues,
     columnClues: columnClues

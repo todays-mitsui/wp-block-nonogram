@@ -1,6 +1,3 @@
-import { Circle, Layer, Stage } from "konva";
-import { calcLayout } from "./lib/calcLayout";
-import { Game } from "../../src/Game";
 import { GameView } from "./Components/GameView";
 import { createRoot } from "react-dom/client";
 
