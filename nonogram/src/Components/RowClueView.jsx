@@ -3,19 +3,19 @@ import { HORIZONTAL_PADDING_RATIO } from "../lib/calcLayout";
 
 /**
  * @param {{
- * 		clue: number[];
- * 		fontSize: number;
- * 		fill: string;
- * 		top: number;
- * 		right: number;
- * 		height: number;
+ *  clue: number[];
+ *  completion: boolean | null;
+ *  fontSize: number;
+ *  top: number;
+ *  right: number;
+ *  height: number;
  * }} props
  * @returns {JSX.Element}
  */
 export function RowClueView({
   clue,
+  completion,
   fontSize,
-  fill,
   top,
   right,
   height,
@@ -30,7 +30,7 @@ export function RowClueView({
           key={index}
           text={text}
           fontSize={fontSize}
-          fill={fill}
+          fill={completion ? "#bbb" : "black"}
           x={right - (index + 1) * unitSize}
           y={top}
           width={Math.min(height, unitSize)}

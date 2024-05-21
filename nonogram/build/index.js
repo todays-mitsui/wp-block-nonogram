@@ -46,6 +46,7 @@ __webpack_require__.r(__webpack_exports__);
  *  cellSize: number;
  *  setBoardData: (boardData: string) => void;
  *  enableSpaceStatus: boolean
+ *  enableCluesCompletion: boolean
  * }} param
  * @returns {JSX.Element}
  */
@@ -62,7 +63,8 @@ function BoardView({
   cluesHeight,
   cellSize,
   setBoardData,
-  enableSpaceStatus
+  enableSpaceStatus,
+  enableCluesCompletion
 }) {
   // <canvas> 要素を取得し、コンテキストメニューを無効にする
   const stageRef = useDisableContextMenu();
@@ -70,6 +72,8 @@ function BoardView({
   // マウスドラッグによる状態変更のために変更すべきステータスを保持しておく
   const [nextStatus, setNextStatus] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
   const cells = [...board.cells()];
+  const rowCluesCompletions = enableCluesCompletion && calcRowCluesCompletions(board, rowClues);
+  const columnCluesCompletions = enableCluesCompletion && calcColumnCluesCompletions(board, columnClues);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Stage, {
     width: width,
     height: height,
@@ -96,16 +100,16 @@ function BoardView({
     cellSize: cellSize
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ColumnCluesView__WEBPACK_IMPORTED_MODULE_6__.ColumnCluesView, {
     clues: columnClues,
+    cluesCompletions: columnCluesCompletions,
     fontSize: cluesFontSize,
-    fill: "black",
     top: top,
     left: left + cluesWidth,
     cellSize: cellSize,
     cluesHeight: cluesHeight
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_RowCluesView__WEBPACK_IMPORTED_MODULE_7__.RowCluesView, {
     clues: rowClues,
+    cluesCompletions: rowCluesCompletions,
     fontSize: cluesFontSize,
-    fill: "black",
     top: top + cluesHeight,
     left: left,
     cellSize: cellSize,
@@ -125,6 +129,30 @@ function useDisableContextMenu() {
     }
   });
   return stageRef;
+}
+
+/**
+ * @param {Board} board
+ * @param {number[][]} clues
+ * @returns {boolean[]}
+ */
+function calcRowCluesCompletions(board, clues) {
+  const playerAnswer = [...board.rowClues()];
+  return clues.map((clue, index) => {
+    return playerAnswer[index].join() === clue.join();
+  });
+}
+
+/**
+ * @param {Board} board
+ * @param {number[][]} clues
+ * @returns {boolean[]}
+ */
+function calcColumnCluesCompletions(board, clues) {
+  const playerAnswer = [...board.columnClues()];
+  return clues.map((clue, index) => {
+    return playerAnswer[index].join() === clue.join();
+  });
 }
 
 /***/ }),
@@ -369,19 +397,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /**
  * @param {{
- * 		clue: number[];
- * 		fontSize: number;
- * 		fill: string;
- * 		left: number;
- * 		bottom: number;
- * 		width: number;
+ *  clue: number[];
+ *  completion: boolean | null;
+ *  fontSize: number;
+ *  left: number;
+ *  bottom: number;
+ *  width: number;
  * }} props
  * @returns {JSX.Element}
  */
 function ColumnClueView({
   clue,
+  completion,
   fontSize,
-  fill,
   left,
   bottom,
   width
@@ -392,7 +420,7 @@ function ColumnClueView({
     key: index,
     text: text,
     fontSize: fontSize,
-    fill: fill,
+    fill: completion ? "#bbb" : "black",
     x: left,
     y: bottom - (index + 1) * unitSize,
     width: width,
@@ -426,20 +454,20 @@ __webpack_require__.r(__webpack_exports__);
 
 /**
  * @param {{
- * 		clues: number[][];
- * 		fontSize: number;
- * 		fill: string;
- * 		top: number;
- * 		left: number;
- * 		cellSize: number;
- * 		cluesHeight: number;
+ *  clues: number[][];
+ *  cluesCompletions: boolean[] | null;
+ *  fontSize: number;
+ *  top: number;
+ *  left: number;
+ *  cellSize: number;
+ *  cluesHeight: number;
  * }} props
  * @returns {JSX.Element}
  */
 function ColumnCluesView({
   clues,
+  cluesCompletions,
   fontSize,
-  fill,
   top,
   left,
   cellSize,
@@ -448,8 +476,8 @@ function ColumnCluesView({
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Group, null, clues.map((clue, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ColumnClueView__WEBPACK_IMPORTED_MODULE_2__.ColumnClueView, {
     key: index,
     clue: clue,
+    completion: cluesCompletions && cluesCompletions[index],
     fontSize: fontSize,
-    fill: fill,
     left: left + cellSize * index,
     bottom: top + cluesHeight,
     width: cellSize
@@ -570,19 +598,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /**
  * @param {{
- * 		clue: number[];
- * 		fontSize: number;
- * 		fill: string;
- * 		top: number;
- * 		right: number;
- * 		height: number;
+ *  clue: number[];
+ *  completion: boolean | null;
+ *  fontSize: number;
+ *  top: number;
+ *  right: number;
+ *  height: number;
  * }} props
  * @returns {JSX.Element}
  */
 function RowClueView({
   clue,
+  completion,
   fontSize,
-  fill,
   top,
   right,
   height
@@ -593,7 +621,7 @@ function RowClueView({
     key: index,
     text: text,
     fontSize: fontSize,
-    fill: fill,
+    fill: completion ? "#bbb" : "black",
     x: right - (index + 1) * unitSize,
     y: top,
     width: Math.min(height, unitSize),
@@ -627,20 +655,20 @@ __webpack_require__.r(__webpack_exports__);
 
 /**
  * @param {{
- * 		clues: number[][];
- * 		fontSize: number;
- * 		fill: string;
- * 		top: number;
- * 		left: number;
- * 		cellSize: number;
- * 		cluesWidth: number;
+ *  clues: number[][];
+ *  cluesCompletions: boolean[] | null;
+ *  fontSize: number;
+ *  top: number;
+ *  left: number;
+ *  cellSize: number;
+ *  cluesWidth: number;
  * }} props
  * @returns {JSX.Element}
  */
 function RowCluesView({
   clues,
+  cluesCompletions,
   fontSize,
-  fill,
   top,
   left,
   cellSize,
@@ -649,8 +677,8 @@ function RowCluesView({
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Group, null, clues.map((clue, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_RowClueView__WEBPACK_IMPORTED_MODULE_2__.RowClueView, {
     key: index,
     clue: clue,
+    completion: cluesCompletions && cluesCompletions[index],
     fontSize: fontSize,
-    fill: fill,
     top: top + cellSize * index,
     right: left + cluesWidth,
     width: cluesWidth,
@@ -852,7 +880,8 @@ function Edit({
     setBoardData: boardData => setAttributes({
       boardData
     }),
-    enableSpaceStatus: false
+    enableSpaceStatus: false,
+    enableCluesCompletion: false
   })));
 }
 

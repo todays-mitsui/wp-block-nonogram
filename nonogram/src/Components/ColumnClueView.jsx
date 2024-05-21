@@ -3,19 +3,19 @@ import { VERTICAL_PADDING_RATIO } from "../lib/calcLayout";
 
 /**
  * @param {{
- * 		clue: number[];
- * 		fontSize: number;
- * 		fill: string;
- * 		left: number;
- * 		bottom: number;
- * 		width: number;
+ *  clue: number[];
+ *  completion: boolean | null;
+ *  fontSize: number;
+ *  left: number;
+ *  bottom: number;
+ *  width: number;
  * }} props
  * @returns {JSX.Element}
  */
 export function ColumnClueView({
   clue,
+  completion,
   fontSize,
-  fill,
   left,
   bottom,
   width,
@@ -30,7 +30,7 @@ export function ColumnClueView({
           key={index}
           text={text}
           fontSize={fontSize}
-          fill={fill}
+          fill={completion ? "#bbb" : "black"}
           x={left}
           y={bottom - (index + 1) * unitSize}
           width={width}

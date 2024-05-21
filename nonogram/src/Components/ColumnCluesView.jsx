@@ -3,20 +3,20 @@ import { ColumnClueView } from "./ColumnClueView";
 
 /**
  * @param {{
- * 		clues: number[][];
- * 		fontSize: number;
- * 		fill: string;
- * 		top: number;
- * 		left: number;
- * 		cellSize: number;
- * 		cluesHeight: number;
+ *  clues: number[][];
+ *  cluesCompletions: boolean[] | null;
+ *  fontSize: number;
+ *  top: number;
+ *  left: number;
+ *  cellSize: number;
+ *  cluesHeight: number;
  * }} props
  * @returns {JSX.Element}
  */
 export function ColumnCluesView({
   clues,
+  cluesCompletions,
   fontSize,
-  fill,
   top,
   left,
   cellSize,
@@ -28,8 +28,8 @@ export function ColumnCluesView({
         <ColumnClueView
           key={index}
           clue={clue}
+          completion={cluesCompletions && cluesCompletions[index]}
           fontSize={fontSize}
-          fill={fill}
           left={left + cellSize * index}
           bottom={top + cluesHeight}
           width={cellSize}

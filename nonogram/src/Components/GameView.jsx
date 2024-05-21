@@ -58,6 +58,7 @@ export function GameView({
             cellSize={layout?.cellSize}
             setBoardData={setBoardData}
             enableSpaceStatus={true}
+            enableCluesCompletion={true}
           />
         )}
     </div>

@@ -79,6 +79,7 @@ export function Edit({ attributes, setAttributes }) {
           cellSize={cellSize}
           setBoardData={(boardData) => setAttributes({ boardData })}
           enableSpaceStatus={false}
+          enableCluesCompletion={false}
         />
       </div>
     </div>

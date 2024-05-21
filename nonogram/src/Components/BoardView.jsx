@@ -21,6 +21,7 @@ import { RowCluesView } from "./RowCluesView";
  *  cellSize: number;
  *  setBoardData: (boardData: string) => void;
  *  enableSpaceStatus: boolean
+ *  enableCluesCompletion: boolean
  * }} param
  * @returns {JSX.Element}
  */
@@ -38,6 +39,7 @@ export function BoardView({
   cellSize,
   setBoardData,
   enableSpaceStatus,
+  enableCluesCompletion,
 }) {
   // <canvas> 要素を取得し、コンテキストメニューを無効にする
   const stageRef = useDisableContextMenu();
@@ -46,6 +48,8 @@ export function BoardView({
   const [nextStatus, setNextStatus] = useState(null);
 
   const cells = [...board.cells()];
+  const rowCluesCompletions = enableCluesCompletion && calcRowCluesCompletions(board, rowClues);
+  const columnCluesCompletions = enableCluesCompletion && calcColumnCluesCompletions(board, columnClues);
 
   return (
     <Stage
@@ -78,8 +82,8 @@ export function BoardView({
         />
         <ColumnCluesView
           clues={columnClues}
+          cluesCompletions={columnCluesCompletions}
           fontSize={cluesFontSize}
-          fill="black"
           top={top}
           left={left + cluesWidth}
           cellSize={cellSize}
@@ -87,8 +91,8 @@ export function BoardView({
         />
         <RowCluesView
           clues={rowClues}
+          cluesCompletions={rowCluesCompletions}
           fontSize={cluesFontSize}
-          fill="black"
           top={top + cluesHeight}
           left={left}
           cellSize={cellSize}
@@ -112,4 +116,28 @@ function useDisableContextMenu() {
     }
   });
   return stageRef;
+}
+
+/**
+ * @param {Board} board
+ * @param {number[][]} clues
+ * @returns {boolean[]}
+ */
+function calcRowCluesCompletions(board, clues) {
+  const playerAnswer = [...board.rowClues()];
+  return clues.map((clue, index) => {
+    return playerAnswer[index].join() === clue.join();
+  });
+}
+
+/**
+ * @param {Board} board
+ * @param {number[][]} clues
+ * @returns {boolean[]}
+ */
+function calcColumnCluesCompletions(board, clues) {
+  const playerAnswer = [...board.columnClues()];
+  return clues.map((clue, index) => {
+    return playerAnswer[index].join() === clue.join();
+  });
 }
