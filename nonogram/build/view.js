@@ -507,7 +507,7 @@ function GameView({
   const maxNumColumnClues = Math.max(1, ...columnClues.map(clues => clues.length));
   const [wrapperRef, width] = (0,_lib_useBlockWidth__WEBPACK_IMPORTED_MODULE_4__.useBlockWidth)();
   const height = width && width * aspectRatio[1] / aspectRatio[0];
-  const layout = width && (0,_lib_calcLayout__WEBPACK_IMPORTED_MODULE_6__.calcLayout)(width, height, maxNumRowClues, maxNumColumnClues, rowClues.length, columnClues.length);
+  const layout = width && (0,_lib_calcLayout__WEBPACK_IMPORTED_MODULE_6__.calcLayout)(width, height, maxNumRowClues + 1, maxNumColumnClues + 1, rowClues.length, columnClues.length);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ref: wrapperRef
   }, board && width && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_BoardView__WEBPACK_IMPORTED_MODULE_3__.BoardView, {

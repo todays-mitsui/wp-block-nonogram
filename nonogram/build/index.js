@@ -1083,17 +1083,13 @@ function save({
 }) {
   /**
    * @type {{
-  *  aspectRatio: [number, number];
-  *  boardData: string;
-  *  rowCluesSize: number;
-  *  columnCluesSize: number;
-  * }}
-  */
+   *  aspectRatio: [number, number];
+   *  boardData: string;
+   * }}
+   */
   const {
     aspectRatio,
-    boardData,
-    rowCluesSize,
-    columnCluesSize
+    boardData
   } = attributes;
   const board = boardData == null ? new _src_Board__WEBPACK_IMPORTED_MODULE_2__.Board(15, 15) : _src_Board__WEBPACK_IMPORTED_MODULE_2__.Board.deserialize(boardData);
   const rowCluesStr = [...board.rowClues()].map(clues => clues.join(",")).join(";");
@@ -1105,9 +1101,7 @@ function save({
     },
     "data-aspect-ratio": aspectRatio.join(":"),
     "data-row-clues": rowCluesStr,
-    "data-row-clues-size": rowCluesSize,
-    "data-column-clues": columnCluesStr,
-    "data-column-clues-size": columnCluesSize
+    "data-column-clues": columnCluesStr
   });
 }
 

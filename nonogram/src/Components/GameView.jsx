@@ -31,8 +31,8 @@ export function GameView({
   const layout = width && calcLayout(
     width,
     height,
-    maxNumRowClues,
-    maxNumColumnClues,
+    maxNumRowClues + 1,
+    maxNumColumnClues + 1,
     rowClues.length,
     columnClues.length,
   );
