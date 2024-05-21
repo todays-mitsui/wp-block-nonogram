@@ -4,7 +4,7 @@
 	"version": "0.1.0",
 	"description": "Create and solve Nonogram puzzles in the WordPress block editor.",
 	"author": "Mitsui <todays.mitsui@gmail.com>",
-	"license": "GPL-2.0-or-later",
+	"license": "MIT",
 	"main": "build/index.js",
 	"scripts": {
 		"start": "run-p start:wp-env start:wp-scripts",
