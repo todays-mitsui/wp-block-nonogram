@@ -1,5 +1,5 @@
-import { Group, Text } from "react-konva";
-import { VERTICAL_PADDING_RATIO } from "../lib/calcLayout";
+import { Group, Text } from 'react-konva';
+import { VERTICAL_PADDING_RATIO } from '../lib/calcLayout';
 
 /**
  * @param {{
@@ -12,34 +12,34 @@ import { VERTICAL_PADDING_RATIO } from "../lib/calcLayout";
  * }} props
  * @returns {JSX.Element}
  */
-export function ColumnClueView({
-  clue,
-  completion,
-  fontSize,
-  left,
-  bottom,
-  width,
-}) {
-  const texts = clue.map((num) => num.toString()).reverse();
-  const unitSize = (1 + 2 * VERTICAL_PADDING_RATIO) * fontSize;
+export function ColumnClueView( {
+	clue,
+	completion,
+	fontSize,
+	left,
+	bottom,
+	width,
+} ) {
+	const texts = clue.map( ( num ) => num.toString() ).reverse();
+	const unitSize = ( 1 + 2 * VERTICAL_PADDING_RATIO ) * fontSize;
 
-  return (
-    <Group>
-      {texts.map((text, index) => (
-        <Text
-          key={index}
-          text={text}
-          fontSize={fontSize}
-          fill={completion ? "#bbb" : "black"}
-          x={left}
-          y={bottom - (index + 1) * unitSize}
-          width={width}
-          height={Math.min(width, unitSize)}
-          align="center"
-          verticalAlign="middle"
-          wrap="none"
-        />
-      ))}
-    </Group>
-  );
+	return (
+		<Group>
+			{ texts.map( ( text, index ) => (
+				<Text
+					key={ index }
+					text={ text }
+					fontSize={ fontSize }
+					fill={ completion ? '#bbb' : 'black' }
+					x={ left }
+					y={ bottom - ( index + 1 ) * unitSize }
+					width={ width }
+					height={ Math.min( width, unitSize ) }
+					align="center"
+					verticalAlign="middle"
+					wrap="none"
+				/>
+			) ) }
+		</Group>
+	);
 }

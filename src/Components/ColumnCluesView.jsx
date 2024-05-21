@@ -1,5 +1,5 @@
-import { Group } from "react-konva";
-import { ColumnClueView } from "./ColumnClueView";
+import { Group } from 'react-konva';
+import { ColumnClueView } from './ColumnClueView';
 
 /**
  * @param {{
@@ -13,28 +13,28 @@ import { ColumnClueView } from "./ColumnClueView";
  * }} props
  * @returns {JSX.Element}
  */
-export function ColumnCluesView({
-  clues,
-  cluesCompletions,
-  fontSize,
-  top,
-  left,
-  cellSize,
-  cluesHeight,
-}) {
-  return (
-    <Group>
-      {clues.map((clue, index) => (
-        <ColumnClueView
-          key={index}
-          clue={clue}
-          completion={cluesCompletions && cluesCompletions[index]}
-          fontSize={fontSize}
-          left={left + cellSize * index}
-          bottom={top + cluesHeight}
-          width={cellSize}
-        />
-      ))}
-    </Group>
-  );
+export function ColumnCluesView( {
+	clues,
+	cluesCompletions,
+	fontSize,
+	top,
+	left,
+	cellSize,
+	cluesHeight,
+} ) {
+	return (
+		<Group>
+			{ clues.map( ( clue, index ) => (
+				<ColumnClueView
+					key={ index }
+					clue={ clue }
+					completion={ cluesCompletions && cluesCompletions[ index ] }
+					fontSize={ fontSize }
+					left={ left + cellSize * index }
+					bottom={ top + cluesHeight }
+					width={ cellSize }
+				/>
+			) ) }
+		</Group>
+	);
 }
