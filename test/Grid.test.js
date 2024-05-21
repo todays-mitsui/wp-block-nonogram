@@ -1,4 +1,4 @@
-const { Grid } = require("../src/Grid");
+import { Grid } from "./src/Model/Grid";
 
 describe("Grid", () => {
   describe("constructor", () => {

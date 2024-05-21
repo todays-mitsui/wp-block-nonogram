@@ -1,4 +1,4 @@
-const { encode, decode } = require("../src/util");
+import { encode, decode } from "./src/lib/encode";
 
 describe("encode/decode", () => {
   test("should encode serials to code", () => {
