@@ -1,3 +1,13 @@
 .wp-block-todays-mitsui-nonogram {
 	line-height: 0;
+
+	nav {
+		margin-top: .2rem;
+		display: flex;
+		justify-content: right;
+		gap: .5rem;
+	}
+	nav button {
+		cursor: pointer;
+	}
 }

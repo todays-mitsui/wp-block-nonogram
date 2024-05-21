@@ -21,8 +21,9 @@ import { useDisableContextMenu } from '../lib/useDisableContextMenu';
  *  cluesHeight: number;
  *  cellSize: number;
  *  setBoardData: (boardData: string) => void;
- *  enableSpaceStatus: boolean
- *  enableCluesCompletion: boolean
+ *  enableSpaceStatus: boolean;
+ *  enableCluesCompletion: boolean;
+ *  showGrid: boolean;
  * }} param
  * @returns {JSX.Element}
  */
@@ -41,6 +42,7 @@ export function BoardView( {
 	setBoardData,
 	enableSpaceStatus,
 	enableCluesCompletion,
+	showGrid,
 } ) {
 	// マウスドラッグによる状態変更のために変更すべきステータスを保持しておく
 	const [ nextStatus, setNextStatus ] = useState( null );
@@ -68,7 +70,7 @@ export function BoardView( {
 					left={ left + cluesWidth }
 					cellSize={ cellSize }
 					nextStatus={ nextStatus }
-					enableSpaceStatus={ enableSpaceStatus }
+					enableSpaceStatus={ showGrid && enableSpaceStatus }
 					setNextStatus={ setNextStatus }
 					setBoardData={ setBoardData }
 				/>
@@ -80,6 +82,7 @@ export function BoardView( {
 					numRows={ board.numRows }
 					numColumns={ board.numColumns }
 					cellSize={ cellSize }
+					showGrid={ showGrid }
 				/>
 				<ColumnCluesView
 					clues={ columnClues }

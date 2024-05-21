@@ -1,3 +1,4 @@
+import { useCallback } from '@wordpress/element';
 import { Line, Rect } from 'react-konva';
 
 const STROKE_COLOR_DARK = '#666';
@@ -5,13 +6,14 @@ const STROKE_COLOR_LIGHT = '#aaa';
 
 /**
  * @param {{
- * 		top: number;
- * 		left: number;
- * 		cluesWidth: number;
- * 		cluesHeight: number;
- * 		numRows: number;
- * 		numColumns: number;
- * 		cellSize: number;
+ *  top: number;
+ *  left: number;
+ *  cluesWidth: number;
+ *  cluesHeight: number;
+ *  numRows: number;
+ *  numColumns: number;
+ *  cellSize: number;
+ *  showGrid: boolean;
  * }} param
  * @returns {JSX.Element}
  */
@@ -23,6 +25,7 @@ export function GridView( {
 	numRows,
 	numColumns,
 	cellSize,
+	showGrid,
 } ) {
 	const gridWidth = numColumns * cellSize;
 	const gridHeight = numRows * cellSize;
@@ -37,6 +40,10 @@ export function GridView( {
 		xEnd: left + cluesWidth + gridWidth,
 		y: top + cluesHeight + i * cellSize,
 	} ) );
+
+	const showLine = useCallback((index, lastIndex) => {
+		return index === 0 || index === lastIndex || showGrid;
+	}, [showGrid]);
 
 	return (
 		<>
@@ -61,7 +68,7 @@ export function GridView( {
 			/>
 
 			{ verticalLines.map( ( { x, yStart, yEnd }, i ) => (
-				<Line
+				showLine(i, numColumns) && <Line
 					key={ i }
 					id={ `vertical-${ i }` }
 					points={ [ x, yStart, x, yEnd ] }
@@ -74,7 +81,7 @@ export function GridView( {
 				/>
 			) ) }
 			{ horizontalLines.map( ( { xStart, xEnd, y }, i ) => (
-				<Line
+				showLine(i, numRows) && <Line
 					key={ i }
 					id={ `horizontal-${ i }` }
 					points={ [ xStart, y, xEnd, y ] }
