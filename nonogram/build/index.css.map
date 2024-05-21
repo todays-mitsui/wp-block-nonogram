@@ -1,1 +1,0 @@
-{"version":3,"file":"index.css","mappings":";;;AAAA;EACC;EACA;AACD;;AAEA;EACC;EACA;AACD,C","sources":["webpack://nonogram/./src/editor.scss"],"sourcesContent":[".wp-block-todays-mitsui-nonogram {\n\tline-height: 0;\n\tpadding: 8px;\n}\n\n.nonogram-controls {\n\tdisplay: flex;\n\tgap: 10px;\n}\n"],"names":[],"sourceRoot":""}
