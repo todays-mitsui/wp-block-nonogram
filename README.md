@@ -4,7 +4,7 @@
 
 ## Description
 
-The Nonogram Block allows you to create Nonogram puzzles in the WordPress block editor. This block provides a user-friendly interface for designing puzzles and presenting them to your website visitors for solving.
+The Nonogram Block allows you to create Nonogram puzzles (also known as Hanjie, Paint by Numbers, Picross, Griddlers, and Pic-a-Pix) in the WordPress block editor. This block provides a user-friendly interface for designing puzzles and presenting them to your website visitors for solving.
 
 ## Features
 
