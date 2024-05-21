@@ -29,14 +29,21 @@ export function Edit({ attributes, setAttributes }) {
 
   const maxNumRowClues = Math.max(
     Math.ceil(board.numColumns / 2),
-    ...[...board.rowClues()].map(clues => clues.length)
+    ...[...board.rowClues()].map((clues) => clues.length),
   );
   const maxNumColumnClues = Math.max(
     Math.ceil(board.numRows / 2),
-    ...[...board.columnClues()].map(clues => clues.length)
+    ...[...board.columnClues()].map((clues) => clues.length),
   );
 
-  const { offsetLeft, offsetTop, cluesFontSize, cluesWidth, cluesHeight, cellSize } = calcLayout(
+  const {
+    offsetLeft,
+    offsetTop,
+    cluesFontSize,
+    cluesWidth,
+    cluesHeight,
+    cellSize,
+  } = calcLayout(
     width,
     height,
     maxNumRowClues,

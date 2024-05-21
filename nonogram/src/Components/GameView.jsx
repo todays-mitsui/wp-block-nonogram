@@ -23,8 +23,11 @@ export function GameView({
   const [boardData, setBoardData] = useBoardStore(rowClues, columnClues);
   const board = boardData && Board.deserialize(boardData);
 
-  const maxNumRowClues = Math.max(1, ...rowClues.map(clues => clues.length));
-  const maxNumColumnClues = Math.max(1, ...columnClues.map(clues => clues.length));
+  const maxNumRowClues = Math.max(1, ...rowClues.map((clues) => clues.length));
+  const maxNumColumnClues = Math.max(
+    1,
+    ...columnClues.map((clues) => clues.length),
+  );
 
   const [wrapperRef, width] = useBlockWidth();
   const height = width && width * aspectRatio[1] / aspectRatio[0];

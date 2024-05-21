@@ -11,7 +11,7 @@ export function save({ attributes }) {
    *  boardData: string;
    * }}
    */
- const { aspectRatio, boardData } = attributes;
+  const { aspectRatio, boardData } = attributes;
 
   const board = boardData == null
     ? new Board(15, 15)
