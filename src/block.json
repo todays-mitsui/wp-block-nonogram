@@ -6,7 +6,7 @@
 	"title": "Nonogram Puzzle",
 	"category": "widgets",
 	"icon": "grid-view",
-	"description": "Create and solve Nonogram puzzles in the WordPress editor.",
+	"description": "Create and solve Nonogram puzzles in the WordPress block editor.",
 	"keywords": [ "nonogram", "picross", "puzzle", "game" ],
 	"example": {
 		"attributes": {
