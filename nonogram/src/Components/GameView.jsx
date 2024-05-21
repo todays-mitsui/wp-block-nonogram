@@ -19,19 +19,20 @@ export function GameView({
   aspectRatio,
   rowClues,
   columnClues,
-  rowCluesSize,
-  columnCluesSize,
 }) {
   const [boardData, setBoardData] = useBoardStore(rowClues, columnClues);
   const board = boardData && Board.deserialize(boardData);
+
+  const maxNumRowClues = Math.max(1, ...rowClues.map(clues => clues.length));
+  const maxNumColumnClues = Math.max(1, ...columnClues.map(clues => clues.length));
 
   const [wrapperRef, width] = useBlockWidth();
   const height = width && width * aspectRatio[1] / aspectRatio[0];
   const layout = width && calcLayout(
     width,
     height,
-    rowCluesSize,
-    columnCluesSize,
+    maxNumRowClues,
+    maxNumColumnClues,
     rowClues.length,
     columnClues.length,
   );
@@ -48,8 +49,9 @@ export function GameView({
             top={layout?.offsetTop}
             rowClues={rowClues}
             columnClues={columnClues}
-            cluesWidth={rowCluesSize}
-            cluesHeight={columnCluesSize}
+            cluesFontSize={layout?.cluesFontSize}
+            cluesWidth={layout?.cluesWidth}
+            cluesHeight={layout?.cluesHeight}
             cellSize={layout?.cellSize}
             setBoardData={setBoardData}
             enableSpaceStatus={true}

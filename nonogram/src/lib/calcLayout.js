@@ -11,6 +11,7 @@ const MAX_FONT_SIZE = 20;
  * @returns {{
  *  offsetLeft: number;
  *  offsetTop: number;
+ *  cluesFontSize: number;
  *  cluesWidth: number;
  *  cluesHeight: number;
  *  cellSize: number;
@@ -19,92 +20,88 @@ const MAX_FONT_SIZE = 20;
 export function calcLayout(
   canvasWidth,
   canvasHeight,
-  // cluesWidth,
-  // cluesHeight,
   maxNumRowClues,
   maxNumColumnClues,
   numRows,
   numColumns,
 ) {
-  // const cellSize = calcCellSize(
-  //   canvasWidth,
-  //   canvasHeight,
-  //   cluesWidth,
-  //   cluesHeight,
-  //   numRows,
-  //   numColumns,
-  // );
+  const {
+    cluesFontSize,
+    cluesWidth,
+    cluesHeight,
+    cellSize,
+  } = calcCellSize(canvasWidth, canvasHeight, [maxNumRowClues, numColumns], [maxNumColumnClues, numRows]);
 
-  const cellSize = calcCellSize(
-    canvasWidth,
-    canvasHeight,
-    maxNumRowClues,
-    maxNumColumnClues,
-    numRows,
-    numColumns,
-  )
-
-  const gridWidth = cellSize * numColumns + 1;
-  const cluesWidth = Math.min(cellSize, 2 * MAX_FONT_SIZE) * maxNumRowClues;
-  const boardWidth = cluesWidth + gridWidth;
+  const boardWidth = cluesWidth + numColumns * cellSize;
   const offsetLeft = (canvasWidth - boardWidth) / 2;
 
-  const gridHeight = cellSize * numRows + 1;
-  const cluesHeight = Math.min(cellSize, 2 * MAX_FONT_SIZE) * maxNumColumnClues;
-  const boardHeight = cluesHeight + gridHeight;
+  const boardHeight = cluesHeight + numRows * cellSize;
   const offsetTop = (canvasHeight - boardHeight) / 2;
 
-  return { offsetLeft, offsetTop, cluesWidth, cluesHeight, cellSize };
+  return { offsetLeft, offsetTop, cluesFontSize, cluesWidth, cluesHeight, cellSize };
 }
 
-// /**
-//  * @param {number} canvasWidth
-//  * @param {number} canvasHeight
-//  * @param {number} numRows
-//  * @param {number} numColumns
-//  * @returns {{ cellSize: number; gridWidth: number; gridHeight: number; }}
-//  */
-// function calcCellSize(
-//   canvasWidth,
-//   canvasHeight,
-//   cluesWidth,
-//   cluesHeight,
-//   numRows,
-//   numColumns,
-// ) {
-//   const gridWidth = canvasWidth - cluesWidth - 2 * MIN_PADDING;
-//   const gridHeight = canvasHeight - cluesHeight - 2 * MIN_PADDING;
+const FONT_SIZE_RATIO = 0.45; // fontSize / cellSize
+export const HORIZONTAL_PADDING_RATIO = 0.15; // padding / fontSize
+export const VERTICAL_PADDING_RATIO = 0.25; // padding / fontSize
 
-//   const cellSize = Math.min(
-//     (gridWidth - 1) / numColumns,
-//     (gridHeight - 1) / numRows,
-//   );
+const ROW_CLUE_CELL_ASPECT_RATIO = (1 + 2 * HORIZONTAL_PADDING_RATIO) * FONT_SIZE_RATIO;
+const COLUMN_CLUE_CELL_ASPECT_RATIO = (1 + 2 * VERTICAL_PADDING_RATIO) * FONT_SIZE_RATIO;
 
-//   return cellSize;
-// }
+const MAX_CLUE_CELL_WIDTH = (1 + 2 * HORIZONTAL_PADDING_RATIO) * MAX_FONT_SIZE;
+const MAX_CLUE_CELL_HEIGHT = (1 + 2 * VERTICAL_PADDING_RATIO) * MAX_FONT_SIZE;
 
+/**
+ * @param {number} canvasWidth
+ * @param {number} canvasHeight
+ * @param {[number, number]} numHorizontalCells
+ * @param {[number, number]} numVerticalCells
+ */
 function calcCellSize(
   canvasWidth,
   canvasHeight,
-  maxNumRowClues,
-  maxNumColumnClues,
-  numRows,
-  numColumns,
+  numHorizontalCells,
+  numVerticalCells,
 ) {
-  const cellSize = Math.min(
-    (canvasWidth - 2 * MIN_PADDING - 1) / (maxNumRowClues + numColumns),
-    (canvasHeight - 2 * MIN_PADDING - 1) / (maxNumColumnClues + numRows),
-  );
+  {
+    // まず ROW_CLUE_CELL_ASPECT_RATIO, COLUMN_CLUE_CELL_ASPECT_RATIO を用いて cellSize を計算する
+    // このロジックだと fontSize = cellSize * FONT_SIZE_RATIO が MAX_FONT_SIZE を超えることがある
+    // MAX_FONT_SIZE を超えるとは、fontSize が大きすぎるということであり cluesWidth, cluesHeight が大きすぎるということ
+    // 逆に、cluesWidth, cluesHeight をもっと小さくできる余地がある
+    const boardWidth = canvasWidth - 2 * MIN_PADDING;
+    const boardHeight = canvasHeight - 2 * MIN_PADDING;
+    const cellSize = Math.min(
+      boardWidth / (numHorizontalCells[0] * ROW_CLUE_CELL_ASPECT_RATIO + numHorizontalCells[1]),
+      boardHeight / (numVerticalCells[0] * COLUMN_CLUE_CELL_ASPECT_RATIO + numVerticalCells[1]),
+    );
+    const fontSize = cellSize * FONT_SIZE_RATIO;
 
-  if (cellSize <= 2 * MAX_FONT_SIZE) {
-    return cellSize;
+    if (fontSize <= MAX_FONT_SIZE) {
+      return {
+        cluesFontSize: fontSize,
+        cluesWidth: ROW_CLUE_CELL_ASPECT_RATIO * cellSize * numHorizontalCells[0],
+        cluesHeight: COLUMN_CLUE_CELL_ASPECT_RATIO * cellSize * numVerticalCells[0],
+        cellSize,
+      };
+    }
   }
 
-  const gridWidth = canvasWidth - 2 * MAX_FONT_SIZE * maxNumRowClues - 2 * MIN_PADDING;
-  const gridHeight = canvasHeight - 2 * MAX_FONT_SIZE * maxNumColumnClues - 2 * MIN_PADDING;
+  {
+    // というわけで前段のロジックで算出した fontSize が大きすぎる場合には、ここから先のロジックで計算し直す
+    // fontSize は MAX_FONT_SIZE で確定できる
+    // FONT_SIZE_RATIO, HORIZONTAL_PADDING_RATIO, VERTICAL_PADDING_RATIO から cellSize を逆算する
+    const gridWidth = canvasWidth - MAX_CLUE_CELL_WIDTH * numHorizontalCells[0] - 2 * MIN_PADDING;
+    const gridHeight = canvasHeight - MAX_CLUE_CELL_HEIGHT * numVerticalCells[0] - 2 * MIN_PADDING;
+    const cellSize = Math.min(
+      gridWidth / numHorizontalCells[1],
+      gridHeight / numVerticalCells[1],
+    );
 
-  return Math.min(
-    (gridWidth - 1) / numColumns,
-    (gridHeight - 1) / numRows,
-  );
+    return {
+      cluesFontSize: MAX_FONT_SIZE,
+      cluesWidth: MAX_CLUE_CELL_WIDTH * numHorizontalCells[0],
+      cluesHeight: MAX_CLUE_CELL_HEIGHT * numVerticalCells[0],
+      cellSize,
+    };
+  }
 }

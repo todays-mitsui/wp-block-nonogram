@@ -36,7 +36,7 @@ export function Edit({ attributes, setAttributes }) {
     ...[...board.columnClues()].map(clues => clues.length)
   );
 
-  const { offsetLeft, offsetTop, cluesWidth, cluesHeight, cellSize } = calcLayout(
+  const { offsetLeft, offsetTop, cluesFontSize, cluesWidth, cluesHeight, cellSize } = calcLayout(
     width,
     height,
     maxNumRowClues,
@@ -66,6 +66,7 @@ export function Edit({ attributes, setAttributes }) {
           top={offsetTop}
           rowClues={[...board.rowClues()]}
           columnClues={[...board.columnClues()]}
+          cluesFontSize={cluesFontSize}
           cluesWidth={cluesWidth}
           cluesHeight={cluesHeight}
           cellSize={cellSize}

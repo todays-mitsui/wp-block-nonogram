@@ -40,6 +40,7 @@ __webpack_require__.r(__webpack_exports__);
  *  top: number;
  *  rowClues: number[][];
  *  columnClues: number[][];
+ *  cluesFontSize: number;
  *  cluesWidth: number;
  *  cluesHeight: number;
  *  cellSize: number;
@@ -56,6 +57,7 @@ function BoardView({
   top,
   rowClues,
   columnClues,
+  cluesFontSize,
   cluesWidth,
   cluesHeight,
   cellSize,
@@ -68,7 +70,6 @@ function BoardView({
   // マウスドラッグによる状態変更のために変更すべきステータスを保持しておく
   const [nextStatus, setNextStatus] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
   const cells = [...board.cells()];
-  const fontSize = Math.min(cellSize / 2, 20);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_2__.Stage, {
     width: width,
     height: height,
@@ -95,7 +96,7 @@ function BoardView({
     cellSize: cellSize
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ColumnCluesView__WEBPACK_IMPORTED_MODULE_6__.ColumnCluesView, {
     clues: columnClues,
-    fontSize: fontSize,
+    fontSize: cluesFontSize,
     fill: "black",
     top: top,
     left: left + cluesWidth,
@@ -103,7 +104,7 @@ function BoardView({
     cluesHeight: cluesHeight
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_RowCluesView__WEBPACK_IMPORTED_MODULE_7__.RowCluesView, {
     clues: rowClues,
-    fontSize: fontSize,
+    fontSize: cluesFontSize,
     fill: "black",
     top: top + cluesHeight,
     left: left,
@@ -361,6 +362,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_konva__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-konva */ "./node_modules/react-konva/es/ReactKonva.js");
+/* harmony import */ var _lib_calcLayout__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../lib/calcLayout */ "./src/lib/calcLayout.js");
+
 
 
 
@@ -384,15 +387,19 @@ function ColumnClueView({
   width
 }) {
   const texts = clue.map(num => num.toString()).reverse();
+  const unitSize = (1 + 2 * _lib_calcLayout__WEBPACK_IMPORTED_MODULE_2__.VERTICAL_PADDING_RATIO) * fontSize;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Group, null, texts.map((text, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Text, {
     key: index,
     text: text,
     fontSize: fontSize,
     fill: fill,
     x: left,
-    y: bottom - (index * 1.5 + 1.5) * fontSize,
+    y: bottom - (index + 1) * unitSize,
     width: width,
-    align: "center"
+    height: Math.min(width, unitSize),
+    align: "center",
+    verticalAlign: "middle",
+    wrap: "none"
   })));
 }
 
@@ -556,6 +563,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_konva__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-konva */ "./node_modules/react-konva/es/ReactKonva.js");
+/* harmony import */ var _lib_calcLayout__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../lib/calcLayout */ "./src/lib/calcLayout.js");
+
 
 
 
@@ -565,9 +574,8 @@ __webpack_require__.r(__webpack_exports__);
  * 		fontSize: number;
  * 		fill: string;
  * 		top: number;
- * 		left: number;
+ * 		right: number;
  * 		height: number;
- * 		width: number;
  * }} props
  * @returns {JSX.Element}
  */
@@ -576,23 +584,24 @@ function RowClueView({
   fontSize,
   fill,
   top,
-  left,
-  height,
-  width
+  right,
+  height
 }) {
-  const text = clue.map(num => num.toString()).join("  ");
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Text, {
+  const texts = clue.map(num => num.toString()).reverse();
+  const unitSize = (1 + 2 * _lib_calcLayout__WEBPACK_IMPORTED_MODULE_2__.HORIZONTAL_PADDING_RATIO) * fontSize;
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Group, null, texts.map((text, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Text, {
+    key: index,
     text: text,
     fontSize: fontSize,
     fill: fill,
-    x: left,
+    x: right - (index + 1) * unitSize,
     y: top,
-    width: width - fontSize * 0.5,
+    width: Math.min(height, unitSize),
     height: height,
-    align: "right",
+    align: "center",
     verticalAlign: "middle",
     wrap: "none"
-  });
+  })));
 }
 
 /***/ }),
@@ -643,7 +652,7 @@ function RowCluesView({
     fontSize: fontSize,
     fill: fill,
     top: top + cellSize * index,
-    left: left,
+    right: left + cluesWidth,
     width: cluesWidth,
     height: cellSize
   })));
@@ -808,6 +817,7 @@ function Edit({
   const {
     offsetLeft,
     offsetTop,
+    cluesFontSize,
     cluesWidth,
     cluesHeight,
     cellSize
@@ -835,6 +845,7 @@ function Edit({
     top: offsetTop,
     rowClues: [...board.rowClues()],
     columnClues: [...board.columnClues()],
+    cluesFontSize: cluesFontSize,
     cluesWidth: cluesWidth,
     cluesHeight: cluesHeight,
     cellSize: cellSize,
@@ -911,6 +922,8 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   HORIZONTAL_PADDING_RATIO: () => (/* binding */ HORIZONTAL_PADDING_RATIO),
+/* harmony export */   VERTICAL_PADDING_RATIO: () => (/* binding */ VERTICAL_PADDING_RATIO),
 /* harmony export */   calcLayout: () => (/* binding */ calcLayout)
 /* harmony export */ });
 const MIN_PADDING = 8;
@@ -926,76 +939,80 @@ const MAX_FONT_SIZE = 20;
  * @returns {{
  *  offsetLeft: number;
  *  offsetTop: number;
+ *  cluesFontSize: number;
  *  cluesWidth: number;
  *  cluesHeight: number;
  *  cellSize: number;
  * }}
  */
-function calcLayout(canvasWidth, canvasHeight,
-// cluesWidth,
-// cluesHeight,
-maxNumRowClues, maxNumColumnClues, numRows, numColumns) {
-  // const cellSize = calcCellSize(
-  //   canvasWidth,
-  //   canvasHeight,
-  //   cluesWidth,
-  //   cluesHeight,
-  //   numRows,
-  //   numColumns,
-  // );
-
-  const cellSize = calcCellSize(canvasWidth, canvasHeight, maxNumRowClues, maxNumColumnClues, numRows, numColumns);
-  const gridWidth = cellSize * numColumns + 1;
-  const cluesWidth = Math.min(cellSize, 2 * MAX_FONT_SIZE) * maxNumRowClues;
-  const boardWidth = cluesWidth + gridWidth;
+function calcLayout(canvasWidth, canvasHeight, maxNumRowClues, maxNumColumnClues, numRows, numColumns) {
+  const {
+    cluesFontSize,
+    cluesWidth,
+    cluesHeight,
+    cellSize
+  } = calcCellSize(canvasWidth, canvasHeight, [maxNumRowClues, numColumns], [maxNumColumnClues, numRows]);
+  const boardWidth = cluesWidth + numColumns * cellSize;
   const offsetLeft = (canvasWidth - boardWidth) / 2;
-  const gridHeight = cellSize * numRows + 1;
-  const cluesHeight = Math.min(cellSize, 2 * MAX_FONT_SIZE) * maxNumColumnClues;
-  const boardHeight = cluesHeight + gridHeight;
+  const boardHeight = cluesHeight + numRows * cellSize;
   const offsetTop = (canvasHeight - boardHeight) / 2;
   return {
     offsetLeft,
     offsetTop,
+    cluesFontSize,
     cluesWidth,
     cluesHeight,
     cellSize
   };
 }
+const FONT_SIZE_RATIO = 0.45; // fontSize / cellSize
+const HORIZONTAL_PADDING_RATIO = 0.15; // padding / fontSize
+const VERTICAL_PADDING_RATIO = 0.25; // padding / fontSize
 
-// /**
-//  * @param {number} canvasWidth
-//  * @param {number} canvasHeight
-//  * @param {number} numRows
-//  * @param {number} numColumns
-//  * @returns {{ cellSize: number; gridWidth: number; gridHeight: number; }}
-//  */
-// function calcCellSize(
-//   canvasWidth,
-//   canvasHeight,
-//   cluesWidth,
-//   cluesHeight,
-//   numRows,
-//   numColumns,
-// ) {
-//   const gridWidth = canvasWidth - cluesWidth - 2 * MIN_PADDING;
-//   const gridHeight = canvasHeight - cluesHeight - 2 * MIN_PADDING;
+const ROW_CLUE_CELL_ASPECT_RATIO = (1 + 2 * HORIZONTAL_PADDING_RATIO) * FONT_SIZE_RATIO;
+const COLUMN_CLUE_CELL_ASPECT_RATIO = (1 + 2 * VERTICAL_PADDING_RATIO) * FONT_SIZE_RATIO;
+const MAX_CLUE_CELL_WIDTH = (1 + 2 * HORIZONTAL_PADDING_RATIO) * MAX_FONT_SIZE;
+const MAX_CLUE_CELL_HEIGHT = (1 + 2 * VERTICAL_PADDING_RATIO) * MAX_FONT_SIZE;
 
-//   const cellSize = Math.min(
-//     (gridWidth - 1) / numColumns,
-//     (gridHeight - 1) / numRows,
-//   );
-
-//   return cellSize;
-// }
-
-function calcCellSize(canvasWidth, canvasHeight, maxNumRowClues, maxNumColumnClues, numRows, numColumns) {
-  const cellSize = Math.min((canvasWidth - 2 * MIN_PADDING - 1) / (maxNumRowClues + numColumns), (canvasHeight - 2 * MIN_PADDING - 1) / (maxNumColumnClues + numRows));
-  if (cellSize <= 2 * MAX_FONT_SIZE) {
-    return cellSize;
+/**
+ * @param {number} canvasWidth
+ * @param {number} canvasHeight
+ * @param {[number, number]} numHorizontalCells
+ * @param {[number, number]} numVerticalCells
+ */
+function calcCellSize(canvasWidth, canvasHeight, numHorizontalCells, numVerticalCells) {
+  {
+    // まず ROW_CLUE_CELL_ASPECT_RATIO, COLUMN_CLUE_CELL_ASPECT_RATIO を用いて cellSize を計算する
+    // このロジックだと fontSize = cellSize * FONT_SIZE_RATIO が MAX_FONT_SIZE を超えることがある
+    // MAX_FONT_SIZE を超えるとは、fontSize が大きすぎるということであり cluesWidth, cluesHeight が大きすぎるということ
+    // 逆に、cluesWidth, cluesHeight をもっと小さくできる余地がある
+    const boardWidth = canvasWidth - 2 * MIN_PADDING;
+    const boardHeight = canvasHeight - 2 * MIN_PADDING;
+    const cellSize = Math.min(boardWidth / (numHorizontalCells[0] * ROW_CLUE_CELL_ASPECT_RATIO + numHorizontalCells[1]), boardHeight / (numVerticalCells[0] * COLUMN_CLUE_CELL_ASPECT_RATIO + numVerticalCells[1]));
+    const fontSize = cellSize * FONT_SIZE_RATIO;
+    if (fontSize <= MAX_FONT_SIZE) {
+      return {
+        cluesFontSize: fontSize,
+        cluesWidth: ROW_CLUE_CELL_ASPECT_RATIO * cellSize * numHorizontalCells[0],
+        cluesHeight: COLUMN_CLUE_CELL_ASPECT_RATIO * cellSize * numVerticalCells[0],
+        cellSize
+      };
+    }
   }
-  const gridWidth = canvasWidth - 2 * MAX_FONT_SIZE * maxNumRowClues - 2 * MIN_PADDING;
-  const gridHeight = canvasHeight - 2 * MAX_FONT_SIZE * maxNumColumnClues - 2 * MIN_PADDING;
-  return Math.min((gridWidth - 1) / numColumns, (gridHeight - 1) / numRows);
+  {
+    // というわけで前段のロジックで算出した fontSize が大きすぎる場合には、ここから先のロジックで計算し直す
+    // fontSize は MAX_FONT_SIZE で確定できる
+    // FONT_SIZE_RATIO, HORIZONTAL_PADDING_RATIO, VERTICAL_PADDING_RATIO から cellSize を逆算する
+    const gridWidth = canvasWidth - MAX_CLUE_CELL_WIDTH * numHorizontalCells[0] - 2 * MIN_PADDING;
+    const gridHeight = canvasHeight - MAX_CLUE_CELL_HEIGHT * numVerticalCells[0] - 2 * MIN_PADDING;
+    const cellSize = Math.min(gridWidth / numHorizontalCells[1], gridHeight / numVerticalCells[1]);
+    return {
+      cluesFontSize: MAX_FONT_SIZE,
+      cluesWidth: MAX_CLUE_CELL_WIDTH * numHorizontalCells[0],
+      cluesHeight: MAX_CLUE_CELL_HEIGHT * numVerticalCells[0],
+      cellSize
+    };
+  }
 }
 
 /***/ }),

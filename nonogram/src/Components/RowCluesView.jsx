@@ -31,7 +31,7 @@ export function RowCluesView({
           fontSize={fontSize}
           fill={fill}
           top={top + cellSize * index}
-          left={left}
+          right={left + cluesWidth}
           width={cluesWidth}
           height={cellSize}
         />

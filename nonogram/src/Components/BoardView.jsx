@@ -15,6 +15,7 @@ import { RowCluesView } from "./RowCluesView";
  *  top: number;
  *  rowClues: number[][];
  *  columnClues: number[][];
+ *  cluesFontSize: number;
  *  cluesWidth: number;
  *  cluesHeight: number;
  *  cellSize: number;
@@ -31,6 +32,7 @@ export function BoardView({
   top,
   rowClues,
   columnClues,
+  cluesFontSize,
   cluesWidth,
   cluesHeight,
   cellSize,
@@ -44,7 +46,6 @@ export function BoardView({
   const [nextStatus, setNextStatus] = useState(null);
 
   const cells = [...board.cells()];
-  const fontSize = Math.min(cellSize / 2, 20);
 
   return (
     <Stage
@@ -77,7 +78,7 @@ export function BoardView({
         />
         <ColumnCluesView
           clues={columnClues}
-          fontSize={fontSize}
+          fontSize={cluesFontSize}
           fill="black"
           top={top}
           left={left + cluesWidth}
@@ -86,7 +87,7 @@ export function BoardView({
         />
         <RowCluesView
           clues={rowClues}
-          fontSize={fontSize}
+          fontSize={cluesFontSize}
           fill="black"
           top={top + cluesHeight}
           left={left}

@@ -1,4 +1,5 @@
 import { Group, Text } from "react-konva";
+import { VERTICAL_PADDING_RATIO } from '../lib/calcLayout';
 
 /**
  * @param {{
@@ -20,6 +21,7 @@ export function ColumnClueView({
   width,
 }) {
   const texts = clue.map((num) => num.toString()).reverse();
+  const unitSize = (1 + 2 * VERTICAL_PADDING_RATIO) * fontSize ;
 
   return (
     <Group>
@@ -30,9 +32,12 @@ export function ColumnClueView({
           fontSize={fontSize}
           fill={fill}
           x={left}
-          y={bottom - (index * 1.5 + 1.5) * fontSize}
+          y={bottom - (index + 1) * unitSize}
           width={width}
+          height={Math.min(width, unitSize)}
           align="center"
+          verticalAlign="middle"
+          wrap="none"
         />
       ))}
     </Group>

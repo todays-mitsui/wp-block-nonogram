@@ -1,4 +1,5 @@
-import { Text } from "react-konva";
+import { Group, Text } from "react-konva";
+import { HORIZONTAL_PADDING_RATIO } from '../lib/calcLayout';
 
 /**
  * @param {{
@@ -6,9 +7,8 @@ import { Text } from "react-konva";
  * 		fontSize: number;
  * 		fill: string;
  * 		top: number;
- * 		left: number;
+ * 		right: number;
  * 		height: number;
- * 		width: number;
  * }} props
  * @returns {JSX.Element}
  */
@@ -17,24 +17,29 @@ export function RowClueView({
   fontSize,
   fill,
   top,
-  left,
+  right,
   height,
-  width,
 }) {
-  const text = clue.map((num) => num.toString()).join("  ");
+  const texts = clue.map((num) => num.toString()).reverse();
+  const unitSize = (1 + 2 * HORIZONTAL_PADDING_RATIO) * fontSize ;
 
   return (
-    <Text
-      text={text}
-      fontSize={fontSize}
-      fill={fill}
-      x={left}
-      y={top}
-      width={width - fontSize * 0.5}
-      height={height}
-      align="right"
-      verticalAlign="middle"
-      wrap="none"
-    />
+    <Group>
+      {texts.map((text, index) => (
+        <Text
+          key={index}
+          text={text}
+          fontSize={fontSize}
+          fill={fill}
+          x={right - (index + 1) * unitSize}
+          y={top}
+          width={Math.min(height, unitSize)}
+          height={height}
+          align="center"
+          verticalAlign="middle"
+          wrap="none"
+        />
+      ))}
+    </Group>
   );
 }

@@ -14,8 +14,6 @@ function init(container) {
   );
   const rowClues = decodeClues(container.dataset.rowClues);
   const columnClues = decodeClues(container.dataset.columnClues);
-  const rowCluesSize = parseInt(container.dataset.rowCluesSize, 10);
-  const columnCluesSize = parseInt(container.dataset.columnCluesSize, 10);
 
   createRoot(container)
     .render(
@@ -23,8 +21,6 @@ function init(container) {
         aspectRatio={aspectRatio}
         rowClues={rowClues}
         columnClues={columnClues}
-        rowCluesSize={rowCluesSize}
-        columnCluesSize={columnCluesSize}
       />,
     );
 }
