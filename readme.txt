@@ -1,19 +1,26 @@
-# Nonogram Block for WordPress
+=== Nonogram Puzzle Block ===
+Contributors: todays-mitsui
+Tags: nonogram, puzzle, game, block, gutenberg
+Requires at least: 6.1
+Tested up to: 6.1
+Requires PHP: 7.0
+License: MIT
+License URI: https://opensource.org/licenses/MIT
 
-![Nonogram Puzzle](https://github.com/todays-mitsui/wp-block-nonogram/assets/3040456/59d892ca-75b4-48c4-99ce-78e3eb54328e)
+Create and solve Nonogram puzzles directly in the WordPress editor.
 
-## Description
+== Description ==
 
 The Nonogram Block allows you to create Nonogram puzzles (also known as Hanjie, Paint by Numbers, Picross, Griddlers, and Pic-a-Pix) in the WordPress block editor. This block provides a user-friendly interface for designing puzzles and presenting them to your website visitors for solving.
 
-## Features
+== Features ==
 
 - Customize the number of rows and columns for your puzzle.
 - Choose from predefined aspect ratios (Square, Wide, Tall).
 - Easy to use controls in the WordPress editor.
 - Responsive and interactive puzzle solving experience.
 
-## Installation
+== Installation ==
 
 1. Download the repository from GitHub:
    ```sh
@@ -39,7 +46,7 @@ The Nonogram Block allows you to create Nonogram puzzles (also known as Hanjie, 
 
 6. Activate the plugin through the 'Plugins' menu in WordPress.
 
-## Development
+== Development ==
 
 To start the development environment:
 
@@ -50,17 +57,17 @@ To start the development environment:
    npm start
    ```
 
-3. This will set up a local development server. Open your browser and go to http://localhost:8888/wp-admin/ to access the WordPress admin dashboard. Use the following credentials to log in:
+3. This will set up a local development server. Open your browser and go to [http://localhost:8888/wp-admin/](http://localhost:8888/wp-admin/) to access the WordPress admin dashboard. Use the following credentials to log in:
    - **Username**: `admin`
    - **Password**: `password`
 
-## Usage
+== Usage ==
 
 1. In the WordPress editor, add a new block and search for "Nonogram".
 2. Use the block's settings in the sidebar to customize the number of rows, columns, and the aspect ratio.
 3. Design your Nonogram puzzle and save your post or page.
 
-## Attributes
+== Attributes ==
 
 - **numRows**: Number of rows in the puzzle (default: 15).
 - **numColumns**: Number of columns in the puzzle (default: 15).
@@ -70,10 +77,10 @@ To start the development environment:
   - Wide (3:2)
   - Tall (2:3)
 
-## License
+== License ==
 
-This plugin is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+This plugin is licensed under the MIT License. See the LICENSE file for more details.
 
-## Credits
+== Credits ==
 
-Developed by [Mitsui](https://github.com/todays-mitsui).
+Developed by [todays-mitsui](https://github.com/todays-mitsui).
