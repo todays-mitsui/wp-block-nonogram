@@ -51,7 +51,7 @@ jobs:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
           body: |
-            This is the release for tag ${{ env.TAG }}.
+            This is the release for tag ${{ env.TAG_NAME }}.
           draft: false
           prerelease: false
 
@@ -67,5 +67,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: wp-block-nonogram.zip
-          asset_name: wp-block-nonogram_${{ env.TAG }}.zip
+          asset_name: wp-block-nonogram_${{ env.TAG_NAME }}.zip
           asset_content_type: application/zip
