@@ -23,7 +23,6 @@
 		"logs": "wp-env logs"
 	},
 	"devDependencies": {
-		"@types/wordpress__block-editor": "^11.5.14",
 		"@wordpress/element": "^5.34.0",
 		"@wordpress/env": "^9.10.0",
 		"@wordpress/scripts": "^27.8.0",
