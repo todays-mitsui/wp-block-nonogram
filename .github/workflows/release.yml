@@ -39,13 +39,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Download production artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: plugin_zip
-
-      - id: create_release
-        name: Create release
+      - name: Create release
+        id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -56,6 +51,11 @@ jobs:
             This is the release for tag ${{ github.ref }}.
           draft: false
           prerelease: false
+
+      - name: Download production artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: plugin_zip
 
       - name: Upload release artifact
         uses: actions/upload-release-asset@v1
