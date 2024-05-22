@@ -23,6 +23,9 @@ jobs:
         run: npm i
 
       - name: Build
+        run: npm run build
+
+      - name: Create zip
         run: npm run plugin-zip
 
       - name: Archive production artifact
