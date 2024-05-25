@@ -64,16 +64,10 @@ jobs:
           draft: false
           prerelease: false
 
-      - run: ls
-
       - name: Download standalone artifact
         uses: actions/download-artifact@v2
         with:
           name: standalone_js
-
-      - run: ls
-
-      - run: ls standalone
 
       - name: Upload standalone artifact
         uses: actions/upload-release-asset@v1
@@ -81,7 +75,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: standalone/view.js
+          asset_path: view.js
           asset_name: nonogram.js
           asset_content_type: text/javascript
 
