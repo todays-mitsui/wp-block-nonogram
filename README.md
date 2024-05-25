@@ -76,4 +76,4 @@ This plugin is licensed under the MIT License. See the [LICENSE](LICENSE) file f
 
 ## Credits
 
-Developed by [Mitsui](https://github.com/todays-mitsui).
+Developed by [todays-mitsui](https://github.com/todays-mitsui).

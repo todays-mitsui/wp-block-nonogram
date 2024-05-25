@@ -3,7 +3,7 @@
 	"name": "wp-block-nonogram",
 	"version": "0.2.0",
 	"description": "Create and solve Nonogram puzzles in the WordPress block editor.",
-	"author": "Mitsui <todays.mitsui@gmail.com>",
+	"author": "todays-mitsui <todays.mitsui@gmail.com>",
 	"license": "MIT",
 	"main": "build/index.js",
 	"files": [
