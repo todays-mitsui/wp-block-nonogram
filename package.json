@@ -1,7 +1,7 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
 	"name": "wp-block-nonogram",
-	"version": "0.2.2",
+	"version": "0.2.3",
 	"description": "Create and solve Nonogram puzzles in the WordPress block editor.",
 	"author": "todays-mitsui <todays.mitsui@gmail.com>",
 	"license": "MIT",
@@ -29,11 +29,11 @@
 		"logs": "wp-env logs"
 	},
 	"devDependencies": {
-		"@wordpress/element": "^5.34.0",
+		"@wordpress/element": "^5.35.0",
 		"@wordpress/env": "^9.10.0",
-		"@wordpress/scripts": "^27.8.0",
-		"konva": "^9.3.6",
-		"react-konva": "^18.2.10",
-		"npm-run-all2": "^6.2.0"
+		"@wordpress/scripts": "^27.9.0",
+		"konva": "^9.3.11",
+		"npm-run-all2": "^6.2.0",
+		"react-konva": "^18.2.10"
 	}
 }
