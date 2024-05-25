@@ -33,7 +33,9 @@
 		"@wordpress/env": "^9.10.0",
 		"@wordpress/scripts": "^27.8.0",
 		"konva": "^9.3.6",
-		"react-konva": "^18.2.10",
-		"npm-run-all2": "^6.2.0"
+		"npm-run-all2": "^6.2.0",
+		"react": "^18.3.1",
+		"react-dom": "^18.3.1",
+		"react-konva": "^18.2.10"
 	}
 }

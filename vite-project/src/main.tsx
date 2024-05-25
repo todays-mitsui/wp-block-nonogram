@@ -1,12 +1,15 @@
-import { GameView } from './Components/GameView';
-import React from 'react';
-import { createRoot } from 'react-dom/client';
+// import React from 'react'
+import ReactDOM from 'react-dom/client'
+// import App from './App.tsx'
+import './index.css'
+import { GameView } from './Components/GameView.jsx';
+// import { createRoot } from 'react-dom/client';
 
 /**
  * @param {HTMLDivElement} container
  * @returns {void}
  */
-function init(container) {
+function init(container: HTMLDivElement) {
 	const aspectRatio = container.dataset.aspectRatio
 		? container.dataset.aspectRatio
 			.split(':')
@@ -15,7 +18,7 @@ function init(container) {
 	const rowClues = decodeClues(container.dataset.rowClues);
 	const columnClues = decodeClues(container.dataset.columnClues);
 
-	createRoot(container).render(
+	ReactDOM.createRoot(container).render(
 		<GameView
 			aspectRatio={aspectRatio}
 			rowClues={rowClues}
@@ -28,7 +31,7 @@ function init(container) {
  * @param {string} cluesStr
  * @returns {number[][]}
  */
-function decodeClues(cluesStr) {
+function decodeClues(cluesStr: string) {
 	return cluesStr
 		.split(';')
 		.map((clues) =>
@@ -39,5 +42,5 @@ function decodeClues(cluesStr) {
 {
 	document
 		.querySelectorAll('.wp-block-todays-mitsui-nonogram')
-		.forEach((container) => init(container));
+		.forEach((container) => init(container as HTMLDivElement));
 }
