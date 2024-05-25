@@ -6,10 +6,15 @@
 	"author": "Mitsui <todays.mitsui@gmail.com>",
 	"license": "MIT",
 	"main": "build/index.js",
-	"files": [ "nonogram.php", "build/*" ],
+	"files": [
+		"nonogram.php",
+		"build/*"
+	],
 	"scripts": {
 		"start": "run-p start:wp-env start:wp-scripts",
-		"build": "wp-scripts build",
+		"build": "run-s build:plugin build:standalone",
+		"build:plugin": "wp-scripts build",
+		"build:standalone": "wp-scripts build src/view.js --output-path=standalone",
 		"fmt": "wp-scripts format",
 		"format": "wp-scripts format",
 		"lint:css": "wp-scripts lint-style",

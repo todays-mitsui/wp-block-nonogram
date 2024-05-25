@@ -7,8 +7,10 @@ import { createRoot } from 'react-dom/client';
  */
 function init( container ) {
 	const aspectRatio = container.dataset.aspectRatio
-		.split( ':' )
-		.map( ( str ) => parseInt( str, 10 ) );
+		? container.dataset.aspectRatio
+				.split( ':' )
+				.map( ( str ) => parseInt( str, 10 ) )
+		: [ 1, 1 ];
 	const rowClues = decodeClues( container.dataset.rowClues );
 	const columnClues = decodeClues( container.dataset.columnClues );
 
