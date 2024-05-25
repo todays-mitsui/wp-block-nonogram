@@ -71,6 +71,8 @@ jobs:
         with:
           name: standalone_js
 
+      - run: ls
+
       - run: ls standalone
 
       - name: Upload standalone artifact
