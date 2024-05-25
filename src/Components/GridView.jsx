@@ -1,4 +1,4 @@
-import { useCallback } from '@wordpress/element';
+import { useCallback } from 'react';
 import { Line, Rect } from 'react-konva';
 
 const STROKE_COLOR_DARK = '#666';

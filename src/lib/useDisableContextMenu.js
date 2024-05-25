@@ -1,19 +1,19 @@
-import { useEffect, useRef } from '@wordpress/element';
+import { useEffect, useRef } from 'react';
 
 /**
  * @returns {React.MutableRefObject<HTMLCanvasElement | null>}
  */
 export function useDisableContextMenu() {
-	const stageRef = useRef( null );
-	useEffect( () => {
+	const stageRef = useRef(null);
+	useEffect(() => {
 		/** @type HTMLCanvasElement */
 		const canvas = stageRef.current;
-		if ( canvas ) {
+		if (canvas) {
 			// 右クリック時のコンテキストメニューを無効化
-			canvas.addEventListener( 'contextmenu', ( event ) => {
+			canvas.addEventListener('contextmenu', (event) => {
 				event.preventDefault();
-			} );
+			});
 		}
-	} );
+	});
 	return stageRef;
 }

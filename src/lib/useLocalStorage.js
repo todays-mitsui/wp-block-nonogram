@@ -1,25 +1,25 @@
-import { useEffect, useState } from '@wordpress/element';
+import { useEffect, useState } from 'react';
 
 /**
  * @param {string | null} key
  * @param {() => string} genInitialValue
  * @returns {[string | null, (newValue: string) => void]}
  */
-export function useLocalStorage( key, genInitialValue ) {
-	const [ value, setValue ] = useState( null );
+export function useLocalStorage(key, genInitialValue) {
+	const [value, setValue] = useState(null);
 
-	useEffect( () => {
-		if ( key != null ) {
-			const storedValue = localStorage.getItem( key );
-			setValue( storedValue == null ? genInitialValue() : storedValue );
+	useEffect(() => {
+		if (key != null) {
+			const storedValue = localStorage.getItem(key);
+			setValue(storedValue == null ? genInitialValue() : storedValue);
 		}
-	}, [ key ] );
+	}, [key]);
 
-	useEffect( () => {
-		if ( key != null && value != null ) {
-			localStorage.setItem( key, value );
+	useEffect(() => {
+		if (key != null && value != null) {
+			localStorage.setItem(key, value);
 		}
-	}, [ value ] );
+	}, [value]);
 
-	return [ value, setValue ];
+	return [value, setValue];
 }

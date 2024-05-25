@@ -1,4 +1,4 @@
-import { useCallback } from '@wordpress/element';
+import { useCallback } from 'react';
 import { Board } from '../Model/Board';
 import { Cell } from './Cell';
 
