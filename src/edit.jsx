@@ -83,6 +83,7 @@ export function Edit( { attributes, setAttributes } ) {
 					}
 					enableSpaceStatus={ false }
 					enableCluesCompletion={ false }
+					showGrid={ true }
 				/>
 			</div>
 		</div>
