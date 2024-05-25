@@ -5,7 +5,7 @@
  * Description:       Create and solve Nonogram puzzles in the WordPress block editor.
  * Requires at least: 6.1
  * Requires PHP:      7.0
- * Version:           0.2.0
+ * Version:           0.2.2
  * Author:            todays-mitsui
  * Author URI:        https://github.com/todays-mitsui
  * License:           MIT
