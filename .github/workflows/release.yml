@@ -1,95 +1,98 @@
 name: Release
 
 on:
-    push:
-        tags:
-            - 'v*'
-    workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest
 
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v4
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-            - name: Set up Node.js
-              uses: actions/setup-node@v4
-              with:
-                  node-version: '20'
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
 
-            - name: Install dependencies
-              run: npm i
+      - name: Install dependencies
+        run: npm i
 
-            - name: Build
-              run: npm run build
+      - name: Build
+        run: npm run build
 
-            - name: Archive standalone artifact
-              uses: actions/upload-artifact@v2
-              with:
-                  name: standalone_js
-                  path: standalone/view.js
+      - name: Archive standalone artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: standalone_js
+          path: standalone/view.js
 
-            - name: Create zip
-              run: npm run plugin-zip
+      - name: Create zip
+        run: npm run plugin-zip
 
-            - name: Archive plugin artifact
-              uses: actions/upload-artifact@v2
-              with:
-                  name: plugin_zip
-                  path: wp-block-nonogram.zip
+      - name: Archive plugin artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: plugin_zip
+          path: wp-block-nonogram.zip
 
-    release:
-        needs: build
-        runs-on: ubuntu-latest
+  release:
+    needs: build
+    runs-on: ubuntu-latest
 
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v4
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-            - name: get tag name
-              run: echo "TAG_NAME=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      - name: get tag name
+        run: echo "TAG_NAME=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
 
-            - name: Create release
-              id: create_release
-              uses: actions/create-release@v1
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                  tag_name: ${{ github.ref }}
-                  release_name: Release ${{ github.ref }}
-                  body: |
-                      This is the release for tag ${{ env.TAG_NAME }}.
-                  draft: false
-                  prerelease: false
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            This is the release for tag ${{ env.TAG_NAME }}.
+          draft: false
+          prerelease: false
 
-            - name: Download standalone artifact
-              uses: actions/download-artifact@v2
-              with:
-                  name: standalone_js
+      - run: ls
+      - run: ls standalone
 
-            - name: Upload standalone artifact
-              uses: actions/upload-release-asset@v1
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                  upload_url: ${{ steps.create_release.outputs.upload_url }}
-                  asset_path: standalone/view.js
-                  asset_name: nonogram.js
-                  asset_content_type: text/javascript
+      - name: Download standalone artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: standalone_js
 
-            - name: Download plugin artifact
-              uses: actions/download-artifact@v2
-              with:
-                  name: plugin_zip
+      - name: Upload standalone artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: standalone/view.js
+          asset_name: nonogram.js
+          asset_content_type: text/javascript
 
-            - name: Upload plugin artifact
-              uses: actions/upload-release-asset@v1
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                  upload_url: ${{ steps.create_release.outputs.upload_url }}
-                  asset_path: wp-block-nonogram.zip
-                  asset_name: wp-block-nonogram.zip
-                  asset_content_type: application/zip
+      - name: Download plugin artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: plugin_zip
+
+      - name: Upload plugin artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: wp-block-nonogram.zip
+          asset_name: wp-block-nonogram.zip
+          asset_content_type: application/zip
