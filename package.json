@@ -26,7 +26,9 @@
 		"stop": "wp-env stop",
 		"clean": "wp-env clean",
 		"destroy": "wp-env destroy",
-		"logs": "wp-env logs"
+		"logs": "wp-env logs",
+		"test:e2e": "wp-scripts test-playwright",
+		"test:e2e:debug": "wp-scripts test-playwright --debug"
 	},
 	"devDependencies": {
 		"@wordpress/element": "^5.35.0",
