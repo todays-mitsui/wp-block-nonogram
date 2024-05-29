@@ -1,10 +1,10 @@
 import { defineConfig } from '@playwright/test';
 
-const baseConfig = require('@wordpress/scripts/config/playwright.config.js');
+const baseConfig = require( '@wordpress/scripts/config/playwright.config.js' );
 
-const config = defineConfig({
+const config = defineConfig( {
 	...baseConfig,
 	testDir: './test/e2e',
-});
+} );
 
 export default config;
