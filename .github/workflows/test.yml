@@ -27,7 +27,7 @@ jobs:
             - name: Install dependencies
               run: npm install
 
-            - run: npm start
+            - run: nohup npm start &
 
             - run: ls -la node_modules/.bin/
 
