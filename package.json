@@ -27,6 +27,8 @@
 		"clean": "wp-env clean",
 		"destroy": "wp-env destroy",
 		"logs": "wp-env logs",
+		"test": "run-s test:unit test:e2e",
+		"test:unit": "wp-scripts test-unit-js",
 		"test:e2e": "wp-scripts test-playwright",
 		"test:e2e:debug": "wp-scripts test-playwright --debug"
 	},
