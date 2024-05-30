@@ -27,5 +27,7 @@ jobs:
             - name: Install dependencies
               run: npm install
 
+            - run: ls -la node_modules/.bin/
+
             - name: Run tests
               run: npm test
