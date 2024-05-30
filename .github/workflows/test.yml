@@ -29,6 +29,11 @@ jobs:
 
             - run: nohup npm start &
 
+            - run: |
+                  while ! nc -z localhost 8888; do
+                      sleep 1
+                  done
+
             - run: ls -la node_modules/.bin/
 
             - name: Run tests
