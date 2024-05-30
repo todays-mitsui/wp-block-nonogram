@@ -1,4 +1,4 @@
-import { Grid } from './src/Model/Grid';
+import { Grid } from '../src/Model/Grid';
 
 describe( 'Grid', () => {
 	describe( 'constructor', () => {

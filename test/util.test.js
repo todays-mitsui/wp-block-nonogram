@@ -1,4 +1,4 @@
-import { encode, decode } from './src/lib/encode';
+import { encode, decode } from '../src/lib/encode';
 
 describe( 'encode/decode', () => {
 	test( 'should encode serials to code', () => {
