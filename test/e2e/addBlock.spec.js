@@ -1,6 +1,6 @@
 import { test, expect } from '@wordpress/e2e-test-utils-playwright';
 
-test.describe( 'Block', () => {
+test.describe( 'addBlock', () => {
 	test.beforeEach( async ( { admin } ) => {
 		await admin.createNewPost();
 	} );

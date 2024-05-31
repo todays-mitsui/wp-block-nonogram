@@ -8,8 +8,8 @@ on:
         branches:
             - main
         paths:
-            - "src/**"
-            - "test/**"
+            - 'src/**'
+            - 'test/**'
 
 jobs:
     test:
@@ -27,14 +27,14 @@ jobs:
             - name: Install dependencies
               run: npm install
 
-            - run: nohup npm start &
+            - name: Start wp-env local server
+              run: nohup npm start &
 
-            - run: |
-                  while ! nc -z localhost 8888; do
+            - name: Wait for local server to start
+              run: |
+                  while ! nc -z localhost 8889; do
                       sleep 1
                   done
-
-            - run: ls -la node_modules/.bin/
 
             - name: Run tests
               run: npm test
