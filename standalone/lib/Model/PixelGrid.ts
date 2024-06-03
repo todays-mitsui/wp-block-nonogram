@@ -28,9 +28,10 @@ export function newPixelGrid( width: number, height: number ): PixelGrid {
 }
 
 export function getPixels( grid: PixelGrid ): readonly Pixel[] {
+	const { width, height } = grid;
 	const pixels: Pixel[] = [];
-	for ( const [ y, row ] of rows( grid ).entries() ) {
-		for ( const [ x, status ] of row.entries() ) {
+	for ( const [ y, row ] of rows( grid ).slice( 0, height ).entries() ) {
+		for ( const [ x, status ] of row.slice( 0, width ).entries() ) {
 			pixels.push( { id: `${ x },${ y }`, x, y, status } );
 		}
 	}
