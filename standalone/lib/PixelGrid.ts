@@ -358,7 +358,11 @@ function isValidPixels(
 function isValidStatus(
 	status: 'UNSETTLED' | 'SPACE' | number
 ): status is Status {
-	return typeof status === 'string' || ( status >= 0 && status <= 61 );
+	return typeof status === 'string' || isValidColorIndex( status );
+}
+
+function isValidColorIndex( colorIndex: number ): colorIndex is ColorIndex {
+	return colorIndex >= 0 && colorIndex <= 61;
 }
 
 // ========================================================================== //
@@ -415,4 +419,37 @@ function calcClue( cells: readonly Status[] ): Clue {
 	}
 
 	return clue.length === 0 ? ( [ [ 0, null ] ] as const ) : clue;
+}
+
+// ========================================================================== //
+
+export function serializeClues( clues: Clue[] ): string {
+	return clues
+		.map( ( clue ) => {
+			if ( clue.length === 1 && clue[ 0 ][ 1 ] === null ) {
+				return '';
+			}
+			return clue
+				.map(
+					( [ count, colorIndex ] ) => `${ colorIndex }:${ count }`
+				)
+				.join( ',' );
+		} )
+		.join( ';' );
+}
+
+export function deserializeClues( serialized: string ): Clue[] {
+	return serialized.split( ';' ).map( ( row ) =>
+		row === ''
+			? [ [ 0, null ] ]
+			: row.split( ',' ).map( ( clue ) => {
+					const [ colorIndex, count ] = clue
+						.split( ':' )
+						.map( Number );
+					if ( ! isValidColorIndex( colorIndex ) ) {
+						throw new Error( 'Invalid colorIndex' );
+					}
+					return [ count, colorIndex ] as const;
+			  } )
+	);
 }

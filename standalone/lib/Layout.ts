@@ -120,7 +120,7 @@ function maxFontSizeCase(
 	canvas: CanvasSize,
 	pixelGrid: PixelGrid,
 	clueLength: ClueLength
-): Omit< Layout, 'offsetLeft' | 'offsetTop' > {
+): Pick< Layout, 'cluesFontSize' | 'cluesWidth' | 'cluesHeight' | 'cellSize' > {
 	const { width, height } = canvas;
 	const { width: rowLength, height: columnLength } = pixelGrid;
 	const { rowClueLength, columnClueLength } = clueLength;
