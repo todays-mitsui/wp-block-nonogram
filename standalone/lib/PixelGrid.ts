@@ -9,7 +9,7 @@ import {
 	decode32,
 	encode64,
 	decode64,
-} from '../util/encode';
+} from './util/encode';
 
 export interface PixelGrid {
 	width: number;
