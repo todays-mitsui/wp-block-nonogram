@@ -367,7 +367,7 @@ function isValidColorIndex( colorIndex: number ): colorIndex is ColorIndex {
 
 // ========================================================================== //
 
-type Clue = [ [ 0, null ] ] | [ number, ColorIndex ][];
+export type Clue = [ number, ColorIndex ][];
 
 export function rowClues( grid: PixelGrid ): Clue[] {
 	const { width, height } = grid;
@@ -393,10 +393,6 @@ export function columnClues( grid: PixelGrid ): Clue[] {
  * 1行分または1列分の手がかりを計算する
  */
 function calcClue( cells: readonly Status[] ): Clue {
-	if ( cells.length === 0 ) {
-		return [ [ 0, null ] ];
-	}
-
 	const clue: Clue = [];
 
 	let count = 0;
@@ -418,30 +414,27 @@ function calcClue( cells: readonly Status[] ): Clue {
 		clue.push( [ count, colorIndex ] );
 	}
 
-	return clue.length === 0 ? ( [ [ 0, null ] ] as const ) : clue;
+	return clue;
 }
 
 // ========================================================================== //
 
 export function serializeClues( clues: Clue[] ): string {
 	return clues
-		.map( ( clue ) => {
-			if ( clue.length === 1 && clue[ 0 ][ 1 ] === null ) {
-				return '';
-			}
-			return clue
+		.map( ( clue ) =>
+			clue
 				.map(
 					( [ count, colorIndex ] ) => `${ colorIndex }:${ count }`
 				)
-				.join( ',' );
-		} )
+				.join( ',' )
+		)
 		.join( ';' );
 }
 
 export function deserializeClues( serialized: string ): Clue[] {
 	return serialized.split( ';' ).map( ( row ) =>
 		row === ''
-			? [ [ 0, null ] ]
+			? []
 			: row.split( ',' ).map( ( clue ) => {
 					const [ colorIndex, count ] = clue
 						.split( ':' )
