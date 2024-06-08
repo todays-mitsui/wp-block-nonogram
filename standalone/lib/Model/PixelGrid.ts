@@ -398,8 +398,8 @@ function calcClue( cells: readonly Status[] ): Clue {
 	let count = 0;
 	let colorIndex: ColorIndex | null = null;
 	for ( const status of cells ) {
-		if (colorIndex != null && colorIndex !== status) {
-			clue.push([count, colorIndex]);
+		if ( colorIndex != null && colorIndex !== status ) {
+			clue.push( [ count, colorIndex ] );
 			count = 0;
 			colorIndex = null;
 		}

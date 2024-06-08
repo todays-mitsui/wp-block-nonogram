@@ -261,9 +261,9 @@ describe( 'rowClues', () => {
 	test( '空の PixelGrid', () => {
 		const grid = newPixelGrid( 4, 3 );
 		expect( rowClues( grid ) ).toEqual( [
-			[ [0, null] ],
-			[ [0, null] ],
-			[ [0, null] ],
+			[ [ 0, null ] ],
+			[ [ 0, null ] ],
+			[ [ 0, null ] ],
 		] );
 	} );
 
@@ -285,10 +285,11 @@ describe( 'rowClues', () => {
 		grid = update( grid, { x: 2, y: 2, newStatus: color } );
 		grid = update( grid, { x: 3, y: 2, newStatus: color } );
 
+		// prettier-ignore
 		expect( rowClues( grid ) ).toEqual( [
-			[ [3, color] ],
-			[ [1, color], [1, color] ],
-			[ [1, color], [2, color] ],
+			[ [ 3, color ],              ],
+			[ [ 1, color ], [ 1, color ] ],
+			[ [ 1, color ], [ 2, color ] ],
 		] );
 	} );
 
@@ -311,10 +312,11 @@ describe( 'rowClues', () => {
 		grid = update( grid, { x: 2, y: 2, newStatus: color1 } );
 		grid = update( grid, { x: 3, y: 2, newStatus: color2 } );
 
+		// prettier-ignore
 		expect( rowClues( grid ) ).toEqual( [
-			[ [2, color1], [1, color2] ],
-			[ [1, color2], [1, color1] ],
-			[ [1, color1], [1, color1], [1, color2] ],
+			[ [ 2, color1 ], [ 1, color2 ],               ],
+			[ [ 1, color2 ], [ 1, color1 ],               ],
+			[ [ 1, color1 ], [ 1, color1 ], [ 1, color2 ] ],
 		] );
 	} );
 } );
@@ -323,10 +325,10 @@ describe( 'columnClues', () => {
 	test( '空の PixelGrid', () => {
 		const grid = newPixelGrid( 4, 3 );
 		expect( columnClues( grid ) ).toEqual( [
-			[ [0, null] ],
-			[ [0, null] ],
-			[ [0, null] ],
-			[ [0, null] ],
+			[ [ 0, null ] ],
+			[ [ 0, null ] ],
+			[ [ 0, null ] ],
+			[ [ 0, null ] ],
 		] );
 	} );
 
@@ -347,11 +349,12 @@ describe( 'columnClues', () => {
 		grid = update( grid, { x: 2, y: 1, newStatus: color } );
 		grid = update( grid, { x: 2, y: 2, newStatus: color } );
 
+		// prettier-ignore
 		expect( columnClues( grid ) ).toEqual( [
-			[ [3, color] ],
-			[ [1, color], [1, color] ],
-			[ [2, color] ],
-			[ [0, null] ],
+			[ [ 3, color ],              ],
+			[ [ 1, color ], [ 1, color ] ],
+			[ [ 2, color ],              ],
+			[ [ 0, null  ],              ],
 		] );
 	} );
 
@@ -378,11 +381,12 @@ describe( 'columnClues', () => {
 		grid = update( grid, { x: 3, y: 1, newStatus: color2 } );
 		grid = update( grid, { x: 3, y: 2, newStatus: color1 } );
 
+		// prettier-ignore
 		expect( columnClues( grid ) ).toEqual( [
-			[ [2, color1], [1, color2] ],
-			[ [1, color1], [1, color1] ],
-			[ [2, color1] ],
-			[ [1, color1], [1, color2], [1, color1] ],
+			[ [ 2, color1 ], [ 1, color2 ],               ],
+			[ [ 1, color1 ], [ 1, color1 ],               ],
+			[ [ 2, color1 ],                              ],
+			[ [ 1, color1 ], [ 1, color2 ], [ 1, color1 ] ],
 		] );
 	} );
 } );
