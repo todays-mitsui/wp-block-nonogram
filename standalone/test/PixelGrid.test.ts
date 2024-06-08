@@ -7,8 +7,11 @@ import {
 	resize,
 	serialize,
 	deserialize,
+	type Clue,
 	rowClues,
 	columnClues,
+	serializeClues,
+	deserializeClues,
 } from '../lib/PixelGrid';
 
 test( 'constructor', () => {
@@ -260,11 +263,7 @@ describe( 'serialize/deserialize', () => {
 describe( 'rowClues', () => {
 	test( '空の PixelGrid', () => {
 		const grid = newPixelGrid( 4, 3 );
-		expect( rowClues( grid ) ).toEqual( [
-			[ [ 0, null ] ],
-			[ [ 0, null ] ],
-			[ [ 0, null ] ],
-		] );
+		expect( rowClues( grid ) ).toEqual( [ [], [], [] ] );
 	} );
 
 	test( '1色のみ', () => {
@@ -324,12 +323,7 @@ describe( 'rowClues', () => {
 describe( 'columnClues', () => {
 	test( '空の PixelGrid', () => {
 		const grid = newPixelGrid( 4, 3 );
-		expect( columnClues( grid ) ).toEqual( [
-			[ [ 0, null ] ],
-			[ [ 0, null ] ],
-			[ [ 0, null ] ],
-			[ [ 0, null ] ],
-		] );
+		expect( columnClues( grid ) ).toEqual( [ [], [], [], [] ] );
 	} );
 
 	test( '1色のみ', () => {
@@ -354,7 +348,7 @@ describe( 'columnClues', () => {
 			[ [ 3, color ],              ],
 			[ [ 1, color ], [ 1, color ] ],
 			[ [ 2, color ],              ],
-			[ [ 0, null  ],              ],
+			[                            ],
 		] );
 	} );
 
@@ -388,5 +382,27 @@ describe( 'columnClues', () => {
 			[ [ 2, color1 ],                              ],
 			[ [ 1, color1 ], [ 1, color2 ], [ 1, color1 ] ],
 		] );
+	} );
+} );
+
+describe( 'serializeClues/deserializeClues', () => {
+	test( '空の Clues', () => {
+		const clues: Clue[] = [ [], [], [] ];
+		const serialized = serializeClues( clues );
+		console.info( { clues, serialized } );
+		expect( deserializeClues( serialized ) ).toEqual( clues );
+	} );
+
+	test( 'serializeClues/deserializeClues', () => {
+		// prettier-ignore
+		const clues: Clue[] = [
+			[ [ 1, 3 ] ],
+			[],
+			[ [ 3, 1 ], [ 4, 1 ] ],
+			[ [ 5, 1 ], [ 1, 2 ] ],
+		];
+		const serialized = serializeClues( clues );
+		console.info( { clues, serialized } );
+		expect( deserializeClues( serialized ) ).toEqual( clues );
 	} );
 } );
