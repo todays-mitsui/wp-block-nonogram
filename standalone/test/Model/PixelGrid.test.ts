@@ -7,6 +7,8 @@ import {
 	resize,
 	serialize,
 	deserialize,
+	rowClues,
+	columnClues,
 } from '../../lib/Model/PixelGrid';
 
 test( 'constructor', () => {
@@ -252,5 +254,67 @@ describe( 'serialize/deserialize', () => {
 		console.info( { grid, serialized, codeSize } );
 		expect( codeSize ).toBe( '64' );
 		expect( deserialize( serialized ) ).toEqual( grid );
+	} );
+} );
+
+describe( 'rowClues', () => {
+	test( '空の PixelGrid', () => {
+		const grid = newPixelGrid( 4, 3 );
+		expect( rowClues( grid ) ).toEqual( [
+			[ [0, null] ],
+			[ [0, null] ],
+			[ [0, null] ],
+		] );
+	} );
+
+	test( '1色のみ', () => {
+		let grid = newPixelGrid( 4, 3 );
+		const color = 0;
+
+		// 0行め
+		grid = update( grid, { x: 0, y: 0, newStatus: color } );
+		grid = update( grid, { x: 1, y: 0, newStatus: color } );
+		grid = update( grid, { x: 2, y: 0, newStatus: color } );
+
+		// 1行め
+		grid = update( grid, { x: 0, y: 1, newStatus: color } );
+		grid = update( grid, { x: 3, y: 1, newStatus: color } );
+
+		// 2行め
+		grid = update( grid, { x: 0, y: 2, newStatus: color } );
+		grid = update( grid, { x: 2, y: 2, newStatus: color } );
+		grid = update( grid, { x: 3, y: 2, newStatus: color } );
+
+		expect( rowClues( grid ) ).toEqual( [
+			[ [3, color] ],
+			[ [1, color], [1, color] ],
+			[ [1, color], [2, color] ],
+		] );
+	} );
+
+	test( '2色', () => {
+		let grid = newPixelGrid( 4, 3 );
+		const color1 = 6;
+		const color2 = 42;
+
+		// 0行め
+		grid = update( grid, { x: 0, y: 0, newStatus: color1 } );
+		grid = update( grid, { x: 1, y: 0, newStatus: color1 } );
+		grid = update( grid, { x: 2, y: 0, newStatus: color2 } );
+
+		// 1行め
+		grid = update( grid, { x: 0, y: 1, newStatus: color2 } );
+		grid = update( grid, { x: 3, y: 1, newStatus: color1 } );
+
+		// 2行め
+		grid = update( grid, { x: 0, y: 2, newStatus: color1 } );
+		grid = update( grid, { x: 2, y: 2, newStatus: color1 } );
+		grid = update( grid, { x: 3, y: 2, newStatus: color2 } );
+
+		expect( rowClues( grid ) ).toEqual( [
+			[ [2, color1], [1, color2] ],
+			[ [1, color2], [1, color1] ],
+			[ [1, color1], [1, color1], [1, color2] ],
+		] );
 	} );
 } );

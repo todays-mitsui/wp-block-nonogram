@@ -38,6 +38,10 @@ export function getPixels( grid: PixelGrid ): readonly Pixel[] {
 	return pixels;
 }
 
+/**
+ * pixels を行ごとに分割して返す
+ * scopeSize (width * height) の外の要素も返すので注意
+ */
 function rows( grid: PixelGrid ): readonly Status[][] {
 	const { chunkLength, pixels } = grid;
 	const rows: Status[][] = [];
@@ -331,9 +335,7 @@ interface Pixel {
 }
 
 // prettier-ignore
-type Status =
-	| 'UNSETTLED'
-	| 'SPACE'
+type ColorIndex =
 	|  0 |  1 |  2 |  3 |  4 |  5 |  6 |  7
 	|  8 |  9 | 10 | 11 | 12 | 13 | 14 | 15
 	| 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23
@@ -343,6 +345,9 @@ type Status =
 	| 48 | 49 | 50 | 51 | 52 | 53 | 54 | 55
 	| 56 | 57 | 58 | 59 | 60 | 61
 	;
+
+// prettier-ignore
+type Status = 'UNSETTLED' | 'SPACE' | ColorIndex;
 
 function isValidPixels(
 	pixel: ( 'UNSETTLED' | 'SPACE' | number )[]
@@ -354,4 +359,60 @@ function isValidStatus(
 	status: 'UNSETTLED' | 'SPACE' | number
 ): status is Status {
 	return typeof status === 'string' || ( status >= 0 && status <= 61 );
+}
+
+// ========================================================================== //
+
+type Clue = [ [ 0, null ] ] | [ number, ColorIndex ][];
+
+export function rowClues( grid: PixelGrid ): Clue[] {
+	const { width, height } = grid;
+
+	return rows( grid )
+		.slice( 0, height )
+		.map( ( row ) => row.slice( 0, width ) )
+		.map( calcClue );
+}
+
+export function columnClues( grid: PixelGrid ): Clue[] {
+	const { width, height, chunkLength } = grid;
+
+	return Array.from( { length: width }, ( _, x ) =>
+		Array.from(
+			{ length: height },
+			( _, y ) => grid.pixels[ x + y * chunkLength ]
+		)
+	).map( calcClue );
+}
+
+/**
+ * 1行分または1列分の手がかりを計算する
+ */
+function calcClue( cells: readonly Status[] ): Clue {
+	if ( cells.length === 0 ) {
+		return [ [ 0, null ] ];
+	}
+
+	const clue: Clue = [];
+
+	let count = 0;
+	let colorIndex: ColorIndex | null = null;
+	for ( const status of cells ) {
+		if (colorIndex != null && colorIndex !== status) {
+			clue.push([count, colorIndex]);
+			count = 0;
+			colorIndex = null;
+		}
+
+		if ( typeof status === 'number' ) {
+			count++;
+			colorIndex = status;
+		}
+	}
+
+	if ( colorIndex != null ) {
+		clue.push( [ count, colorIndex ] );
+	}
+
+	return clue.length === 0 ? ( [ [ 0, null ] ] as const ) : clue;
 }
