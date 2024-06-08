@@ -9,7 +9,7 @@ import {
 	deserialize,
 	rowClues,
 	columnClues,
-} from '../../lib/Model/PixelGrid';
+} from '../lib/PixelGrid';
 
 test( 'constructor', () => {
 	const grid = newPixelGrid( 3, 2 );
