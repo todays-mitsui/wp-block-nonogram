@@ -318,3 +318,71 @@ describe( 'rowClues', () => {
 		] );
 	} );
 } );
+
+describe( 'columnClues', () => {
+	test( '空の PixelGrid', () => {
+		const grid = newPixelGrid( 4, 3 );
+		expect( columnClues( grid ) ).toEqual( [
+			[ [0, null] ],
+			[ [0, null] ],
+			[ [0, null] ],
+			[ [0, null] ],
+		] );
+	} );
+
+	test( '1色のみ', () => {
+		let grid = newPixelGrid( 4, 3 );
+		const color = 0;
+
+		// 0列め
+		grid = update( grid, { x: 0, y: 0, newStatus: color } );
+		grid = update( grid, { x: 0, y: 1, newStatus: color } );
+		grid = update( grid, { x: 0, y: 2, newStatus: color } );
+
+		// 1列め
+		grid = update( grid, { x: 1, y: 0, newStatus: color } );
+		grid = update( grid, { x: 1, y: 2, newStatus: color } );
+
+		// 2列め
+		grid = update( grid, { x: 2, y: 1, newStatus: color } );
+		grid = update( grid, { x: 2, y: 2, newStatus: color } );
+
+		expect( columnClues( grid ) ).toEqual( [
+			[ [3, color] ],
+			[ [1, color], [1, color] ],
+			[ [2, color] ],
+			[ [0, null] ],
+		] );
+	} );
+
+	test( '2色', () => {
+		let grid = newPixelGrid( 4, 3 );
+		const color1 = 6;
+		const color2 = 42;
+
+		// 0列め
+		grid = update( grid, { x: 0, y: 0, newStatus: color1 } );
+		grid = update( grid, { x: 0, y: 1, newStatus: color1 } );
+		grid = update( grid, { x: 0, y: 2, newStatus: color2 } );
+
+		// 1列め
+		grid = update( grid, { x: 1, y: 0, newStatus: color1 } );
+		grid = update( grid, { x: 1, y: 2, newStatus: color1 } );
+
+		// 2列め
+		grid = update( grid, { x: 2, y: 1, newStatus: color1 } );
+		grid = update( grid, { x: 2, y: 2, newStatus: color1 } );
+
+		// 3列め
+		grid = update( grid, { x: 3, y: 0, newStatus: color1 } );
+		grid = update( grid, { x: 3, y: 1, newStatus: color2 } );
+		grid = update( grid, { x: 3, y: 2, newStatus: color1 } );
+
+		expect( columnClues( grid ) ).toEqual( [
+			[ [2, color1], [1, color2] ],
+			[ [1, color1], [1, color1] ],
+			[ [2, color1] ],
+			[ [1, color1], [1, color2], [1, color1] ],
+		] );
+	} );
+} );
