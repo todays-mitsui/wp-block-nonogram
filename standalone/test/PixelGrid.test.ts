@@ -405,4 +405,15 @@ describe( 'serializeClues/deserializeClues', () => {
 		console.info( { clues, serialized } );
 		expect( deserializeClues( serialized ) ).toEqual( clues );
 	} );
+
+	test( '', () => {
+		// prettier-ignore
+		const clues: Clue[] = [
+			[ [ 1, 0 ], [ 1, 0 ] ],
+			[ [ 1, 0 ], [ 1, 0 ], [ 1, 0 ] ],
+			[ [ 1, 0 ], [ 1, 0 ], [ 1, 0 ] ],
+			[ [ 1, 0 ], [ 1, 0 ] ],
+			[ [ 1, 0 ], [ 1, 0 ] ],
+		];
+	} );
 } );
