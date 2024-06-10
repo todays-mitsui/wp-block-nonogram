@@ -21,7 +21,7 @@ export function Board( {
 	setPixelGrid,
 	config,
 }: Props ): JSX.Element {
-	const { enableSpaceStatus, enableCluesCompletion, showGrid } = {
+	config = {
 		...defaultConfig,
 		...config,
 	};
