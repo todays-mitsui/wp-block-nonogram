@@ -1,6 +1,7 @@
 import { Layer, Stage } from 'react-konva';
 import { type PixelGrid, type Clue } from '../../lib/PixelGrid';
 import { useDisableContextMenu } from '../../lib/hooks/useDisableContextMenu';
+import { Config, defaultConfig, ConfigContext } from './ConfigContext';
 
 interface Props {
 	width: number;
@@ -9,7 +10,7 @@ interface Props {
 	columnClues: Clue[];
 	pixelGrid: PixelGrid;
 	setPixelGrid: ( pixelGrid: PixelGrid ) => void;
-	config?: Config;
+	config?: Partial<Config>;
 }
 
 export function Board( {
@@ -21,19 +22,17 @@ export function Board( {
 	setPixelGrid,
 	config,
 }: Props ): JSX.Element {
-	config = {
+	const completeConfig: Config = {
 		...defaultConfig,
 		...config,
 	};
-	console.log(
+	console.log({
 		width,
 		height,
 		rowClues,
 		columnClues,
-		enableSpaceStatus,
-		enableCluesCompletion,
-		showGrid
-	);
+		...config,
+	});
 
 	return (
 		<Stage
@@ -41,21 +40,9 @@ export function Board( {
 			height={ height }
 			ref={ useDisableContextMenu() }
 		>
-			Board
+			<ConfigContext.Provider value={ completeConfig }>
+				Board
+			</ConfigContext.Provider>
 		</Stage>
 	);
 }
-
-// ========================================================================== //
-
-interface Config {
-	enableSpaceStatus?: boolean;
-	enableCluesCompletion?: boolean;
-	showGrid?: boolean;
-}
-
-const defaultConfig: Config = {
-	enableSpaceStatus: false,
-	enableCluesCompletion: false,
-	showGrid: true,
-};

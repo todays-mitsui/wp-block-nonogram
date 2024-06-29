@@ -327,7 +327,7 @@ function genDecoder(
 
 // ========================================================================== //
 
-interface Pixel {
+export interface Pixel {
 	id: `${ number },${ number }`;
 	x: number;
 	y: number;
@@ -335,7 +335,7 @@ interface Pixel {
 }
 
 // prettier-ignore
-type ColorIndex =
+export type ColorIndex =
 	|  0 |  1 |  2 |  3 |  4 |  5 |  6 |  7
 	|  8 |  9 | 10 | 11 | 12 | 13 | 14 | 15
 	| 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23
@@ -347,7 +347,7 @@ type ColorIndex =
 	;
 
 // prettier-ignore
-type Status = 'UNSETTLED' | 'SPACE' | ColorIndex;
+export type Status = 'UNSETTLED' | 'SPACE' | ColorIndex;
 
 function isValidPixels(
 	pixel: ( 'UNSETTLED' | 'SPACE' | number )[]
@@ -359,6 +359,10 @@ function isValidStatus(
 	status: 'UNSETTLED' | 'SPACE' | number
 ): status is Status {
 	return typeof status === 'string' || isValidColorIndex( status );
+}
+
+export function isFilled( status: Status ): status is ColorIndex {
+	return typeof status === 'number' && isValidColorIndex( status );
 }
 
 function isValidColorIndex( colorIndex: number ): colorIndex is ColorIndex {
