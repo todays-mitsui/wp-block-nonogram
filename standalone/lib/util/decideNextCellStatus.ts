@@ -2,10 +2,10 @@ import Konva from 'konva';
 import { ColorIndex, Status, isFilled } from '../PixelGrid';
 
 export function decideNextCellStatus(
-	event: Konva.KonvaEventObject<MouseEvent | TouchEvent>,
+	event: Konva.KonvaEventObject< MouseEvent | TouchEvent >,
 	enableSpaceStatus: boolean,
 	prevCellStatus: Status,
-	currentColorIndex: ColorIndex,
+	currentColorIndex: ColorIndex
 ): Status {
 	const enableRightClick = event.evt instanceof MouseEvent;
 	const buttons = event.evt instanceof MouseEvent ? event.evt.buttons : null;
@@ -15,24 +15,34 @@ export function decideNextCellStatus(
 	if ( ! enableSpaceStatus ) {
 		return withoutSpaceStatus( prevCellStatus, currentColorIndex );
 	} else if ( enableRightClick ) {
-		return withSpaceStatusAndRightClick( prevCellStatus, currentColorIndex, isRightClick );
+		return withSpaceStatusAndRightClick(
+			prevCellStatus,
+			currentColorIndex,
+			isRightClick
+		);
 	} else {
 		return withSpaceStatus( prevCellStatus, currentColorIndex );
 	}
 }
 
-function withoutSpaceStatus( prevCellStatus: Status, currentColorIndex: ColorIndex ): Status {
+function withoutSpaceStatus(
+	prevCellStatus: Status,
+	currentColorIndex: ColorIndex
+): Status {
 	switch ( true ) {
 		case isFilled( prevCellStatus ):
 			return 'SPACE';
-		case prevCellStatus === 'SPACE' || prevCellStatus=== 'UNSETTLED':
+		case prevCellStatus === 'SPACE' || prevCellStatus === 'UNSETTLED':
 			return currentColorIndex;
 		default:
 			throw new Error( 'Invalid status' );
 	}
 }
 
-function withSpaceStatus( prevCellStatus: Status, currentColorIndex: ColorIndex ): Status {
+function withSpaceStatus(
+	prevCellStatus: Status,
+	currentColorIndex: ColorIndex
+): Status {
 	switch ( true ) {
 		case isFilled( prevCellStatus ):
 			return 'SPACE';
@@ -45,7 +55,11 @@ function withSpaceStatus( prevCellStatus: Status, currentColorIndex: ColorIndex 
 	}
 }
 
-function withSpaceStatusAndRightClick( prevCellStatus: Status, currentColorIndex: ColorIndex, isRightClick: boolean ): Status {
+function withSpaceStatusAndRightClick(
+	prevCellStatus: Status,
+	currentColorIndex: ColorIndex,
+	isRightClick: boolean
+): Status {
 	switch ( true ) {
 		case isFilled( prevCellStatus ) && ! isRightClick:
 			return 'UNSETTLED';

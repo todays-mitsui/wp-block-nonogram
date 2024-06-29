@@ -12,4 +12,4 @@ export const defaultConfig: Config = {
 	showGrid: true,
 };
 
-export const ConfigContext = createContext<Config>(defaultConfig);
+export const ConfigContext = createContext< Config >( defaultConfig );

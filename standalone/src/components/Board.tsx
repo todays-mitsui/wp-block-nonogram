@@ -10,7 +10,7 @@ interface Props {
 	columnClues: Clue[];
 	pixelGrid: PixelGrid;
 	setPixelGrid: ( pixelGrid: PixelGrid ) => void;
-	config?: Partial<Config>;
+	config?: Partial< Config >;
 }
 
 export function Board( {
@@ -26,13 +26,13 @@ export function Board( {
 		...defaultConfig,
 		...config,
 	};
-	console.log({
+	console.log( {
 		width,
 		height,
 		rowClues,
 		columnClues,
 		...config,
-	});
+	} );
 
 	return (
 		<Stage
