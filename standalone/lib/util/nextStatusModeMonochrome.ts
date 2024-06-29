@@ -6,7 +6,7 @@ const COLOR_INDEX_BLACK: ColorIndex = 0;
 export function nextStatusModeMonochrome(
 	event: Konva.KonvaEventObject< MouseEvent | TouchEvent >,
 	enableSpaceStatus: boolean,
-	prevCellStatus: Status,
+	prevCellStatus: Status
 ): Status {
 	const enableRightClick = event.evt instanceof MouseEvent;
 	const buttons = event.evt instanceof MouseEvent ? event.evt.buttons : null;
@@ -16,18 +16,13 @@ export function nextStatusModeMonochrome(
 	if ( ! enableSpaceStatus ) {
 		return withoutSpaceStatus( prevCellStatus );
 	} else if ( enableRightClick ) {
-		return withSpaceStatusAndRightClick(
-			prevCellStatus,
-			isRightClick
-		);
+		return withSpaceStatusAndRightClick( prevCellStatus, isRightClick );
 	} else {
 		return withSpaceStatus( prevCellStatus );
 	}
 }
 
-function withoutSpaceStatus(
-	prevCellStatus: Status,
-): Status {
+function withoutSpaceStatus( prevCellStatus: Status ): Status {
 	switch ( true ) {
 		case isFilled( prevCellStatus ):
 			return 'SPACE';
@@ -38,9 +33,7 @@ function withoutSpaceStatus(
 	}
 }
 
-function withSpaceStatus(
-	prevCellStatus: Status,
-): Status {
+function withSpaceStatus( prevCellStatus: Status ): Status {
 	switch ( true ) {
 		case isFilled( prevCellStatus ):
 			return 'SPACE';
