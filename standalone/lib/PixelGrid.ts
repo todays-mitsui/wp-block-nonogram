@@ -373,16 +373,24 @@ function isValidColorIndex( colorIndex: number ): colorIndex is ColorIndex {
 
 export type Clue = [ number, ColorIndex ][];
 
-export function rowClues( grid: PixelGrid, monochrome: boolean = false ): Clue[] {
+export function rowClues(
+	grid: PixelGrid,
+	monochrome: boolean = false
+): Clue[] {
 	const { width, height } = grid;
 
 	return rows( grid )
 		.slice( 0, height )
 		.map( ( row ) => row.slice( 0, width ) )
-		.map( ( row ) => monochrome ? calcClueMonochrome( row ) : calcClueColor( row ) );
+		.map( ( row ) =>
+			monochrome ? calcClueMonochrome( row ) : calcClueColor( row )
+		);
 }
 
-export function columnClues( grid: PixelGrid, monochrome: boolean = false ): Clue[] {
+export function columnClues(
+	grid: PixelGrid,
+	monochrome: boolean = false
+): Clue[] {
 	const { width, height, chunkLength } = grid;
 
 	return Array.from( { length: width }, ( _, x ) =>
@@ -390,7 +398,9 @@ export function columnClues( grid: PixelGrid, monochrome: boolean = false ): Clu
 			{ length: height },
 			( _, y ) => grid.pixels[ x + y * chunkLength ]
 		)
-	).map( ( column ) => monochrome ? calcClueMonochrome( column ) : calcClueColor( column ) );
+	).map( ( column ) =>
+		monochrome ? calcClueMonochrome( column ) : calcClueColor( column )
+	);
 }
 
 /**
