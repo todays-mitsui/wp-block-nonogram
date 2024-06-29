@@ -373,16 +373,16 @@ function isValidColorIndex( colorIndex: number ): colorIndex is ColorIndex {
 
 export type Clue = [ number, ColorIndex ][];
 
-export function rowClues( grid: PixelGrid ): Clue[] {
+export function rowClues( grid: PixelGrid, monochrome: boolean = false ): Clue[] {
 	const { width, height } = grid;
 
 	return rows( grid )
 		.slice( 0, height )
 		.map( ( row ) => row.slice( 0, width ) )
-		.map( calcClue );
+		.map( ( row ) => monochrome ? calcClueMonochrome( row ) : calcClueColor( row ) );
 }
 
-export function columnClues( grid: PixelGrid ): Clue[] {
+export function columnClues( grid: PixelGrid, monochrome: boolean = false ): Clue[] {
 	const { width, height, chunkLength } = grid;
 
 	return Array.from( { length: width }, ( _, x ) =>
@@ -390,32 +390,64 @@ export function columnClues( grid: PixelGrid ): Clue[] {
 			{ length: height },
 			( _, y ) => grid.pixels[ x + y * chunkLength ]
 		)
-	).map( calcClue );
+	).map( ( column ) => monochrome ? calcClueMonochrome( column ) : calcClueColor( column ) );
 }
 
 /**
  * 1行分または1列分の手がかりを計算する
  */
-function calcClue( cells: readonly Status[] ): Clue {
+function calcClueMonochrome( cells: readonly Status[] ): Clue {
 	const clue: Clue = [];
 
 	let count = 0;
-	let colorIndex: ColorIndex | null = null;
+	let currentColor: ColorIndex | null = null;
 	for ( const status of cells ) {
-		if ( colorIndex != null && colorIndex !== status ) {
-			clue.push( [ count, colorIndex ] );
+		// 色の切り替わり判定
+		if ( currentColor != null && ! isFilled( status ) ) {
+			clue.push( [ count, currentColor ] );
 			count = 0;
-			colorIndex = null;
+			currentColor = null;
 		}
 
+		// 今見ているセルが塗られていればカウントアップする
 		if ( typeof status === 'number' ) {
 			count++;
-			colorIndex = status;
+			currentColor = status;
 		}
 	}
 
-	if ( colorIndex != null ) {
-		clue.push( [ count, colorIndex ] );
+	if ( currentColor != null ) {
+		clue.push( [ count, currentColor ] );
+	}
+
+	return clue;
+}
+
+/**
+ * 1行分または1列分の手がかりを計算する
+ */
+function calcClueColor( cells: readonly Status[] ): Clue {
+	const clue: Clue = [];
+
+	let count = 0;
+	let currentColor: ColorIndex | null = null;
+	for ( const status of cells ) {
+		// 色の切り替わり判定
+		if ( currentColor != null && currentColor !== status ) {
+			clue.push( [ count, currentColor ] );
+			count = 0;
+			currentColor = null;
+		}
+
+		// 今見ているセルが塗られていればカウントアップする
+		if ( typeof status === 'number' ) {
+			count++;
+			currentColor = status;
+		}
+	}
+
+	if ( currentColor != null ) {
+		clue.push( [ count, currentColor ] );
 	}
 
 	return clue;
